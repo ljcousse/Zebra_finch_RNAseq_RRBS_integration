@@ -36,7 +36,7 @@ mkdir JASPAR_output
 ######################
 
 # Preprocessing RNAseq
-bash fastq2counts.bash
+# bash fastq2counts.bash
 
 # Differential expression analysis
 Rscript DE_analysis.R
@@ -70,7 +70,7 @@ Rscript JASPAR_TF_Pairwise.R MaleOver,FemaleOver &
 
 ####################
 # Cluster analysis #
-####################
+####################g
 
 # Make clustering 
 Rscript RNAseq_ClusterAnalysis.R
