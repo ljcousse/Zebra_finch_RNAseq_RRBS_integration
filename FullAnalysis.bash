@@ -15,7 +15,7 @@ mkdir fimo_RNAseq_out
 
 mkdir JASPAR_pfms_meme
 cd JASPAR_pfms_meme
-wget https://www.jaspar2018.genereg.net/download/CORE/JASPAR2018_CORE_vertebrates_non-redundant_pfms_jaspar.zip
+wget http://jaspar2018.genereg.net/download/CORE/JASPAR2018_CORE_vertebrates_non-redundant_pfms_jaspar.zip
 cd ..
 unzip *
 rm *.zip
