@@ -10,7 +10,7 @@
 ## Parameter settings 
 #####################
 
-home_dir <- "/home/louisc/Zebra_Finch/"
+home_dir <- "/home/louisc/Zebra_Finch_new/"
 data_dir <- "/data/sandras/BiSeq"
 options(warn=2L)
 mincov<-5 
@@ -141,6 +141,9 @@ print(hist_diff$counts)
 
 ## Boxplot Methylation percentage
 ################################
+
+meth_levels <- methLevel(rrbs_B.rel)-methLevel(rrbs_O.rel)
+save(meth_levels,file="methLevel_hydroxy.Rda")
 
 f1 <- paste0(annot[,3],"dph")
 f2 <- annot[,2]

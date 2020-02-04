@@ -119,8 +119,7 @@ for (t in 1:am_patt){
   x <- as.factor(unique(f1))
   
   # Plot trends
-
-  jpeg(paste("Trends/trend_patt_",paste(pattern,collapse="_"),".jpg",sep=""))
+  png(paste("Trends/trend_patt_",paste(pattern,collapse="_"),".png",sep=""))
   if(nrow(logcpm_mask)>500){
     rest <- nrow(logcpm_mask) %% 500
     times <- (nrow(logcpm_mask)-rest)/500
@@ -131,13 +130,11 @@ for (t in 1:am_patt){
         g <- ggplot(data=temp,aes(Age,LogCpm,group=1)) +
           theme_bw() +
           geom_line() +
-          ggtitle(paste(pattern,collapse="_")) +
           ylim(min(logcpm_rowm),max(logcpm_rowm))
         for (i in 1:nrow(logcpm_mask_sub)) {
           #print(temp)
           temp <- data.frame(Age = x, LogCpm = logcpm_mask_sub[i,])
-          g <- g + ggtitle(paste(pattern,collapse="_")) +
-            geom_line(data = temp, aes(Age,LogCpm),col="grey") 
+          g <- g + geom_line(data = temp, aes(Age,LogCpm),col="grey") 
         }
         print(g)
       } else {
@@ -145,15 +142,15 @@ for (t in 1:am_patt){
         temp <- data.frame(Age = x, LogCpm = colMeans(logcpm_mask_sub))
         g <- ggplot(data=temp,aes(Age,LogCpm,group=1)) +
           theme_bw() +
-          ggtitle(paste(pattern,collapse="_")) +
           geom_line()
         for (i in 1:nrow(logcpm_mask_sub)) {
           #print(temp)
           temp <- data.frame(Age = x, LogCpm = logcpm_mask_sub[i,])
           g <- g + geom_line(data = temp, aes(Age,LogCpm),col="grey")
         }
+        textdf <- data.frame(Age = 2.5, LogCpm = min(logcpm_mask)+(max(logcpm_mask)-min(logcpm_mask))*0.10)
         temp <- data.frame(Age = x, LogCpm = colMeans(logcpm_mask))
-        g <- g + ggtitle(paste(pattern,collapse="_")) + 
+        g <- g + geom_label(data=textdf,aes(Age,LogCpm),label=paste(paste(toupper(substr(gsub("elevated","higher",pattern),1,1)),collapse=""),": ",nrow(logcpm_mask),sep=""),size = 6,label.size = 0) + 
           geom_line(data = temp, aes(Age,LogCpm),col="blue")
         print(g)
       }
@@ -162,23 +159,61 @@ for (t in 1:am_patt){
     temp <- data.frame(Age = x, LogCpm = colMeans(logcpm_mask))
     g <- ggplot(data=temp,aes(Age,LogCpm,group=1)) +
       theme_bw() +
-      ggtitle(paste(pattern,collapse="_")) +
       geom_line()
     for (i in 1:nrow(logcpm_mask)) {
       #print(temp)
       temp <- data.frame(Age = x, LogCpm = logcpm_mask[i,])
-      g <- g + ggtitle(paste(pattern,collapse="_")) +
-        geom_line(data = temp, aes(Age,LogCpm),col="grey")
+      g <- g +  geom_line(data = temp, aes(Age,LogCpm),col="grey")
     }
     temp <- data.frame(Age = x, LogCpm = colMeans(logcpm_mask))
-    g <- g + ggtitle(paste(pattern,collapse="_")) +
+    textdf <- data.frame(Age = 2.5, LogCpm = min(logcpm_mask)+(max(logcpm_mask)-min(logcpm_mask))*0.10)
+    g <- g + geom_label(data=textdf,aes(Age,LogCpm),label=paste(paste(toupper(substr(gsub("elevated","higher",pattern),1,1)),collapse=""),": ",nrow(logcpm_mask),sep=""),size = 6,label.size = 0) + 
       geom_line(data = temp, aes(Age,LogCpm),col="blue")
     print(g)
 
   }
   dev.off()
 }
-# dev.off()
+
+library(grid)
+library(png)
+library(ggplot2)
+library(gridExtra)
+
+unlink("Trends_overall.png")
+plots <- lapply(ll <- list.files("Trends/",patt='*[.]png'),function(x){
+  img <- as.raster(readPNG(paste("Trends/",x,sep="")))
+  rasterGrob(img, interpolate = FALSE)
+})
+
+ggsave("Trends_overall.png",width=20, height=15, units="cm",
+       marrangeGrob(grobs = plots, nrow=3, ncol=4,top=NULL))
+
+
+
+## Trend metrics
+###############
+n_clusters <- 0
+for (t in 1:am_patt){
+  pattern <- eval(parse(text = paste("pattern",t,sep="")))
+  print(pattern)
+  gene_list_patt <-read.table(file=paste("GeneLists/ListGenes_patt_",paste(pattern,collapse="_"),".txt",sep=""), header = F, sep="\t")$V1
+  n_clusters <- n_clusters + length(gene_list_patt)
+}
+print(n_clusters)
+print(n_clusters/13891)
+
+
+
+####################
+#####################
+
+
+# VOOR WEGIO
+
+
+#################"
+###################
 
 
 ## Check for differential methylation

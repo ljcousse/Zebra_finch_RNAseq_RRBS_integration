@@ -51,13 +51,13 @@ RCircos.Reset.Plot.Parameters(rcircos.params);
 RCircos.List.Plot.Parameters()
 
 # Load in DE genes
-age_genes <- read.table("ListGenes_age.txt",header=F,stringsAsFactors = F)$V1
+age_genes <- read.table("GeneLists/ListGenes_age.txt",header=F,stringsAsFactors = F)$V1
 age_genes_df <- genes[genes$ensembl_gene_id%in%age_genes,c(1:3,5)]
 
-sex_genes <- unique(c(read.table("ListGenes_1dph.txt",header=F,stringsAsFactors = F)$V1,
-                      read.table("ListGenes_20dph.txt",header=F,stringsAsFactors = F)$V1,
-                      read.table("ListGenes_65dph.txt",header=F,stringsAsFactors = F)$V1,
-                      read.table("ListGenes_adult.txt",header=F,stringsAsFactors = F)$V1))
+sex_genes <- unique(c(read.table("GeneLists/ListGenes_1dph.txt",header=F,stringsAsFactors = F)$V1,
+                      read.table("GeneLists/ListGenes_20dph.txt",header=F,stringsAsFactors = F)$V1,
+                      read.table("GeneLists/ListGenes_65dph.txt",header=F,stringsAsFactors = F)$V1,
+                      read.table("GeneLists/ListGenes_adult.txt",header=F,stringsAsFactors = F)$V1))
 sex_genes_df <- genes[genes$ensembl_gene_id%in%sex_genes,c(1:3,5)]
 
 #Get df for genes in the right form
@@ -115,7 +115,7 @@ dev.off()
 
 # Open jpg
 out.file <- "RCircos_Plastoscine_DEgenes.jpg";
-jpeg(file=out.file, height=2000, width=2000);
+jpeg(file=out.file, height=750, width=750);
 
 # Adjust text size for jpg
 rcircos.params$text.size <- 10
@@ -129,7 +129,7 @@ par(lty="blank")
 RCircos.Set.Plot.Area();
 
 # Plot choromosomes
-RCircos.Chromosome.Ideogram.Plot_jpg()
+RCircos.Chromosome.Ideogram.Plot_L()
 
 # Plot DE genes 
 rcircos.params$heatmap.color <- "goldenrod1"

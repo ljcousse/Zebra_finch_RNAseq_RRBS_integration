@@ -10,8 +10,8 @@
 ## Parameter settings 
 #####################
 
-home_dir <- "/home/louisc/Zebra_Finch/"
-data_dir <- "/data/sandras/BiSeq"
+home_dir <- "/home/louisc/Zebra_Finch_new/"
+data_dir <- "/data/sandras/BiSeq/"
 options(warn=2L)
 mincov<-5 
 minmethreads<-6
@@ -32,8 +32,6 @@ library(RColorBrewer)
 library(gplots)
 
 sink(file='RRBS_analyse.log', type = c("output", "message"))
-
-setwd(data_dir)
 
 
 ## Extra annotation Uniprot 
@@ -63,6 +61,8 @@ if (file.exists(paste(home_dir,"uniprot.Rda",sep=""))){
 
 ## Import data 
 ##############
+
+setwd(data_dir)
 
 # annotation
 annot<-c("Pool","Sex","Age","8","F","20","12","M","20","14","F","65","18","M","65","1","F","1","7","F","20","10","M","20","24","M","adult","2","F","1","15","F","65","19","F","adult","22","M","adult","9","F","20","11","M","20","16","M","65","17","M","65","4","M","1","5","M","1","13","F","65","20","F","adult","3","F","1","6","M","1","21","F","adult","23","M","adult")
@@ -99,6 +99,9 @@ setwd(home_dir)
 #Filtering based on shared regions (should be shared with coverage >= mincov in all samples)
 rrbs<-filterBySharedRegions(object=allrrbs,perc.samples=1,minCov=mincov)
 rrbs.rel <- rawToRel(rrbs)
+
+print("After filtering on coverage")
+print(dim(rrbs))
 
 
 ## Functional annotation per CpG
@@ -359,11 +362,11 @@ for (i in 1:length(f1)){
 }
 colnames(rrbsredB.rel) <- c_names
 
-GOI_1dph <- read.table(file="ListGenes_1dph.txt",header=F,stringsAsFactors =F)$V1
-GOI_20dph <- read.table(file="ListGenes_20dph.txt",header=F,stringsAsFactors =F)$V1
-GOI_65dph <- read.table(file="ListGenes_65dph.txt",header=F,stringsAsFactors =F)$V1
-GOI_adult <- read.table(file="ListGenes_adult.txt",header=F,stringsAsFactors =F)$V1
-GOI_age <- read.table(file="ListGenes_age.txt",header=F,stringsAsFactors =F)$V1
+GOI_1dph <- read.table(file="GeneLists/ListGenes_1dph.txt",header=F,stringsAsFactors =F)$V1
+GOI_20dph <- read.table(file="GeneLists/ListGenes_20dph.txt",header=F,stringsAsFactors =F)$V1
+GOI_65dph <- read.table(file="GeneLists/ListGenes_65dph.txt",header=F,stringsAsFactors =F)$V1
+GOI_adult <- read.table(file="GeneLists/ListGenes_adult.txt",header=F,stringsAsFactors =F)$V1
+GOI_age <- read.table(file="GeneLists/ListGenes_age.txt",header=F,stringsAsFactors =F)$V1
 
 
 # General #

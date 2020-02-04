@@ -10,9 +10,9 @@
 ## Parameter settings 
 #####################
 
-home_dir <- "/home/louisc/Zebra_Finch/"
-data_dir_CHG <- "/data/louisc/Zebra_Finch/oxRRBS/CHG"
-data_dir_CHH <- "/data/louisc/Zebra_Finch/oxRRBS/CHH"
+home_dir <- "/home/louisc/Zebra_Finch_new/"
+data_dir_CHG <- "/data/louisc/Zebra_Finch/oxRRBS/CHG/"
+data_dir_CHH <- "/data/louisc/Zebra_Finch/oxRRBS/CHH/"
 options(warn=2L)
 mincov<-5 
 minmethreads<-6
@@ -80,7 +80,7 @@ allrrbs_CHH<-readBismark(poolfiles,colData=annotN)
 
 allrrbs <- rbind(allrrbs_CHG,allrrbs_CHH)
 setwd(home_dir)
-save(allrrbs,file="allrrbs_nonCpG.Rda")
+# save(allrrbs,file="allrrbs_nonCpG.Rda")
 
 # locs<-rowRanges(allrrbs)
 
@@ -100,6 +100,11 @@ print(dim(rrbs))
 
 # Rename rownames to remove duplicate rownames
 rownames(rrbs) <- 1:nrow(rrbs) 
+
+save(rrbs,file="rrbs_nonCpG.Rda")
+
+print("After filtering on coverage")
+print(dim(rrbs))
 
 
 ## Functional annotation per CHG/CHH
@@ -365,11 +370,11 @@ for (i in 1:length(f1)){
 }
 colnames(rrbsredB.rel) <- c_names
 
-GOI_1dph <- read.table(file="ListGenes_1dph.txt",header=F,stringsAsFactors =F)$V1
-GOI_20dph <- read.table(file="ListGenes_20dph.txt",header=F,stringsAsFactors =F)$V1
-GOI_65dph <- read.table(file="ListGenes_65dph.txt",header=F,stringsAsFactors =F)$V1
-GOI_adult <- read.table(file="ListGenes_adult.txt",header=F,stringsAsFactors =F)$V1
-GOI_age <- read.table(file="ListGenes_age.txt",header=F,stringsAsFactors =F)$V1
+GOI_1dph <- read.table(file="GeneLists/ListGenes_1dph.txt",header=F,stringsAsFactors =F)$V1
+GOI_20dph <- read.table(file="GeneLists/ListGenes_20dph.txt",header=F,stringsAsFactors =F)$V1
+GOI_65dph <- read.table(file="GeneLists/ListGenes_65dph.txt",header=F,stringsAsFactors =F)$V1
+GOI_adult <- read.table(file="GeneLists/ListGenes_adult.txt",header=F,stringsAsFactors =F)$V1
+GOI_age <- read.table(file="GeneLists/ListGenes_age.txt",header=F,stringsAsFactors =F)$V1
 
 
 # General #

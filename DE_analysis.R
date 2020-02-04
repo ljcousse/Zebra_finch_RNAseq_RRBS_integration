@@ -233,11 +233,11 @@ out2excel <- cbind(rownames(out2excel),genes_new,uniprot_new,stageWiseRes_all[ix
                    out2excel)
 
 colnames(out2excel) <- c("ensembl.gene.id","gene.symbol","uniprot.annot","Pvalue.omnibus",
-                         paste("logFC",age[1],sep="."),paste("Pvalue",age[1],sep="."),
-                         paste("logFC",age[2],sep="."),paste("Pvalue",age[2],sep="."),
-                         paste("logFC",age[3],sep="."),paste("Pvalue",age[3],sep="."),
-                         paste("logFC",age[4],sep="."),paste("Pvalue",age[4],sep="."),
-                         paste("logFC",age[5],sep="."),paste("Pvalue",age[5],sep="."),
+                         paste("logFC",coi[1],sep="."),paste("Pvalue",coi[1],sep="."),
+                         paste("logFC",coi[2],sep="."),paste("Pvalue",coi[2],sep="."),
+                         paste("logFC",coi[3],sep="."),paste("Pvalue",coi[3],sep="."),
+                         paste("logFC",coi[4],sep="."),paste("Pvalue",coi[4],sep="."),
+                         paste("logFC",coi[5],sep="."),paste("Pvalue",coi[5],sep="."),
                          "mean.1dph,F","sd.1dph,F","mean.1dph,M","sd.1dph,M",
                          "mean.20dph,F","sd.20dph,F","mean.20dph,M","sd.20dph,M",
                          "mean.65dph,F","sd.65dph,F","mean.65dph,M","sd.65dph,M",
