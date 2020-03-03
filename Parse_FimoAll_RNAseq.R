@@ -1,5 +1,6 @@
 library(parallel)
 
+working_dir <- getwd()
 
 fimo_dirs <- list.dirs("fimo_RNAseq_out/")
 fimo_dirs <- fimo_dirs[-1]
@@ -45,6 +46,6 @@ results <- results[sort(results$Pval,index.return=TRUE)$ix,]
 print(head(results))
 print(dim(results))
 
-write.table(results,file="/home/louisc/Zebra_Finch_new/fimo_RNAseq_out/fimo.txt",col.names = T, row.names = F, sep="\t", quote = F)
+write.table(results,file="fimo_RNAseq_out/fimo.txt",col.names = T, row.names = F, sep="\t", quote = F)
 
 

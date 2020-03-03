@@ -33,6 +33,6 @@ results <- results[sort(results$Pval,index.return=TRUE)$ix,]
 print(head(results))
 print(dim(results))
 
-write.table(results,file="/home/louisc/Zebra_Finch_new/fimo_RRBS_out/fimo.txt",col.names = T, row.names = F, sep="\t", quote = F)
+write.table(results,file="fimo_RRBS_out/fimo.txt",col.names = T, row.names = F, sep="\t", quote = F)
 
 
