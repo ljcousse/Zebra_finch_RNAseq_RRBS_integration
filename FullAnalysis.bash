@@ -41,6 +41,7 @@ Rscript InstallPackages.R
 # bash fastq2counts.bash
 
 # Differential expression analysis
+mkdir GeneLists
 Rscript DE_analysis.R
 
 # General statistics & Plots for paper
