@@ -13,7 +13,7 @@ library("edgeR")
 options(warn=1)
 
 working_dir <- getwd()
-data_dir <- "/share/louisc/Porthos_backup/louisc/Project_Plastoscine/"
+data_dir <- "Genomic_data/"
 
 # Loading Chromosomes and defining functions
 ##############################################
