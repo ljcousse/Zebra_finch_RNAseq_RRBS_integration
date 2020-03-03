@@ -23,6 +23,7 @@ rm *.zip
 mkdir JASPAR_counts
 mkdir JASPAR_output
 
+Rscript InstallPackages.R
 
 
 ##############
