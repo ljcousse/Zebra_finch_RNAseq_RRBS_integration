@@ -11,6 +11,72 @@ library(biomaRt)
 # Load in chromosome info
 df <- read.table("genome.txt",stringsAsFactors = F,header=F)
 
+# Load in gene annotation for Zebra finch genome
+ensembl=useMart("ensembl")
+ensembl = useDataset("tguttata_gene_ensembl",mart=ensembl)
+genes <- getBM(attributes = c('chromosome_name','start_position','end_position','hgnc_symbol','ensembl_gene_id'),mart = ensembl)
+print(dim(genes))
+genes <- genes[!duplicated(genes$ensembl_gene_id),]
+print(dim(genes))
+
+# Test data in RCircos package
+# data(UCSC.HG19.Human.CytoBandIdeogram);
+# head(UCSC.HG19.Human.CytoBandIdeogram);
+
+
+# Create cyto info object
+cyto.info <- cbind(df[,1],rep(0,nrow(df)),df[,2],rep("",nrow(df)),rep("black",nrow(df)))
+colnames(cyto.info) <- c("Chromosome","ChromStart","ChromEnd","Band","Stain")
+cyto.info <- as.data.frame(cyto.info,stringsAsFactors=F)
+cyto.info$ChromStart <- as.integer(cyto.info$ChromStart)
+cyto.info$ChromEnd <- as.integer(cyto.info$ChromEnd)
+
+# Set core Components
+chr.exclude <- NULL
+tracks.inside <- 5
+tracks.outside <- 0
+RCircos.Set.Core.Components(cyto.info, chr.exclude, tracks.inside, tracks.outside)
+
+# Get plot parameters 
+rcircos.params <- RCircos.Get.Plot.Parameters();
+rcircos.cyto <- RCircos.Get.Plot.Ideogram();
+rcircos.position <- RCircos.Get.Plot.Positions();
+
+# Set some adjustmetns
+rcircos.params$heatmap.width <- 10
+RCircos.Reset.Plot.Parameters(rcircos.params);
+RCircos.List.Plot.Parameters()
+
+# Load in DE genes
+age_genes <- read.table("GeneLists/ListGenes_age.txt",header=F,stringsAsFactors = F)$V1
+age_genes_df <- genes[genes$ensembl_gene_id%in%age_genes,c(1:3,5)]
+
+sex_genes <- unique(c(read.table("GeneLists/ListGenes_1dph.txt",header=F,stringsAsFactors = F)$V1,
+                      read.table("GeneLists/ListGenes_20dph.txt",header=F,stringsAsFactors = F)$V1,
+                      read.table("GeneLists/ListGenes_65dph.txt",header=F,stringsAsFactors = F)$V1,
+                      read.table("GeneLists/ListGenes_adult.txt",header=F,stringsAsFactors = F)$V1))
+sex_genes_df <- genes[genes$ensembl_gene_id%in%sex_genes,c(1:3,5)]
+
+#Get df for genes in the right form
+age_genes_df$chromosome_name <- toupper(age_genes_df$chromosome_name)
+age_genes_df$chromosome_name <- paste("chr",age_genes_df$chromosome_name,sep="")
+age_genes_df <- age_genes_df[!grepl("RANDOM",age_genes_df$chromosome_name),]
+age_genes_df <- age_genes_df[!grepl("UN",age_genes_df$chromosome_name),]
+# age_genes_df <- age_genes_df[!grepl("MT",age_genes_df$chromosome_name),]
+# age_genes_df <- age_genes_df[!grepl("LG5",age_genes_df$chromosome_name),]
+# age_genes_df <- age_genes_df[!grepl("LG2",age_genes_df$chromosome_name),]
+age_genes_df$linedata <- rep(1,nrow(age_genes_df))
+colnames(age_genes_df) <- c("Chromosome","chromStart","chromEnd","EnsGeneName","LineData")
+
+
+sex_genes_df$chromosome_name <- toupper(sex_genes_df$chromosome_name)
+sex_genes_df$chromosome_name <- paste("chr",sex_genes_df$chromosome_name,sep="")
+sex_genes_df <- sex_genes_df[!grepl("RANDOM",sex_genes_df$chromosome_name),]
+sex_genes_df <- sex_genes_df[!grepl("UN",sex_genes_df$chromosome_name),]
+sex_genes_df$linedata <- rep(2,nrow(sex_genes_df))
+colnames(sex_genes_df) <- c("Chromosome","chromStart","chromEnd","EnsGeneName","LineData")
+
+
 
 ##############################################
 # Rewritten fucntions of the RCircos package #
@@ -316,72 +382,6 @@ RCircos.Label.Chromosome.Names_jpg <- function (chr.name.pos = NULL)
 ####################
 # Production plots #
 ####################
-
-# Load in gene annotation for Zebra finch genome
-ensembl=useMart("ensembl")
-ensembl = useDataset("tguttata_gene_ensembl",mart=ensembl)
-genes <- getBM(attributes = c('chromosome_name','start_position','end_position','hgnc_symbol','ensembl_gene_id'),mart = ensembl)
-print(dim(genes))
-genes <- genes[!duplicated(genes$ensembl_gene_id),]
-print(dim(genes))
-
-# Test data in RCircos package
-# data(UCSC.HG19.Human.CytoBandIdeogram);
-# head(UCSC.HG19.Human.CytoBandIdeogram);
-
-
-# Create cyto info object
-cyto.info <- cbind(df[,1],rep(0,nrow(df)),df[,2],rep("",nrow(df)),rep("black",nrow(df)))
-colnames(cyto.info) <- c("Chromosome","ChromStart","ChromEnd","Band","Stain")
-cyto.info <- as.data.frame(cyto.info,stringsAsFactors=F)
-cyto.info$ChromStart <- as.integer(cyto.info$ChromStart)
-cyto.info$ChromEnd <- as.integer(cyto.info$ChromEnd)
-
-# Set core Components
-chr.exclude <- NULL
-tracks.inside <- 5
-tracks.outside <- 0
-RCircos.Set.Core.Components(cyto.info, chr.exclude, tracks.inside, tracks.outside)
- 
-# Get plot parameters 
-rcircos.params <- RCircos.Get.Plot.Parameters();
-rcircos.cyto <- RCircos.Get.Plot.Ideogram();
-rcircos.position <- RCircos.Get.Plot.Positions();
-
-# Set some adjustmetns
-rcircos.params$heatmap.width <- 10
-RCircos.Reset.Plot.Parameters(rcircos.params);
-RCircos.List.Plot.Parameters()
-
-# Load in DE genes
-age_genes <- read.table("GeneLists/ListGenes_age.txt",header=F,stringsAsFactors = F)$V1
-age_genes_df <- genes[genes$ensembl_gene_id%in%age_genes,c(1:3,5)]
-
-sex_genes <- unique(c(read.table("GeneLists/ListGenes_1dph.txt",header=F,stringsAsFactors = F)$V1,
-                      read.table("GeneLists/ListGenes_20dph.txt",header=F,stringsAsFactors = F)$V1,
-                      read.table("GeneLists/ListGenes_65dph.txt",header=F,stringsAsFactors = F)$V1,
-                      read.table("GeneLists/ListGenes_adult.txt",header=F,stringsAsFactors = F)$V1))
-sex_genes_df <- genes[genes$ensembl_gene_id%in%sex_genes,c(1:3,5)]
-
-#Get df for genes in the right form
-age_genes_df$chromosome_name <- toupper(age_genes_df$chromosome_name)
-age_genes_df$chromosome_name <- paste("chr",age_genes_df$chromosome_name,sep="")
-age_genes_df <- age_genes_df[!grepl("RANDOM",age_genes_df$chromosome_name),]
-age_genes_df <- age_genes_df[!grepl("UN",age_genes_df$chromosome_name),]
-# age_genes_df <- age_genes_df[!grepl("MT",age_genes_df$chromosome_name),]
-# age_genes_df <- age_genes_df[!grepl("LG5",age_genes_df$chromosome_name),]
-# age_genes_df <- age_genes_df[!grepl("LG2",age_genes_df$chromosome_name),]
-age_genes_df$linedata <- rep(1,nrow(age_genes_df))
-colnames(age_genes_df) <- c("Chromosome","chromStart","chromEnd","EnsGeneName","LineData")
-
-
-sex_genes_df$chromosome_name <- toupper(sex_genes_df$chromosome_name)
-sex_genes_df$chromosome_name <- paste("chr",sex_genes_df$chromosome_name,sep="")
-sex_genes_df <- sex_genes_df[!grepl("RANDOM",sex_genes_df$chromosome_name),]
-sex_genes_df <- sex_genes_df[!grepl("UN",sex_genes_df$chromosome_name),]
-sex_genes_df$linedata <- rep(2,nrow(sex_genes_df))
-colnames(sex_genes_df) <- c("Chromosome","chromStart","chromEnd","EnsGeneName","LineData")
-
 
 # Storage as pdf
 ####################
