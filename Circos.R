@@ -50,7 +50,6 @@ RCircos.List.Plot.Parameters()
 # Load in DE genes
 age_genes <- read.table("GeneLists/ListGenes_age.txt",header=F,stringsAsFactors = F)$V1
 age_genes_df <- genes[genes$ensembl_gene_id%in%age_genes,c(1:3,5)]
-age_genes_
 
 sex_genes <- unique(c(read.table("GeneLists/ListGenes_1dph.txt",header=F,stringsAsFactors = F)$V1,
                       read.table("GeneLists/ListGenes_20dph.txt",header=F,stringsAsFactors = F)$V1,
