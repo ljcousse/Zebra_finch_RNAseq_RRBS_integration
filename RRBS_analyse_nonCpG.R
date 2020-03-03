@@ -10,7 +10,7 @@
 ## Parameter settings 
 #####################
 
-home_dir <- "/home/louisc/Zebra_Finch_new/"
+home_dir <- getwd()
 data_dir_CHG <- "/data/louisc/Zebra_Finch/oxRRBS/CHG/"
 data_dir_CHH <- "/data/louisc/Zebra_Finch/oxRRBS/CHH/"
 options(warn=2L)

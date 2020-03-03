@@ -10,7 +10,7 @@
 ## Parameter settings 
 #####################
 
-home_dir <- "/home/louisc/Zebra_Finch_new/"
+home_dir <- getwd()
 data_dir <- "/data/sandras/BiSeq"
 options(warn=2L)
 mincov<-5 
