@@ -16,6 +16,7 @@ library(edgeR)
 library(BiSeq)
 library(xlsx)
 
+working_dir <- getwd()
 
 # Function for calculation of percentage of genes per bin
 ###############
@@ -39,7 +40,6 @@ CalcPercentage <- function(ratio,am_bins,cte){
 ## Load Data & annotation
 ###############
 
-setwd("C:/Users/Louis/OneDrive/Louis/AAP/Zebra_Finch_new/")
 rnadata <- read.table("Plastoscine.txt",header=T,sep="\t",quote="")
 rna_annot <- read.table("Plastoscine_annot.txt",header=F,sep="\t",quote="",stringsAsFactors = F)$V1
 
