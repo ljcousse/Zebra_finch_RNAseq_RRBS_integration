@@ -23,7 +23,6 @@ print(dim(genes))
 # head(UCSC.HG19.Human.CytoBandIdeogram);
 
 # Load in chromosome info
-setwd("C:/Users/Louis/OneDrive/Louis/AAP/Zebra_Finch_new/")
 df <- read.table("genome.txt",stringsAsFactors = F,header=F)
 
 
@@ -448,80 +447,80 @@ RCircos.Label.Chromosome.Names_jpg <- function (chr.name.pos = NULL)
 
 
 
-#########################
-# Possible usefull code #
-#########################
-
-# RCircos.Area.Highlight(highlight.area=c("chr1",12700000,34600000), track.num=c(1:10),
-# side=c("in"), hightlight.color=rgb(0.5, 0.5, 0, 0.5),
-# inside.pos=NULL, outside.pos=NULL)
-
-RCircos.Gene.Connector.Plot(genes_df,track.num=1, side="in");
-RCircos.Gene.Name.Plot(genes_df,track.num = 2,side="in",name.col = 4)
-RCircos.Line.Plot(genes_df,data.col=5,1,"in")
-RCircos.Point.Plot(genes_df,track.num=4,"in",data.col=5,min.value = 0,max.value = 1000,outside.pos = 1.29,inside.pos = 1.17
-                   ,point.type=20,point.scale=1)
-
-library(circlize)
-
-# Create data
-data = data.frame(
-  factor = sample(letters[1:8], 1000, replace = TRUE),
-  x = rnorm(1000), 
-  y = runif(1000)
-)
-
-# Step1: Initialise the chart giving factor and x-axis.
-circos.initialize( factors=data$factor, x=data$x )
-
-# Step 2: Build the regions. 
-circos.trackPlotRegion(factors = data$factor, y = data$y, panel.fun = function(x, y) {
-  circos.axis()
-})
-
-# library
-library(circlize)
-
-# Create data
-set.seed(123)
-data = data.frame(
-  factor = sample(letters[1:8], 1000, replace = TRUE),
-  x = rnorm(1000), 
-  y = runif(1000)
-)
-
-# Initialize the plot.
-par(mar = c(1, 1, 1, 1) ) 
-circos.initialize(factors = data$factor, x = data$x )
-
-# Build the regions of track #1
-circos.trackPlotRegion(factors = data$factor, y=data$y , bg.col = rgb(0.1,0.1,seq(0,1,0.1),0.4) , bg.border = NA)
-
-# Add a link between a point and another
-circos.link("a", 0, "b", 0, h = 0.4)
-
-# Add a link between a point and a zone
-circos.link("e", 0, "g", c(-1,1), col = "green", lwd = 2, lty = 2, border="black" )
-
-# Add a link between a zone and another
-circos.link("c", c(-0.5, 0.5), "d", c(-0.5,0.5), col = "red", border = "blue", h = 0.2)
-
-#Create data
-name=c(3,10,10,3,6,7,8,3,6,1,2,2,6,10,2,3,3,10,4,5,9,10)
-feature=paste("feature ", c(1,1,2,2,2,2,2,3,3,3,3,3,3,3,4,4,4,4,5,5,5,5) , sep="")
-dat <- data.frame(name,feature)
-dat <- with(dat, table(name, feature))
-
-# Charge the circlize library
-library(circlize)
-
-# Make the circular plot
-chordDiagram(as.data.frame(dat), transparency = 0.5)
-
-data(RCircos.Gene.Label.Data);
-name.col <- 4;
-side <- "in";
-track.num <- 1;
-RCircos.Gene.Connector.Plot(RCircos.Gene.Label.Data[RCircos.Gene.Label.Data$Chromosome!="chrX",],track.num, side);
-track.num <- 2;
-RCircos.Gene.Name.Plot(RCircos.Gene.Label.Data,name.col,track.num, side);
+# #########################
+# # Possible usefull code #
+# #########################
+# 
+# # RCircos.Area.Highlight(highlight.area=c("chr1",12700000,34600000), track.num=c(1:10),
+# # side=c("in"), hightlight.color=rgb(0.5, 0.5, 0, 0.5),
+# # inside.pos=NULL, outside.pos=NULL)
+# 
+# RCircos.Gene.Connector.Plot(genes_df,track.num=1, side="in");
+# RCircos.Gene.Name.Plot(genes_df,track.num = 2,side="in",name.col = 4)
+# RCircos.Line.Plot(genes_df,data.col=5,1,"in")
+# RCircos.Point.Plot(genes_df,track.num=4,"in",data.col=5,min.value = 0,max.value = 1000,outside.pos = 1.29,inside.pos = 1.17
+#                    ,point.type=20,point.scale=1)
+# 
+# library(circlize)
+# 
+# # Create data
+# data = data.frame(
+#   factor = sample(letters[1:8], 1000, replace = TRUE),
+#   x = rnorm(1000), 
+#   y = runif(1000)
+# )
+# 
+# # Step1: Initialise the chart giving factor and x-axis.
+# circos.initialize( factors=data$factor, x=data$x )
+# 
+# # Step 2: Build the regions. 
+# circos.trackPlotRegion(factors = data$factor, y = data$y, panel.fun = function(x, y) {
+#   circos.axis()
+# })
+# 
+# # library
+# library(circlize)
+# 
+# # Create data
+# set.seed(123)
+# data = data.frame(
+#   factor = sample(letters[1:8], 1000, replace = TRUE),
+#   x = rnorm(1000), 
+#   y = runif(1000)
+# )
+# 
+# # Initialize the plot.
+# par(mar = c(1, 1, 1, 1) ) 
+# circos.initialize(factors = data$factor, x = data$x )
+# 
+# # Build the regions of track #1
+# circos.trackPlotRegion(factors = data$factor, y=data$y , bg.col = rgb(0.1,0.1,seq(0,1,0.1),0.4) , bg.border = NA)
+# 
+# # Add a link between a point and another
+# circos.link("a", 0, "b", 0, h = 0.4)
+# 
+# # Add a link between a point and a zone
+# circos.link("e", 0, "g", c(-1,1), col = "green", lwd = 2, lty = 2, border="black" )
+# 
+# # Add a link between a zone and another
+# circos.link("c", c(-0.5, 0.5), "d", c(-0.5,0.5), col = "red", border = "blue", h = 0.2)
+# 
+# #Create data
+# name=c(3,10,10,3,6,7,8,3,6,1,2,2,6,10,2,3,3,10,4,5,9,10)
+# feature=paste("feature ", c(1,1,2,2,2,2,2,3,3,3,3,3,3,3,4,4,4,4,5,5,5,5) , sep="")
+# dat <- data.frame(name,feature)
+# dat <- with(dat, table(name, feature))
+# 
+# # Charge the circlize library
+# library(circlize)
+# 
+# # Make the circular plot
+# chordDiagram(as.data.frame(dat), transparency = 0.5)
+# 
+# data(RCircos.Gene.Label.Data);
+# name.col <- 4;
+# side <- "in";
+# track.num <- 1;
+# RCircos.Gene.Connector.Plot(RCircos.Gene.Label.Data[RCircos.Gene.Label.Data$Chromosome!="chrX",],track.num, side);
+# track.num <- 2;
+# RCircos.Gene.Name.Plot(RCircos.Gene.Label.Data,name.col,track.num, side);
