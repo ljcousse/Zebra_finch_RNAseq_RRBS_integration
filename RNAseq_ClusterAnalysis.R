@@ -17,7 +17,6 @@ library(ggplot2)
 ## Load Data & annotation
 ###############
 
-setwd("C:/Users/Louis/OneDrive/Louis/AAP/Zebra_Finch_new/")
 rnadata<-read.table("Plastoscine.txt",header=T,sep="\t",quote="")
 rna_annot <- read.table("Plastoscine_annot.txt",header=F,sep="\t",quote="")$V1
 
@@ -204,66 +203,66 @@ print(n_clusters)
 print(n_clusters/13891)
 
 
-
-####################
-#####################
-
-
-# VOOR WEGIO
-
-
-#################"
-###################
-
-
-## Check for differential methylation
-###############
-
-RRBS_age_full <- read.table("RRBS_age_full.txt",header=T,stringsAsFactors = F,sep="\t")
-genes_RRBS_age <- as.character(unique(unlist(RRBS_age_full[RRBS_age_full$P.Value<0.05,grepl("gene",colnames(RRBS_age_full)) & !grepl("gene_symbol",colnames(RRBS_age_full))]))[-1])
-for (t in 1:am_patt){
-  print(paste(pattern,collapse="_"))
-  pattern <- eval(parse(text = paste("pattern",t,sep="")))
-  genes_cluster <- read.table(paste("GeneLists/ListGenes_patt_",paste(pattern,collapse="_"),".txt",sep=""),header=F,stringsAsFactors = F)$V1
-  print(length(genes_cluster))
-  # print(sum(genes_cluster%in%genes_RRBS_age))
-  # print(sum(genes_cluster%in%genes_RRBS_age)/length(genes_RRBS_age))
-  mat <- cbind(c(sum(genes_cluster%in%genes_RRBS_age),length(genes_cluster)),
-               c(length(genes_RRBS_age),10574))
-  print(mat)
-  print(chisq.test(mat)$p.value)
-}
-
-
-
-
-####
-## Sex ##
-
-
-# Calculate mean per gene
-print(dim(logcpm))
-logcpm_rowm <- NULL
-for (t in unique(f1)){
-  logcpm_rowm <- cbind(logcpm_rowm,rowMeans(logcpm[,f2=="M" & f1==t])-rowMeans(logcpm[,f2=="F" & f1==t]))
-}
-print(dim(logcpm_rowm))
-
-declining <- (logcpm_rowm[,1]>logcpm_rowm[,2]) & (logcpm_rowm[,2]>logcpm_rowm[,3]) & (logcpm_rowm[,3]>logcpm_rowm[,4])
-
-for (i in which(declining)){
-  if (i == which(declining)[1]){
-    plot(1:4,logcpm_rowm[i,])
-  } else {
-    lines(1:4,logcpm_rowm)
-  }
-}
-
-fulldata_output_sorted <- fulldata_output[sort(as.character(fulldata_output$ensembl.gene.id),index.return=T)$ix,]
-
-sort(unique(genes$hgnc_symbol[genes$ensembl_gene_id%in%rna_annot[declining]]))
-
-ascending <- (logcpm_rowm[,4]>logcpm_rowm[,3]) & (logcpm_rowm[,3]>logcpm_rowm[,2]) & (logcpm_rowm[,2]>logcpm_rowm[,1])
+# 
+# ####################
+# #####################
+# 
+# 
+# # VOOR WEGIO
+# 
+# 
+# #################"
+# ###################
+# 
+# 
+# ## Check for differential methylation
+# ###############
+# 
+# RRBS_age_full <- read.table("RRBS_age_full.txt",header=T,stringsAsFactors = F,sep="\t")
+# genes_RRBS_age <- as.character(unique(unlist(RRBS_age_full[RRBS_age_full$P.Value<0.05,grepl("gene",colnames(RRBS_age_full)) & !grepl("gene_symbol",colnames(RRBS_age_full))]))[-1])
+# for (t in 1:am_patt){
+#   print(paste(pattern,collapse="_"))
+#   pattern <- eval(parse(text = paste("pattern",t,sep="")))
+#   genes_cluster <- read.table(paste("GeneLists/ListGenes_patt_",paste(pattern,collapse="_"),".txt",sep=""),header=F,stringsAsFactors = F)$V1
+#   print(length(genes_cluster))
+#   # print(sum(genes_cluster%in%genes_RRBS_age))
+#   # print(sum(genes_cluster%in%genes_RRBS_age)/length(genes_RRBS_age))
+#   mat <- cbind(c(sum(genes_cluster%in%genes_RRBS_age),length(genes_cluster)),
+#                c(length(genes_RRBS_age),10574))
+#   print(mat)
+#   print(chisq.test(mat)$p.value)
+# }
+# 
+# 
+# 
+# 
+# ####
+# ## Sex ##
+# 
+# 
+# # Calculate mean per gene
+# print(dim(logcpm))
+# logcpm_rowm <- NULL
+# for (t in unique(f1)){
+#   logcpm_rowm <- cbind(logcpm_rowm,rowMeans(logcpm[,f2=="M" & f1==t])-rowMeans(logcpm[,f2=="F" & f1==t]))
+# }
+# print(dim(logcpm_rowm))
+# 
+# declining <- (logcpm_rowm[,1]>logcpm_rowm[,2]) & (logcpm_rowm[,2]>logcpm_rowm[,3]) & (logcpm_rowm[,3]>logcpm_rowm[,4])
+# 
+# for (i in which(declining)){
+#   if (i == which(declining)[1]){
+#     plot(1:4,logcpm_rowm[i,])
+#   } else {
+#     lines(1:4,logcpm_rowm)
+#   }
+# }
+# 
+# fulldata_output_sorted <- fulldata_output[sort(as.character(fulldata_output$ensembl.gene.id),index.return=T)$ix,]
+# 
+# sort(unique(genes$hgnc_symbol[genes$ensembl_gene_id%in%rna_annot[declining]]))
+# 
+# ascending <- (logcpm_rowm[,4]>logcpm_rowm[,3]) & (logcpm_rowm[,3]>logcpm_rowm[,2]) & (logcpm_rowm[,2]>logcpm_rowm[,1])
 
 sort(unique(genes$hgnc_symbol[genes$ensembl_gene_id%in%rna_annot[ascending]]))
 
