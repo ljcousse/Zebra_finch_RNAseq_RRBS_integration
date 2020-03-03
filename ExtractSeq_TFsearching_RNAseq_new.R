@@ -122,7 +122,7 @@ if (file.exists("Genes.Rda")){
   load("Genes.Rda")
   genes <- genes[!duplicated(genes$ensembl_gene_id),]
 } else {
-  ensembl <- useMart("ENSEMBL_MART_ENSEMBL",host="www.ensembl.org")
+  ensembl=useMart("ensembl",host="http://sep2019.archive.ensembl.org")
   ensembl <- useDataset("tguttata_gene_ensembl",mart=ensembl)
   genes <- getBM(attributes = c('hgnc_symbol', 'ensembl_gene_id','chromosome_name','start_position','end_position','transcription_start_site'),mart = ensembl)
   print(head(genes))

@@ -49,7 +49,7 @@ list_20dph <- read.table("GeneLists/ListGenes_20dph.txt",header=F,stringsAsFacto
 list_65dph <- read.table("GeneLists/ListGenes_65dph.txt",header=F,stringsAsFactors = F)$V1
 list_adult <- read.table("GeneLists/ListGenes_adult.txt",header=F,stringsAsFactors = F)$V1
 
-ensembl=useMart("ensembl")
+ensembl=useMart("ensembl",host="http://sep2019.archive.ensembl.org")
 ensembl = useDataset("tguttata_gene_ensembl",mart=ensembl)
 genes <- getBM(attributes = c('hgnc_symbol', 'ensembl_gene_id','chromosome_name'),mart = ensembl)
 

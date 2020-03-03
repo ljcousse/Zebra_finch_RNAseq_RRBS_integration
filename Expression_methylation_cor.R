@@ -97,7 +97,7 @@ for (i in 1:length(rrbs$gene)){
 
 # Get TSS and extra annotation
 if (!file.exists("Genes.Rda")){
-  ensembl=useMart("ensembl")
+  ensembl=useMart("ensembl",host="http://sep2019.archive.ensembl.org")
   ensembl = useDataset("tguttata_gene_ensembl",mart=ensembl)
   genes <- getBM(attributes = c('ensembl_gene_id','hgnc_symbol','chromosome_name','start_position','end_position','transcription_start_site'),mart = ensembl)
   print(dim(genes))

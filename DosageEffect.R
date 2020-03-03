@@ -48,7 +48,7 @@ rownames(out2excel) <- rna_annot
 write.xlsx(out2excel,"RNAseq_Raw.xlsx")
 
 # Load in ensembl annotation
-ensembl=useMart("ensembl")
+ensembl=useMart("ensembl",host="http://sep2019.archive.ensembl.org")
 ensembl = useDataset("tguttata_gene_ensembl",mart=ensembl)
 genes <- getBM(attributes = c('hgnc_symbol', 'ensembl_gene_id','chromosome_name'),mart = ensembl)
 genes <- genes[!duplicated(genes$ensembl_gene_id),]

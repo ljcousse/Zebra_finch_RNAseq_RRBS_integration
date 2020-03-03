@@ -12,7 +12,7 @@ library(biomaRt)
 df <- read.table("genome.txt",stringsAsFactors = F,header=F)
 
 # Load in gene annotation for Zebra finch genome
-ensembl=useMart("ensembl")
+ensembl=useMart("ensembl",host="http://sep2019.archive.ensembl.org")
 ensembl = useDataset("tguttata_gene_ensembl",mart=ensembl)
 genes <- getBM(attributes = c('chromosome_name','start_position','end_position','hgnc_symbol','ensembl_gene_id'),mart = ensembl)
 print(dim(genes))

@@ -113,7 +113,7 @@ if (file.exists("Genes_RRBS.Rda")){
   load("Genes_RRBS.Rda")
 } else {
   # ensembl=useMart(biomart="ensembl",host="jan2019.archive.ensembl.org")
-  ensembl=useMart(biomart="ensembl")
+  ensembl=useMart("ensembl",host="http://sep2019.archive.ensembl.org")
   ensembl = useDataset("tguttata_gene_ensembl",mart=ensembl)
   genes <- getBM(attributes = c('ensembl_gene_id','hgnc_symbol','chromosome_name','start_position','end_position','transcription_start_site'),mart = ensembl)
   colnames(genes) <- c("gene","gene_symbol","chr","start","end","TSS")
@@ -198,6 +198,10 @@ for (i in 2:max_n){
   
 }
 
+genelist_allgenes_RRBS <- unique(unlist(gene))[-1]
+head(genelist_allgenes_RRBS)
+length(genelist_allgenes_RRBS)
+write.table(genelist_allgenes_RRBS,"GeneLists/ListGenes_allRRBS.txt",col.names = F,row.names = F,quote = F, sep="\n")
 
 ## Boxplot Methylation percentage
 ################################
