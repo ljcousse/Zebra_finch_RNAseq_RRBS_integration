@@ -41,7 +41,7 @@ if (file.exists("uniprot.Rda")){
     print(paste(i*300,"done out of",length(egs)))
   }
   uniprot[is.na(uniprot)] <- ""
-  save(uniprot,file="/home/louisc/Zebra_Finch/uniprot.Rda")
+  save(uniprot,file="uniprot.Rda")
 }
 
 
