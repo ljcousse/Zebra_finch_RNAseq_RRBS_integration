@@ -42,6 +42,7 @@ Rscript InstallPackages.R
 
 # Differential expression analysis
 mkdir GeneLists
+mkdir boxplots
 Rscript DE_analysis.R
 
 # General statistics & Plots for paper

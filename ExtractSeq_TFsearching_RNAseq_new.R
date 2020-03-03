@@ -1,13 +1,24 @@
+#########################################
+#########################################
+##                                     ##
+## ExtractSeq_TFsearching_RNAseq_new.R ##
+##                                     ##
+#########################################
+#########################################
+
 
 library("biomaRt")
 library("parallel")
 library("edgeR")
 options(warn=1)
 
+working_dir <- getwd()
+data_dir <- "/share/louisc/Porthos_backup/louisc/Project_Plastoscine/"
+
 # Loading Chromosomes and defining functions
 ##############################################
 
-setwd("/share/louisc/Porthos_backup/louisc/Project_Plastoscine/")
+setwd(data_dir)
 
 chromosome <- c(1, "1A", "1B", 2, 3, 4, "4A", 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 'LGE22', 'Z', 'LG2', 'LG5', 'MT')
 
@@ -104,7 +115,7 @@ getPromSeq <- function(pos,chrom,sense){
 # Seq extraction 
 ##################
 
-setwd("/home/louisc/Zebra_Finch_new")
+setwd(working_dir)
 
 # print(listMarts(host="www.ensembl.org"))
 if (file.exists("Genes.Rda")){
