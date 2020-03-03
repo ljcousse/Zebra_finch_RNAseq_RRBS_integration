@@ -25,7 +25,7 @@ annot$ID <- unlist(strsplit(annot$ID,"\\.[0-9]"))
 # List extraction 
 ##################
 
-fimo_all <- read.table(paste(working_dir,"fimo_RNAseq_out/fimo.txt",sep=""),header=T,stringsAsFactors = F, sep="\t")
+fimo_all <- read.table(paste(working_dir,"/fimo_RNAseq_out/fimo.txt",sep=""),header=T,stringsAsFactors = F, sep="\t")
 # fimo_all <- fimo_all[fimo_all$Adj.Pval<0.05,]
 
 fimo_all$ID <- unlist(strsplit(fimo_all$ID,"\\.[0-9]"))
