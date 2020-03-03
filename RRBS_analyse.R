@@ -37,8 +37,10 @@ sink(file='RRBS_analyse.log', type = c("output", "message"))
 ## Extra annotation Uniprot 
 ###########################
 
-if (file.exists(paste(home_dir,"uniprot.Rda",sep=""))){
-  load(file=paste(home_dir,"uniprot.Rda",sep=""))
+setwd(home_dir)
+
+if (file.exists("uniprot.Rda")){
+  load(file="uniprot.Rda")
 } else {
   up <- UniProt.ws(taxId=59729)
   # availableUniprotSpecies(pattern="guttata")
@@ -55,7 +57,7 @@ if (file.exists(paste(home_dir,"uniprot.Rda",sep=""))){
     print(paste(i*300,"done out of",length(egs)))
   }
   uniprot[is.na(uniprot)] <- ""
-  save(uniprot,file=paste(home_dir,"uniprot.Rda",sep=""))
+  save(uniprot,file="uniprot.Rda")
 }
 
 
