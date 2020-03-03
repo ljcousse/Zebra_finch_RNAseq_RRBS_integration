@@ -26,6 +26,7 @@ mkdir JASPAR_output
 Rscript InstallPackages.R
 
 
+
 ##############
 ##############
 ##  RNAseq  ##
@@ -67,9 +68,7 @@ for coi in "1dph" "20dph" "65dph" "adult" "age"
 do
 	Rscript JASPAR_TF_Pairwise.R $coi,nonsig &
 done
-Rscript JASPAR_TF_Pairwise.R dosage,nodosage &
-Rscript JASPAR_TF_Pairwise.R dosage_bis,nodosage &
-Rscript JASPAR_TF_Pairwise.R MaleOver,FemaleOver &
+
 
 
 ####################
@@ -141,6 +140,11 @@ Rscript Expression_methylation_cor
 
 
 Rscript DosageEffect
+
+# TF analysis
+Rscript JASPAR_TF_Pairwise.R dosage,nodosage &
+Rscript JASPAR_TF_Pairwise.R dosage_bis,nodosage &
+Rscript JASPAR_TF_Pairwise.R MaleOver,FemaleOver &
 
 
 
