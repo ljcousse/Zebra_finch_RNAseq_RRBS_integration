@@ -1,3 +1,6 @@
 PlastoscineProject
 
-Don't forget to use the following command to set bash scripts to the right EOF coding "dos2unix *.bash"
+Run the bash script: "FullAnalysis.bash" to get all results. When running into problems contact Louis Coussement via louis.coussement@ugent.be or Tim De Meyer via tim.demeyer@ugent.be
+
+For citations use:
+\citation paper
