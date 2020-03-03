@@ -133,6 +133,52 @@ RCircos.Chromosome.Ideogram.Plot_L <- function (tick.interval = 0)
 # Rewrite to go outside standard heatmap colors
 ################################################
 
+RCircos.Get.Heatmap.Color.Scale_L <- function (heatmap.color = NULL) 
+{
+  if (is.null(heatmap.color)) 
+    stop("Missing argument in RCircos.Get.Heatmap.Color.Scale().\n")
+  allOnes <- seq(1, 1, length = 256)
+  allZeros <- seq(0, 0, length = 256)
+  one2zeor <- seq(1, 0, length = 256)
+  zero2one <- seq(0, 1, length = 256)
+  if (heatmap.color == "BlueWhiteRed") {
+    RedRamp <- rgb(allOnes, one2zeor, one2zeor)
+    BlueRamp <- rgb(zero2one, zero2one, allOnes)
+    ColorRamp <- cbind(BlueRamp, RedRamp)
+  }
+  else if (heatmap.color == "GreenWhiteRed") {
+    RedRamp <- rgb(allOnes, one2zeor, one2zeor)
+    GreenRamp <- rgb(zero2one, allOnes, zero2one)
+    ColorRamp <- cbind(GreenRamp, RedRamp)
+  }
+  else if (heatmap.color == "GreenYellowRed") {
+    RedRamp <- rgb(allOnes, one2zeor, allZeros)
+    GreenRamp <- rgb(zero2one, allOnes, allZeros)
+    ColorRamp <- cbind(GreenRamp, RedRamp)
+  }
+  else if (heatmap.color == "GreenBlackRed") {
+    RedRamp <- rgb(zero2one, allZeros, allZeros)
+    GreenRamp <- rgb(allZeros, one2zeor, allZeros)
+    ColorRamp <- cbind(GreenRamp, RedRamp)
+  }
+  else if (heatmap.color == "YellowToRed") {
+    ColorRamp <- rgb(allOnes, one2zeor, allZeros)
+  } 
+  else if (heatmap.color == "goldenrod1") {
+    ColorRamp <- rep("goldenrod1",256)
+  }
+  else if (heatmap.color == "goldenrod2") {
+    ColorRamp <- rep("goldenrod2",256)
+  }
+  else if (heatmap.color == "goldenrod3") {
+    ColorRamp <- rep("goldenrod3",256)
+  }
+  else {
+    ColorRamp <- rgb(one2zeor, one2zeor, one2zeor)
+  }
+  return(ColorRamp)
+}
+
 
 
 RCircos.Heatmap.Plot_L <- function (heatmap.data = NULL, data.col = NULL, track.num = NULL, 
@@ -184,51 +230,6 @@ RCircos.Heatmap.Plot_L <- function (heatmap.data = NULL, data.col = NULL, track.
 
 
 
-RCircos.Get.Heatmap.Color.Scale_L <- function (heatmap.color = NULL) 
-{
-  if (is.null(heatmap.color)) 
-    stop("Missing argument in RCircos.Get.Heatmap.Color.Scale().\n")
-  allOnes <- seq(1, 1, length = 256)
-  allZeros <- seq(0, 0, length = 256)
-  one2zeor <- seq(1, 0, length = 256)
-  zero2one <- seq(0, 1, length = 256)
-  if (heatmap.color == "BlueWhiteRed") {
-    RedRamp <- rgb(allOnes, one2zeor, one2zeor)
-    BlueRamp <- rgb(zero2one, zero2one, allOnes)
-    ColorRamp <- cbind(BlueRamp, RedRamp)
-  }
-  else if (heatmap.color == "GreenWhiteRed") {
-    RedRamp <- rgb(allOnes, one2zeor, one2zeor)
-    GreenRamp <- rgb(zero2one, allOnes, zero2one)
-    ColorRamp <- cbind(GreenRamp, RedRamp)
-  }
-  else if (heatmap.color == "GreenYellowRed") {
-    RedRamp <- rgb(allOnes, one2zeor, allZeros)
-    GreenRamp <- rgb(zero2one, allOnes, allZeros)
-    ColorRamp <- cbind(GreenRamp, RedRamp)
-  }
-  else if (heatmap.color == "GreenBlackRed") {
-    RedRamp <- rgb(zero2one, allZeros, allZeros)
-    GreenRamp <- rgb(allZeros, one2zeor, allZeros)
-    ColorRamp <- cbind(GreenRamp, RedRamp)
-  }
-  else if (heatmap.color == "YellowToRed") {
-    ColorRamp <- rgb(allOnes, one2zeor, allZeros)
-  } 
-  else if (heatmap.color == "goldenrod1") {
-    ColorRamp <- rep("goldenrod1",256)
-  }
-  else if (heatmap.color == "goldenrod2") {
-    ColorRamp <- rep("goldenrod2",256)
-  }
-  else if (heatmap.color == "goldenrod3") {
-    ColorRamp <- rep("goldenrod3",256)
-  }
-  else {
-    ColorRamp <- rgb(one2zeor, one2zeor, one2zeor)
-  }
-  return(ColorRamp)
-}
 
 
 
