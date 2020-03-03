@@ -46,12 +46,15 @@ if (length(args)==2){
   fimo <- fimo_all[fimo_all$gene%in%genes_in,]
   fimo_ns <- fimo_all[!(fimo_all$gene%in%genes_in),]
   s <- length(genes_in)
-  ns <- 0
-  for (i in 1:40){
-    fasta_f <- read.table(paste("seq_RNAseq_TFsearching/seq_",i,".fa",sep=""),stringsAsFactors = F,sep="\t")$V1
-    fasta_f <- fasta_f[grep(">",fasta_f)]
-    ns <- ns + length(fasta_f)
-  }
+  # ns <- 0
+  # for (i in 1:40){
+  #   fasta_f <- read.table(paste("seq_RNAseq_TFsearching/seq_",i,".fa",sep=""),stringsAsFactors = F,sep="\t")$V1
+  #   fasta_f <- fasta_f[grep(">",fasta_f)]
+  #   ns <- ns + length(fasta_f)
+  # }
+  fasta_f <- read.table("seq_RNAseq_TFsearching.fa",stringsAsFactors = F,sep="\t")$V1
+  fasta_f <- fasta_f[grep(">",fasta_f)]
+  ns <- length(fasta_f)
   ns <- ns - s
   print(head(fimo))
   print(head(fimo_ns))
