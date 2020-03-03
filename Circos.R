@@ -8,6 +8,9 @@ library(RCircos)
 library(xlsx)
 library(biomaRt)
 
+# Load in chromosome info
+df <- read.table("genome.txt",stringsAsFactors = F,header=F)
+
 
 ##############################################
 # Rewritten fucntions of the RCircos package #
@@ -325,9 +328,6 @@ print(dim(genes))
 # Test data in RCircos package
 # data(UCSC.HG19.Human.CytoBandIdeogram);
 # head(UCSC.HG19.Human.CytoBandIdeogram);
-
-# Load in chromosome info
-df <- read.table("genome.txt",stringsAsFactors = F,header=F)
 
 
 # Create cyto info object
