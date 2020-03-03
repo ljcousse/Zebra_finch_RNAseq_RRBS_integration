@@ -50,19 +50,21 @@ RCircos.List.Plot.Parameters()
 # Load in DE genes
 age_genes <- read.table("GeneLists/ListGenes_age.txt",header=F,stringsAsFactors = F)$V1
 age_genes_df <- genes[genes$ensembl_gene_id%in%age_genes,c(1:3,5)]
+age_genes_
 
 sex_genes <- unique(c(read.table("GeneLists/ListGenes_1dph.txt",header=F,stringsAsFactors = F)$V1,
                       read.table("GeneLists/ListGenes_20dph.txt",header=F,stringsAsFactors = F)$V1,
                       read.table("GeneLists/ListGenes_65dph.txt",header=F,stringsAsFactors = F)$V1,
                       read.table("GeneLists/ListGenes_adult.txt",header=F,stringsAsFactors = F)$V1))
 sex_genes_df <- genes[genes$ensembl_gene_id%in%sex_genes,c(1:3,5)]
+sex_genes_df <- sex_genes_df[!grepl("RRCB",sex_genes_df$chromosome_name),]
 
 #Get df for genes in the right form
 age_genes_df$chromosome_name <- toupper(age_genes_df$chromosome_name)
 age_genes_df$chromosome_name <- paste("chr",age_genes_df$chromosome_name,sep="")
 age_genes_df <- age_genes_df[!grepl("RANDOM",age_genes_df$chromosome_name),]
 age_genes_df <- age_genes_df[!grepl("UN",age_genes_df$chromosome_name),]
-# age_genes_df <- age_genes_df[!grepl("MT",age_genes_df$chromosome_name),]
+age_genes_df <- age_genes_df[!grepl("RRCB",age_genes_df$chromosome_name),]
 # age_genes_df <- age_genes_df[!grepl("LG5",age_genes_df$chromosome_name),]
 # age_genes_df <- age_genes_df[!grepl("LG2",age_genes_df$chromosome_name),]
 age_genes_df$linedata <- rep(1,nrow(age_genes_df))
