@@ -10,6 +10,8 @@ library("biomaRt")
 library("parallel")
 options(warn=2)
 
+working_dir <- getwd()
+data_dir <- "/share/louisc/Porthos_backup/louisc/Project_Plastoscine/"
 
 # Loading Contrast of Interest
 #################################
@@ -19,7 +21,7 @@ coi <- c("age")
 # Loading Chromosomes and defining functions
 ##############################################
 
-setwd("/share/louisc/Porthos_backup/louisc/Project_Plastoscine/")
+setwd(data_dir)
 
 chromosome <- c(1, "1A", "1B", 2, 3, 4, "4A", 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 'LGE22', 'Z', 'LG2', 'LG5', 'MT')
 
@@ -88,7 +90,7 @@ getSeq <- function(pos,chrom){
 ##################
 
 
-setwd("/home/louisc/Zebra_Finch_new")
+setwd(working_dir)
 
 for (j in 1:length(coi)){
   rrbs <- read.table(file=paste("RRBS_",coi[j],"_RNAseq.txt",sep=""),header=T,stringsAsFactors = F,sep="\t")
