@@ -144,7 +144,7 @@ all_genes <- rna_annot[keep]
 
 print(length(all_genes))
 
-setwd("/home/louisc/Zebra_Finch_new/")
+setwd(working_dir)
 
 coi_new <- NULL
 for (i in 1:length(all_genes)){
