@@ -2,147 +2,11 @@
 # RCircos plots # 
 #################
 
-# Scroll down to rewritten functions of the RCircos package and first run these, because they are 
-# necessary to make the plots
 
 # Load in Libraries
 library(RCircos)
 library(xlsx)
 library(biomaRt)
-
-# Load in gene annotation for Zebra finch genome
-ensembl=useMart("ensembl")
-ensembl = useDataset("tguttata_gene_ensembl",mart=ensembl)
-genes <- getBM(attributes = c('chromosome_name','start_position','end_position','hgnc_symbol','ensembl_gene_id'),mart = ensembl)
-print(dim(genes))
-genes <- genes[!duplicated(genes$ensembl_gene_id),]
-print(dim(genes))
-
-# Test data in RCircos package
-# data(UCSC.HG19.Human.CytoBandIdeogram);
-# head(UCSC.HG19.Human.CytoBandIdeogram);
-
-# Load in chromosome info
-df <- read.table("genome.txt",stringsAsFactors = F,header=F)
-
-
-# Create cyto info object
-cyto.info <- cbind(df[,1],rep(0,nrow(df)),df[,2],rep("",nrow(df)),rep("black",nrow(df)))
-colnames(cyto.info) <- c("Chromosome","ChromStart","ChromEnd","Band","Stain")
-cyto.info <- as.data.frame(cyto.info,stringsAsFactors=F)
-cyto.info$ChromStart <- as.integer(cyto.info$ChromStart)
-cyto.info$ChromEnd <- as.integer(cyto.info$ChromEnd)
-
-# Set core Components
-chr.exclude <- NULL
-tracks.inside <- 5
-tracks.outside <- 0
-RCircos.Set.Core.Components(cyto.info, chr.exclude, tracks.inside, tracks.outside)
- 
-# Get plot parameters 
-rcircos.params <- RCircos.Get.Plot.Parameters();
-rcircos.cyto <- RCircos.Get.Plot.Ideogram();
-rcircos.position <- RCircos.Get.Plot.Positions();
-
-# Set some adjustmetns
-rcircos.params$heatmap.width <- 10
-RCircos.Reset.Plot.Parameters(rcircos.params);
-RCircos.List.Plot.Parameters()
-
-# Load in DE genes
-age_genes <- read.table("GeneLists/ListGenes_age.txt",header=F,stringsAsFactors = F)$V1
-age_genes_df <- genes[genes$ensembl_gene_id%in%age_genes,c(1:3,5)]
-
-sex_genes <- unique(c(read.table("GeneLists/ListGenes_1dph.txt",header=F,stringsAsFactors = F)$V1,
-                      read.table("GeneLists/ListGenes_20dph.txt",header=F,stringsAsFactors = F)$V1,
-                      read.table("GeneLists/ListGenes_65dph.txt",header=F,stringsAsFactors = F)$V1,
-                      read.table("GeneLists/ListGenes_adult.txt",header=F,stringsAsFactors = F)$V1))
-sex_genes_df <- genes[genes$ensembl_gene_id%in%sex_genes,c(1:3,5)]
-
-#Get df for genes in the right form
-age_genes_df$chromosome_name <- toupper(age_genes_df$chromosome_name)
-age_genes_df$chromosome_name <- paste("chr",age_genes_df$chromosome_name,sep="")
-age_genes_df <- age_genes_df[!grepl("RANDOM",age_genes_df$chromosome_name),]
-age_genes_df <- age_genes_df[!grepl("UN",age_genes_df$chromosome_name),]
-# age_genes_df <- age_genes_df[!grepl("MT",age_genes_df$chromosome_name),]
-# age_genes_df <- age_genes_df[!grepl("LG5",age_genes_df$chromosome_name),]
-# age_genes_df <- age_genes_df[!grepl("LG2",age_genes_df$chromosome_name),]
-age_genes_df$linedata <- rep(1,nrow(age_genes_df))
-colnames(age_genes_df) <- c("Chromosome","chromStart","chromEnd","EnsGeneName","LineData")
-
-
-sex_genes_df$chromosome_name <- toupper(sex_genes_df$chromosome_name)
-sex_genes_df$chromosome_name <- paste("chr",sex_genes_df$chromosome_name,sep="")
-sex_genes_df <- sex_genes_df[!grepl("RANDOM",sex_genes_df$chromosome_name),]
-sex_genes_df <- sex_genes_df[!grepl("UN",sex_genes_df$chromosome_name),]
-sex_genes_df$linedata <- rep(2,nrow(sex_genes_df))
-colnames(sex_genes_df) <- c("Chromosome","chromStart","chromEnd","EnsGeneName","LineData")
-
-
-# Storage as pdf
-####################
-
-# Open pdf
-out.file <- "RCircos_Plastoscine_DEgenes.pdf";
-pdf(file=out.file, height=8, width=8, compress=TRUE);
-
-# Remove boxes 
-par(lty="blank")
-
-# Set plot area
-RCircos.Set.Plot.Area();
-
-# Plot choromosomes
-RCircos.Chromosome.Ideogram.Plot_L()
-
-# Plot DE genes 
-rcircos.params$heatmap.color <- "goldenrod1"
-RCircos.Reset.Plot.Parameters_L(rcircos.params);
-RCircos.Heatmap.Plot_L(age_genes_df,track.num=1,"in",data.col=5)
-rcircos.params$heatmap.color <- "goldenrod2"
-RCircos.Reset.Plot.Parameters_L(rcircos.params);
-RCircos.Heatmap.Plot_L(sex_genes_df,track.num=2,"in",data.col=5)
-# rcircos.params$heatmap.color <- "goldenrod3"
-# RCircos.Reset.Plot.Parameters_L(rcircos.params);
-# RCircos.Heatmap.Plot_L(int_genes_df,track.num=3,"in",data.col=5)
-
-
-dev.off()
-
-# Storage as Jpeg
-#####################
-
-# Open jpg
-out.file <- "RCircos_Plastoscine_DEgenes.jpg";
-jpeg(file=out.file, height=750, width=750);
-
-# Adjust text size for jpg
-rcircos.params$text.size <- 10
-rcircos.params$char.width <- 1000
-RCircos.Reset.Plot.Parameters_L(rcircos.params);
-
-# Remove boxes 
-par(lty="blank")
-
-# Set plot area
-RCircos.Set.Plot.Area();
-
-# Plot choromosomes
-RCircos.Chromosome.Ideogram.Plot_L()
-
-# Plot DE genes 
-rcircos.params$heatmap.color <- "goldenrod1"
-RCircos.Reset.Plot.Parameters_L(rcircos.params);
-RCircos.Heatmap.Plot_L(age_genes_df,track.num=1,"in",data.col=5)
-rcircos.params$heatmap.color <- "goldenrod2"
-RCircos.Reset.Plot.Parameters_L(rcircos.params);
-RCircos.Heatmap.Plot_L(sex_genes_df,track.num=2,"in",data.col=5)
-# rcircos.params$heatmap.color <- "goldenrod3"
-# RCircos.Reset.Plot.Parameters_L(rcircos.params);
-# RCircos.Heatmap.Plot_L(int_genes_df,track.num=3,"in",data.col=5)
-
-
-dev.off()
 
 
 ##############################################
@@ -203,9 +67,9 @@ RCircos.Chromosome.Ideogram.Plot_L <- function (tick.interval = 0)
 
 
 RCircos.Heatmap.Plot_L <- function (heatmap.data = NULL, data.col = NULL, track.num = NULL, 
-          side = c("in", "out"), min.value = NULL, max.value = NULL, 
-          inside.pos = NULL, outside.pos = NULL, genomic.columns = 3, 
-          is.sorted = TRUE) 
+                                    side = c("in", "out"), min.value = NULL, max.value = NULL, 
+                                    inside.pos = NULL, outside.pos = NULL, genomic.columns = 3, 
+                                    is.sorted = TRUE) 
 {
   if (is.null(heatmap.data)) 
     stop("Genomic data missing in RCircos.Heatmap.Plot().\n")
@@ -444,6 +308,145 @@ RCircos.Label.Chromosome.Names_jpg <- function (chr.name.pos = NULL)
          pos = ifelse(mid <= rightSide, 4, 2), srt = 0,cex=3)
   }
 }
+
+
+####################
+# Production plots #
+####################
+
+# Load in gene annotation for Zebra finch genome
+ensembl=useMart("ensembl")
+ensembl = useDataset("tguttata_gene_ensembl",mart=ensembl)
+genes <- getBM(attributes = c('chromosome_name','start_position','end_position','hgnc_symbol','ensembl_gene_id'),mart = ensembl)
+print(dim(genes))
+genes <- genes[!duplicated(genes$ensembl_gene_id),]
+print(dim(genes))
+
+# Test data in RCircos package
+# data(UCSC.HG19.Human.CytoBandIdeogram);
+# head(UCSC.HG19.Human.CytoBandIdeogram);
+
+# Load in chromosome info
+df <- read.table("genome.txt",stringsAsFactors = F,header=F)
+
+
+# Create cyto info object
+cyto.info <- cbind(df[,1],rep(0,nrow(df)),df[,2],rep("",nrow(df)),rep("black",nrow(df)))
+colnames(cyto.info) <- c("Chromosome","ChromStart","ChromEnd","Band","Stain")
+cyto.info <- as.data.frame(cyto.info,stringsAsFactors=F)
+cyto.info$ChromStart <- as.integer(cyto.info$ChromStart)
+cyto.info$ChromEnd <- as.integer(cyto.info$ChromEnd)
+
+# Set core Components
+chr.exclude <- NULL
+tracks.inside <- 5
+tracks.outside <- 0
+RCircos.Set.Core.Components(cyto.info, chr.exclude, tracks.inside, tracks.outside)
+ 
+# Get plot parameters 
+rcircos.params <- RCircos.Get.Plot.Parameters();
+rcircos.cyto <- RCircos.Get.Plot.Ideogram();
+rcircos.position <- RCircos.Get.Plot.Positions();
+
+# Set some adjustmetns
+rcircos.params$heatmap.width <- 10
+RCircos.Reset.Plot.Parameters(rcircos.params);
+RCircos.List.Plot.Parameters()
+
+# Load in DE genes
+age_genes <- read.table("GeneLists/ListGenes_age.txt",header=F,stringsAsFactors = F)$V1
+age_genes_df <- genes[genes$ensembl_gene_id%in%age_genes,c(1:3,5)]
+
+sex_genes <- unique(c(read.table("GeneLists/ListGenes_1dph.txt",header=F,stringsAsFactors = F)$V1,
+                      read.table("GeneLists/ListGenes_20dph.txt",header=F,stringsAsFactors = F)$V1,
+                      read.table("GeneLists/ListGenes_65dph.txt",header=F,stringsAsFactors = F)$V1,
+                      read.table("GeneLists/ListGenes_adult.txt",header=F,stringsAsFactors = F)$V1))
+sex_genes_df <- genes[genes$ensembl_gene_id%in%sex_genes,c(1:3,5)]
+
+#Get df for genes in the right form
+age_genes_df$chromosome_name <- toupper(age_genes_df$chromosome_name)
+age_genes_df$chromosome_name <- paste("chr",age_genes_df$chromosome_name,sep="")
+age_genes_df <- age_genes_df[!grepl("RANDOM",age_genes_df$chromosome_name),]
+age_genes_df <- age_genes_df[!grepl("UN",age_genes_df$chromosome_name),]
+# age_genes_df <- age_genes_df[!grepl("MT",age_genes_df$chromosome_name),]
+# age_genes_df <- age_genes_df[!grepl("LG5",age_genes_df$chromosome_name),]
+# age_genes_df <- age_genes_df[!grepl("LG2",age_genes_df$chromosome_name),]
+age_genes_df$linedata <- rep(1,nrow(age_genes_df))
+colnames(age_genes_df) <- c("Chromosome","chromStart","chromEnd","EnsGeneName","LineData")
+
+
+sex_genes_df$chromosome_name <- toupper(sex_genes_df$chromosome_name)
+sex_genes_df$chromosome_name <- paste("chr",sex_genes_df$chromosome_name,sep="")
+sex_genes_df <- sex_genes_df[!grepl("RANDOM",sex_genes_df$chromosome_name),]
+sex_genes_df <- sex_genes_df[!grepl("UN",sex_genes_df$chromosome_name),]
+sex_genes_df$linedata <- rep(2,nrow(sex_genes_df))
+colnames(sex_genes_df) <- c("Chromosome","chromStart","chromEnd","EnsGeneName","LineData")
+
+
+# Storage as pdf
+####################
+
+# Open pdf
+out.file <- "RCircos_Plastoscine_DEgenes.pdf";
+pdf(file=out.file, height=8, width=8, compress=TRUE);
+
+# Remove boxes 
+par(lty="blank")
+
+# Set plot area
+RCircos.Set.Plot.Area();
+
+# Plot choromosomes
+RCircos.Chromosome.Ideogram.Plot_L()
+
+# Plot DE genes 
+rcircos.params$heatmap.color <- "goldenrod1"
+RCircos.Reset.Plot.Parameters_L(rcircos.params);
+RCircos.Heatmap.Plot_L(age_genes_df,track.num=1,"in",data.col=5)
+rcircos.params$heatmap.color <- "goldenrod2"
+RCircos.Reset.Plot.Parameters_L(rcircos.params);
+RCircos.Heatmap.Plot_L(sex_genes_df,track.num=2,"in",data.col=5)
+# rcircos.params$heatmap.color <- "goldenrod3"
+# RCircos.Reset.Plot.Parameters_L(rcircos.params);
+# RCircos.Heatmap.Plot_L(int_genes_df,track.num=3,"in",data.col=5)
+
+
+dev.off()
+
+# Storage as Jpeg
+#####################
+
+# Open jpg
+out.file <- "RCircos_Plastoscine_DEgenes.jpg";
+jpeg(file=out.file, height=750, width=750);
+
+# Adjust text size for jpg
+rcircos.params$text.size <- 10
+rcircos.params$char.width <- 1000
+RCircos.Reset.Plot.Parameters_L(rcircos.params);
+
+# Remove boxes 
+par(lty="blank")
+
+# Set plot area
+RCircos.Set.Plot.Area();
+
+# Plot choromosomes
+RCircos.Chromosome.Ideogram.Plot_L()
+
+# Plot DE genes 
+rcircos.params$heatmap.color <- "goldenrod1"
+RCircos.Reset.Plot.Parameters_L(rcircos.params);
+RCircos.Heatmap.Plot_L(age_genes_df,track.num=1,"in",data.col=5)
+rcircos.params$heatmap.color <- "goldenrod2"
+RCircos.Reset.Plot.Parameters_L(rcircos.params);
+RCircos.Heatmap.Plot_L(sex_genes_df,track.num=2,"in",data.col=5)
+# rcircos.params$heatmap.color <- "goldenrod3"
+# RCircos.Reset.Plot.Parameters_L(rcircos.params);
+# RCircos.Heatmap.Plot_L(int_genes_df,track.num=3,"in",data.col=5)
+
+
+dev.off()
 
 
 
