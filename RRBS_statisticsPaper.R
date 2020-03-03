@@ -7,8 +7,6 @@
 #############################
 
 
-setwd("C:/Users/Louis/Onedrive/Louis/AAP/Zebra_Finch_new")
-
 ##################
 ## Load in data ##
 ##################
