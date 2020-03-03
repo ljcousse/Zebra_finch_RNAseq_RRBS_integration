@@ -455,7 +455,7 @@ for (i in 1:am_gene_alt){
 print(sum(inRNAseq))
 
 Bres_1dph_RNAseq <- Bres_1dph_complete[inRNAseq,]
-Bres_1dph_RNAseq$adj.P.Val <- p.adjust(Bres_1dph_RNAseq$P.Value,method="BH",length(Bres_1dph_RNAseq$P.Value))
+Bres_1dph_RNAseq$adj.P.Val <- p.adjust(Bres_1dph_RNAseq$P.Value,method="BH",n=length(Bres_1dph_RNAseq$P.Value))
 
 Bres_1dph_complete <- Bres_1dph_complete[sort(Bres_1dph_complete$P.Value,index.return=T)$ix,]
 Bres_1dph_RNAseq <- Bres_1dph_RNAseq[sort(Bres_1dph_RNAseq$P.Value,index.return=T)$ix,]
