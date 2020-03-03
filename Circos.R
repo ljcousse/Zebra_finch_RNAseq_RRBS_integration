@@ -56,7 +56,7 @@ sex_genes <- unique(c(read.table("GeneLists/ListGenes_1dph.txt",header=F,strings
                       read.table("GeneLists/ListGenes_65dph.txt",header=F,stringsAsFactors = F)$V1,
                       read.table("GeneLists/ListGenes_adult.txt",header=F,stringsAsFactors = F)$V1))
 sex_genes_df <- genes[genes$ensembl_gene_id%in%sex_genes,c(1:3,5)]
-sex_genes_df <- sex_genes_df[!grepl("RRCB",sex_genes_df$chromosome_name),]
+
 
 #Get df for genes in the right form
 age_genes_df$chromosome_name <- toupper(age_genes_df$chromosome_name)
@@ -74,6 +74,7 @@ sex_genes_df$chromosome_name <- toupper(sex_genes_df$chromosome_name)
 sex_genes_df$chromosome_name <- paste("chr",sex_genes_df$chromosome_name,sep="")
 sex_genes_df <- sex_genes_df[!grepl("RANDOM",sex_genes_df$chromosome_name),]
 sex_genes_df <- sex_genes_df[!grepl("UN",sex_genes_df$chromosome_name),]
+sex_genes_df <- sex_genes_df[!grepl("RRCB",sex_genes_df$chromosome_name),]
 sex_genes_df$linedata <- rep(2,nrow(sex_genes_df))
 colnames(sex_genes_df) <- c("Chromosome","chromStart","chromEnd","EnsGeneName","LineData")
 
