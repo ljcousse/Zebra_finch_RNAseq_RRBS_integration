@@ -114,8 +114,8 @@ locs<-rowRanges(rrbs)
 if (file.exists("Genes_RRBS.Rda")){
   load("Genes_RRBS.Rda")
 } else {
-  # ensembl=useMart(biomart="ensembl",host="jan2019.archive.ensembl.org")
-  ensembl=useMart("ensembl",host="http://sep2019.archive.ensembl.org")
+  ensembl=useMart(biomart="ensembl",host="jan2019.archive.ensembl.org")
+  # ensembl=useMart("ensembl",host="http://sep2019.archive.ensembl.org")
   ensembl = useDataset("tguttata_gene_ensembl",mart=ensembl)
   genes <- getBM(attributes = c('ensembl_gene_id','hgnc_symbol','chromosome_name','start_position','end_position','transcription_start_site'),mart = ensembl)
   colnames(genes) <- c("gene","gene_symbol","chr","start","end","TSS")
@@ -456,8 +456,9 @@ for (i in 1:am_gene_alt){
 print(sum(inRNAseq))
 
 Bres_1dph_RNAseq <- Bres_1dph_complete[inRNAseq,]
+
+print(head(Bres_1dph_RNAseq))
 print(length(Bres_1dph_RNAseq$P.Value))
-print(dim(length(Bres_1dph_RNAseq$P.Value)))
 Bres_1dph_RNAseq$adj.P.Val <- p.adjust(Bres_1dph_RNAseq$P.Value,method="BH",n=length(Bres_1dph_RNAseq$P.Value))
 
 Bres_1dph_complete <- Bres_1dph_complete[sort(Bres_1dph_complete$P.Value,index.return=T)$ix,]
