@@ -114,7 +114,7 @@ locs<-rowRanges(rrbs)
 if (file.exists("Genes_RRBS.Rda")){
   load("Genes_RRBS.Rda")
 } else {
-    ensembl=useMart(biomart="ensembl",host="jul2019.archive.ensembl.org")
+    ensembl=useMart(biomart="ensembl",host="jan2019.archive.ensembl.org")
   # ensembl=useMart("ensembl",host="http://sep2019.archive.ensembl.org")
   ensembl = useDataset("tguttata_gene_ensembl",mart=ensembl)
   genes <- getBM(attributes = c('ensembl_gene_id','hgnc_symbol','chromosome_name','start_position','end_position','transcription_start_site'),mart = ensembl)

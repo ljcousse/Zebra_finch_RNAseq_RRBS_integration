@@ -48,7 +48,7 @@ if (file.exists("uniprot.Rda")){
 ## Ensembl annotation
 ############
 
-ensembl=useMart("ensembl",host="http://jul2019.archive.ensembl.org")
+ensembl=useMart("ensembl",host="http://jan2019.archive.ensembl.org")
 ensembl = useDataset("tguttata_gene_ensembl",mart=ensembl)
 genes <- getBM(attributes = c('hgnc_symbol', 'ensembl_gene_id','chromosome_name'),mart = ensembl)
 
