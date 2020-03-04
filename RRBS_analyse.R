@@ -435,7 +435,7 @@ func[promoter] <- "promoter"
 cn_ori <- colnames(Bres_1dph)
 
 Bres_1dph_complete <- cbind(as.data.frame(locs)[1:2],gene[,1],gene_symbol[,1],func,Bres_1dph,B_obs_stat_1dph,gene[,2:ncol(gene)],gene_symbol[,2:ncol(gene_symbol)])
-head(Bres_1dph_complete)
+print(head(Bres_1dph_complete))
 print(cn_ori)
 colnames(Bres_1dph_complete) <- c("chr","locations","gene","gene_symbol","func",cn_ori,
                                   "mean_1dph,F","sd_1dph,F","mean_1dph,M","sd_1dph,M",
@@ -457,7 +457,7 @@ print(sum(inRNAseq))
 
 Bres_1dph_RNAseq <- Bres_1dph_complete[inRNAseq,]
 print(length(Bres_1dph_RNAseq$P.Value))
-print(dim(length(Bres_1dph_RNAseq$P.Value))
+print(dim(length(Bres_1dph_RNAseq$P.Value)))
 Bres_1dph_RNAseq$adj.P.Val <- p.adjust(Bres_1dph_RNAseq$P.Value,method="BH",n=length(Bres_1dph_RNAseq$P.Value))
 
 Bres_1dph_complete <- Bres_1dph_complete[sort(Bres_1dph_complete$P.Value,index.return=T)$ix,]
