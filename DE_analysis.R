@@ -48,7 +48,7 @@ if (file.exists("uniprot.Rda")){
 ## Ensembl annotation
 ############
 
-ensembl=useMart("ensembl",host="http://sep2019.archive.ensembl.org")
+ensembl=useMart("ensembl",host="http://jan2019.archive.ensembl.org")
 ensembl = useDataset("tguttata_gene_ensembl",mart=ensembl)
 genes <- getBM(attributes = c('hgnc_symbol', 'ensembl_gene_id','chromosome_name'),mart = ensembl)
 
@@ -56,7 +56,7 @@ genes <- getBM(attributes = c('hgnc_symbol', 'ensembl_gene_id','chromosome_name'
 ## Load Data & annotation
 ###############
 
-rnadata<-read.table("Plastoscine.txt",header=T,sep="\t",quote="")
+rnadata <- read.table("Plastoscine.txt",header=T,sep="\t",quote="")
 rna_annot <- read.table("Plastoscine_annot.txt",header=F,sep="\t",quote="")
 row.names(rnadata) <- unlist(rna_annot)
 
