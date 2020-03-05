@@ -603,45 +603,50 @@ ct_genic[,1]/(ct_genic[,1]+ct_genic[,2])
 ## Annotation
 ############
 
-annot <- read.table("MATRIX.txt",stringsAsFactors = F,fill=T)
-print(head(annot))
-species <- read.table("MATRIX_SPECIES.txt",stringsAsFactors = F,fill=T)
-print(head(species))
-species <- species[!duplicated(species$V1),]
-annot2 <- read.table("MATRIX_ANNOTATION.txt",stringsAsFactors = F,sep="\t",quote='')
-print(head(annot2))
-print(dim(annot2))
-print(str(annot2))
-class <- annot2[grepl("class",annot2$V2),c(1,3)]
-print(head(class))
-class <- class[!duplicated(class$V1),]
-family <- annot2[grepl("family",annot2$V2),c(1,3)]
-print(head(family))
-family <- family[!duplicated(family$V1),]
-medline <- annot2[grepl("medline",annot2$V2),c(1,3)]
-print(head(medline))
-medline <- medline[!duplicated(medline$V1),]
-print(sum(duplicated(annot$V1)))
-annot_new <- as.data.frame(cbind(rep("",nrow(annot)),rep("",nrow(annot)),rep("",nrow(annot)),rep("",nrow(annot)),rep("",nrow(annot)),rep("",nrow(annot)),rep("",nrow(annot))),stringsAsFactors=F)
-colnames(annot_new) <- c("ID","M_ID","Gene_Symbol","Species","Family","Class","Medline")
-for (i in 1:nrow(annot)){
-  annot_new$ID[i] <- annot[i,1]
-  annot_new$M_ID[i] <- annot[i,3]
-  annot_new$Gene_Symbol[i] <- annot[i,5]
-  if (!identical(species$V2[species$V1==annot$V1[i]],character(0))){
-    annot_new$Species[i] <- species$V2[species$V1==annot$V1[i]]
-  }
-  if (!identical(family$V3[family$V1==annot$V1[i]],character(0))){
-    annot_new$Family[i] <- family$V3[family$V1==annot$V1[i]]
-  }
-  if (!identical(class$V3[class$V1==annot$V1[i]],character(0))){
-    annot_new$Class[i] <- class$V3[class$V1==annot$V1[i]]
-  }
-  if (!identical(medline$V3[medline$V1==annot$V1[i]],character(0))){
-    annot_new$Medline[i] <-medline$V3[medline$V1==annot$V1[i]]
-  }
-}
-annot <- annot_new
+# annot <- read.table("MATRIX.txt",stringsAsFactors = F,fill=T)
+# print(head(annot))
+# species <- read.table("MATRIX_SPECIES.txt",stringsAsFactors = F,fill=T)
+# print(head(species))
+# species <- species[!duplicated(species$V1),]
+# annot2 <- read.table("MATRIX_ANNOTATION.txt",stringsAsFactors = F,sep="\t",quote='')
+# print(head(annot2))
+# print(dim(annot2))
+# print(str(annot2))
+# class <- annot2[grepl("class",annot2$V2),c(1,3)]
+# print(head(class))
+# class <- class[!duplicated(class$V1),]
+# family <- annot2[grepl("family",annot2$V2),c(1,3)]
+# print(head(family))
+# family <- family[!duplicated(family$V1),]
+# medline <- annot2[grepl("medline",annot2$V2),c(1,3)]
+# print(head(medline))
+# medline <- medline[!duplicated(medline$V1),]
+# print(sum(duplicated(annot$V1)))
+# annot_new <- as.data.frame(cbind(rep("",nrow(annot)),rep("",nrow(annot)),rep("",nrow(annot)),rep("",nrow(annot)),rep("",nrow(annot)),rep("",nrow(annot)),rep("",nrow(annot))),stringsAsFactors=F)
+# colnames(annot_new) <- c("ID","M_ID","Gene_Symbol","Species","Family","Class","Medline")
+# for (i in 1:nrow(annot)){
+#   annot_new$ID[i] <- annot[i,1]
+#   annot_new$M_ID[i] <- annot[i,3]
+#   annot_new$Gene_Symbol[i] <- annot[i,5]
+#   if (!identical(species$V2[species$V1==annot$V1[i]],character(0))){
+#     annot_new$Species[i] <- species$V2[species$V1==annot$V1[i]]
+#   }
+#   if (!identical(family$V3[family$V1==annot$V1[i]],character(0))){
+#     annot_new$Family[i] <- family$V3[family$V1==annot$V1[i]]
+#   }
+#   if (!identical(class$V3[class$V1==annot$V1[i]],character(0))){
+#     annot_new$Class[i] <- class$V3[class$V1==annot$V1[i]]
+#   }
+#   if (!identical(medline$V3[medline$V1==annot$V1[i]],character(0))){
+#     annot_new$Medline[i] <-medline$V3[medline$V1==annot$V1[i]]
+#   }
+# }
+# annot <- annot_new
+
+annot <- read.table("JASPAR_annot.txt",header=T,sep="\t",stringsAsFactors=F)
+head(annot)
+
+annot$ID <- unlist(strsplit(annot$ID,"\\.[0-9]"))
 
 annot_human <- annot[annot$Species==9606,]
 
