@@ -247,6 +247,7 @@ locs<-rowRanges(rrbs)
 
 if (file.exists("Genes_RRBS.Rda")){
   load("Genes_RRBS.Rda")
+  dim(genes)
 } else {
   ensembl=useMart(biomart="ensembl",host="jan2019.archive.ensembl.org")
   # ensembl=useMart("ensembl",host="http://sep2019.archive.ensembl.org")
@@ -258,6 +259,8 @@ if (file.exists("Genes_RRBS.Rda")){
   dim(genes)
   save(genes,file="Genes_RRBS.Rda")
 }
+
+sense <- abs(genes$start-genes$TSS)<abs(genes$end-genes$TSS)
 
 new_start <- cbind(c(genes$start[sense]-1999,genes$end[!sense]-499),
                    c(genes$start[sense]-1999,genes$start[!sense]+1))
