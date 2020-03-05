@@ -53,6 +53,8 @@ rrbs_nonCpG_age_RNAseq <- read.table('RRBS_age_RNAseq_nonCpG.txt',header=T,sep="
 ########################
 
 ## CpG
+print("CpG")
+print("Full")
 length(unique(paste(rrbs_1dph_full$chr[rrbs_1dph_full$adj.P.Val<0.05],rrbs_1dph_full$locations,sep="_")[rrbs_1dph_full$adj.P.Val<0.05]))
 length(unique(paste(rrbs_20dph_full$chr[rrbs_20dph_full$adj.P.Val<0.05],rrbs_20dph_full$locations,sep="_")[rrbs_20dph_full$adj.P.Val<0.05]))
 length(unique(paste(rrbs_65dph_full$chr[rrbs_65dph_full$adj.P.Val<0.05],rrbs_65dph_full$locations,sep="_")[rrbs_65dph_full$adj.P.Val<0.05]))
@@ -65,6 +67,7 @@ n_DM_full <- length(c(unique(paste(rrbs_1dph_full$chr[rrbs_1dph_full$adj.P.Val<0
                       unique(paste(rrbs_adult_full$chr[rrbs_adult_full$adj.P.Val<0.05],rrbs_adult_full$locations,sep="_")[rrbs_adult_full$adj.P.Val<0.05]),
                       unique(paste(rrbs_age_full$chr[rrbs_age_full$adj.P.Val<0.05],rrbs_age_full$locations,sep="_")[rrbs_age_full$adj.P.Val<0.05])))
 
+print("RNA_seq")
 length(unique(paste(rrbs_1dph_RNAseq$chr[rrbs_1dph_RNAseq$adj.P.Val<0.05],rrbs_1dph_RNAseq$locations,sep="_")[rrbs_1dph_RNAseq$adj.P.Val<0.05]))
 length(unique(paste(rrbs_20dph_RNAseq$chr[rrbs_20dph_RNAseq$adj.P.Val<0.05],rrbs_20dph_RNAseq$locations,sep="_")[rrbs_20dph_RNAseq$adj.P.Val<0.05]))
 length(unique(paste(rrbs_65dph_RNAseq$chr[rrbs_65dph_RNAseq$adj.P.Val<0.05],rrbs_65dph_RNAseq$locations,sep="_")[rrbs_65dph_RNAseq$adj.P.Val<0.05]))
@@ -95,6 +98,8 @@ length(unique(unlist(c(rrbs_1dph_RNAseq[,grepl("gene",colnames(rrbs_1dph_RNAseq)
 
 
 ## CpH
+print("CpH")
+print("Full")
 length(unique(paste(rrbs_nonCpG_1dph_full$chr[rrbs_nonCpG_1dph_full$adj.P.Val<0.05],rrbs_nonCpG_1dph_full$locations,sep="_")[rrbs_nonCpG_1dph_full$adj.P.Val<0.05]))
 length(unique(paste(rrbs_nonCpG_20dph_full$chr[rrbs_nonCpG_20dph_full$adj.P.Val<0.05],rrbs_nonCpG_20dph_full$locations,sep="_")[rrbs_nonCpG_20dph_full$adj.P.Val<0.05]))
 length(unique(paste(rrbs_nonCpG_65dph_full$chr[rrbs_nonCpG_65dph_full$adj.P.Val<0.05],rrbs_nonCpG_65dph_full$locations,sep="_")[rrbs_nonCpG_65dph_full$adj.P.Val<0.05]))
@@ -107,6 +112,7 @@ n_DM_full_nonCpG <- length(c(unique(paste(rrbs_nonCpG_1dph_full$chr[rrbs_nonCpG_
          unique(paste(rrbs_nonCpG_adult_full$chr[rrbs_nonCpG_adult_full$adj.P.Val<0.05],rrbs_nonCpG_adult_full$locations,sep="_")[rrbs_nonCpG_adult_full$adj.P.Val<0.05]),
          unique(paste(rrbs_nonCpG_age_full$chr[rrbs_nonCpG_age_full$adj.P.Val<0.05],rrbs_nonCpG_age_full$locations,sep="_")[rrbs_nonCpG_age_full$adj.P.Val<0.05])))
 
+print("RNAseq")
 length(unique(paste(rrbs_nonCpG_1dph_RNAseq$chr[rrbs_nonCpG_1dph_RNAseq$adj.P.Val<0.05],rrbs_nonCpG_1dph_RNAseq$locations,sep="_")[rrbs_nonCpG_1dph_RNAseq$adj.P.Val<0.05]))
 length(unique(paste(rrbs_nonCpG_20dph_RNAseq$chr[rrbs_nonCpG_20dph_RNAseq$adj.P.Val<0.05],rrbs_nonCpG_20dph_RNAseq$locations,sep="_")[rrbs_nonCpG_20dph_RNAseq$adj.P.Val<0.05]))
 length(unique(paste(rrbs_nonCpG_65dph_RNAseq$chr[rrbs_nonCpG_65dph_RNAseq$adj.P.Val<0.05],rrbs_nonCpG_65dph_RNAseq$locations,sep="_")[rrbs_nonCpG_65dph_RNAseq$adj.P.Val<0.05]))
