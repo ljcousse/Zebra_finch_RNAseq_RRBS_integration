@@ -662,6 +662,7 @@ chisq.test(ct_TF)
 ct_TF
 ct_TF[,1]/(ct_TF[,1]+ct_TF[,2])
 
+fulldata_output_jaspar <- fulldata_output[fulldata_output$ensembl.gene.id%in%genes_TF,]
 
 length(unique(fulldata_output_jaspar$uniprot.annot[(fulldata_output_jaspar$ensembl.gene.id%in%genes_DM) & (fulldata_output_jaspar$ensembl.gene.id%in%genes_DE)],
             fulldata_output_jaspar$gene.symbol[(fulldata_output_jaspar$ensembl.gene.id%in%genes_DM) & (fulldata_output_jaspar$ensembl.gene.id%in%genes_DE)]))
