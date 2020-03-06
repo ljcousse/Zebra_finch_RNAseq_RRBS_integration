@@ -84,7 +84,6 @@ save(allrrbs_nonCpG,file="allrrbs_nonCpG.Rda")
 
 # locs<-rowRanges(allrrbs)
 
-
 ## Data filtering 
 ##################
 

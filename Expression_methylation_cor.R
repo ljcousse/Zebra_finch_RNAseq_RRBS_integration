@@ -290,7 +290,6 @@ for(i in -2000:800){
     cor_raw <- c(cor_raw,cor.test(c(rrbs_nonCpG_raw[pos==i,]),c(logcpm_sub[pos==i,]))$estimate)
     pvals <- c(pvals,cor.test(c(rrbs_nonCpG_raw[pos==i,]),c(logcpm_sub[pos==i,]))$p.value)
   }
-  
 }
 
 pos_plot_raw <- pos_plot_raw[pvals*length(pvals)<0.05]
