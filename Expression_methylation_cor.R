@@ -176,9 +176,9 @@ dev.off()
 ## CH*
 
 # Load in RRBS raw data
-load(file="allrrbs.Rda") # allrrbs.Rda can be retrieved using RRBS_analyis.R script
-locs<-rowRanges(allrrbs)
-allrrbs.rel <- rawToRel(allrrbs)
+load(file="allrrbs_nonCpG.Rda") # allrrbs.Rda can be retrieved using RRBS_analyis.R script
+locs<-rowRanges(allrrbs_nonCpG)
+allrrbs_nonCpG.rel <- rawToRel(allrrbs_nonCpG)
 head(locs@ranges@start)
 
 
@@ -236,16 +236,16 @@ for (i in 1:length(rrbs_nonCpG$gene)){
 ########################################################################
 
 # Get TSS and extra annotation
-if (!file.exists("Genes.Rda")){
+if (!file.exists("Genes_RRBS.Rda")){
   ensembl=useMart("ensembl")
   ensembl = useDataset("tguttata_gene_ensembl",mart=ensembl)
   genes <- getBM(attributes = c('ensembl_gene_id','hgnc_symbol','chromosome_name','start_position','end_position','transcription_start_site'),mart = ensembl)
   print(dim(genes))
   genes <- genes[!duplicated(genes$ensembl_gene_id),]
   print(dim(genes))
-  save(genes,file="Genes.Rda")
+  save(genes,file="Genes_RRBS.Rda")
 } else {
-  load(file="Genes.Rda")
+  load(file="Genes_RRBS.Rda")
   genes <- genes[!duplicated(genes$ensembl_gene_id),]
   print(dim(genes))
 }
@@ -300,7 +300,7 @@ cor_raw <- cor_raw[pvals*length(pvals)<0.05]
 ## Plot
 ###########
 
-jpeg(paste('Correlation_pos_raw.jpg',sep=''),width = 600, height = 600, units = "px")
+jpeg(paste('Correlation_pos_raw_nonCpG.jpg',sep=''),width = 600, height = 600, units = "px")
 pos_plot_raw <- pos_plot_raw[!is.na(cor_raw)]
 cor_raw <- cor_raw[!is.na(cor_raw)]
 df_raw <- as.data.frame(cbind(pos_plot_raw,cor_raw))
