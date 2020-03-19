@@ -199,9 +199,15 @@ print(head(rrbs_nonCpG))
 
 locs_df <- as.data.frame(locs)
 locs_pos <- paste(locs_df$seqnames,locs_df$start,sep="_")
+allrrbs_nonCpG.rel <- allrrbs_nonCpG.rel[!duplicated(locs_pos),]
+
 wh <- NULL
 teller <- 1
 for (i in 1:nrow(rrbs_nonCpG)){
+  if (length(which(locs_pos%in%paste(rrbs_nonCpG$chr[i],rrbs_nonCpG$locations[i],sep="_")))>1){
+    print(which(locs_pos%in%paste(rrbs_nonCpG$chr[i],rrbs_nonCpG$locations[i],sep="_")))
+    print(paste(rrbs_nonCpG$chr[i],rrbs_nonCpG$locations[i],sep="_"))
+  }
   wh <- c(wh,which(locs_pos%in%paste(rrbs_nonCpG$chr[i],rrbs_nonCpG$locations[i],sep="_")))
   if (i >= 50*teller){
     print(paste(i,"done out of",dim(rrbs_nonCpG)[1]))
@@ -236,16 +242,16 @@ for (i in 1:length(rrbs_nonCpG$gene)){
 ########################################################################
 
 # Get TSS and extra annotation
-if (!file.exists("Genes_RRBS.Rda")){
-  ensembl=useMart("ensembl")
+if (!file.exists("Genes.Rda")){
+  ensembl=useMart("ensembl",host="http://sep2019.archive.ensembl.org")
   ensembl = useDataset("tguttata_gene_ensembl",mart=ensembl)
   genes <- getBM(attributes = c('ensembl_gene_id','hgnc_symbol','chromosome_name','start_position','end_position','transcription_start_site'),mart = ensembl)
   print(dim(genes))
   genes <- genes[!duplicated(genes$ensembl_gene_id),]
   print(dim(genes))
-  save(genes,file="Genes_RRBS.Rda")
+  save(genes,file="Genes.Rda")
 } else {
-  load(file="Genes_RRBS.Rda")
+  load(file="Genes.Rda")
   genes <- genes[!duplicated(genes$ensembl_gene_id),]
   print(dim(genes))
 }
