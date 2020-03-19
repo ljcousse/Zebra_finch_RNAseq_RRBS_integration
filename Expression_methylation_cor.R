@@ -177,7 +177,11 @@ dev.off()
 
 # Load in RRBS raw data
 load(file="allrrbs_nonCpG.Rda") # allrrbs.Rda can be retrieved using RRBS_analyis.R script
-locs<-rowRanges(allrrbs_nonCpG)
+locs <- rowRanges(allrrbs_nonCpG)
+locs_df <- as.data.frame(locs)
+locs_pos <- paste(locs_df$seqnames,locs_df$start,sep="_")
+allrrbs_nonCpG <- allrrbs_nonCpG[!duplicated(locs_pos),]
+locs <- rowRanges(allrrbs_nonCpG)
 allrrbs_nonCpG.rel <- rawToRel(allrrbs_nonCpG)
 head(locs@ranges@start)
 
@@ -199,8 +203,6 @@ print(head(rrbs_nonCpG))
 
 locs_df <- as.data.frame(locs)
 locs_pos <- paste(locs_df$seqnames,locs_df$start,sep="_")
-allrrbs_nonCpG.rel <- allrrbs_nonCpG.rel[!duplicated(locs_pos),]
-
 wh <- NULL
 teller <- 1
 for (i in 1:nrow(rrbs_nonCpG)){
