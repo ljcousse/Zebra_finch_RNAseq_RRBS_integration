@@ -391,13 +391,19 @@ rrbs.rel <- rawToRel(rrbs)
 
 locs<-rowRanges(rrbs)
 
-ensembl=useMart("ensembl")
-ensembl = useDataset("tguttata_gene_ensembl",mart=ensembl)
-genes <- getBM(attributes = c('ensembl_gene_id','hgnc_symbol','chromosome_name','start_position','end_position','transcription_start_site'),mart = ensembl)
-colnames(genes) <- c("gene","gene_symbol","chr","start","end","TSS")
-dim(genes) 
-genes <- genes[!duplicated(genes$gene),]
-dim(genes)
+if (!file.exists("Genes.Rda")){
+  ensembl=useMart("ensembl",host="http://sep2019.archive.ensembl.org")
+  ensembl = useDataset("tguttata_gene_ensembl",mart=ensembl)
+  genes <- getBM(attributes = c('ensembl_gene_id','hgnc_symbol','chromosome_name','start_position','end_position','transcription_start_site'),mart = ensembl)
+  print(dim(genes))
+  genes <- genes[!duplicated(genes$ensembl_gene_id),]
+  print(dim(genes))
+  save(genes,file="Genes.Rda")
+} else {
+  load(file="Genes.Rda")
+  genes <- genes[!duplicated(genes$ensembl_gene_id),]
+  print(dim(genes))
+}
 sense <- abs(genes$start-genes$TSS)<abs(genes$end-genes$TSS)
 
 new_start <- cbind(c(genes$start[sense]-1999,genes$end[!sense]-499),
