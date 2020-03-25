@@ -401,16 +401,17 @@ rrbs.rel <- rawToRel(rrbs)
 
 locs<-rowRanges(rrbs)
 
-if (!file.exists("Genes.Rda")){
+if (!file.exists("Genes_RRBS.Rda")){
   ensembl=useMart("ensembl",host="http://sep2019.archive.ensembl.org")
   ensembl = useDataset("tguttata_gene_ensembl",mart=ensembl)
   genes <- getBM(attributes = c('ensembl_gene_id','hgnc_symbol','chromosome_name','start_position','end_position','transcription_start_site'),mart = ensembl)
+  colnames(genes) <- c("gene","gene_symbol","chr","start","end","TSS")
   print(dim(genes))
   genes <- genes[!duplicated(genes$ensembl_gene_id),]
   print(dim(genes))
   save(genes,file="Genes.Rda")
 } else {
-  load(file="Genes.Rda")
+  load(file="Genes_RRBS.Rda")
   genes <- genes[!duplicated(genes$ensembl_gene_id),]
   print(dim(genes))
 }
