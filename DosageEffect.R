@@ -48,10 +48,20 @@ rownames(out2excel) <- rna_annot
 write.xlsx(out2excel,"RNAseq_Raw.xlsx")
 
 # Load in ensembl annotation
-ensembl=useMart("ensembl",host="http://sep2019.archive.ensembl.org")
-ensembl = useDataset("tguttata_gene_ensembl",mart=ensembl)
-genes <- getBM(attributes = c('hgnc_symbol', 'ensembl_gene_id','chromosome_name'),mart = ensembl)
-genes <- genes[!duplicated(genes$ensembl_gene_id),]
+if (!file.exists("Genes.Rda")){
+  ensembl=useMart("ensembl",host="http://sep2019.archive.ensembl.org")
+  ensembl = useDataset("tguttata_gene_ensembl",mart=ensembl)
+  genes <- getBM(attributes = c('ensembl_gene_id','hgnc_symbol','chromosome_name','start_position','end_position','transcription_start_site'),mart = ensembl)
+  print(dim(genes))
+  genes <- genes[!duplicated(genes$ensembl_gene_id),]
+  print(dim(genes))
+  save(genes,file="Genes.Rda")
+} else {
+  load(file="Genes.Rda")
+  genes <- genes[!duplicated(genes$ensembl_gene_id),]
+  print(dim(genes))
+}
+genes <- genes[,1:3]
 
 # Sort genes (same order as rna_annot)
 genes <- genes[sort(genes$ensembl_gene_id,index.return=T)$ix,]
