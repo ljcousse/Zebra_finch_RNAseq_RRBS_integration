@@ -92,6 +92,8 @@ am_patt <- max(as.numeric(unlist(strsplit(ls()[grep("pattern",ls())],"pattern"))
 annot_clust <- list()
 # jpeg("Trends.jpg")
 # par(mfrow=c(3,4))
+tiff("Trends/Trends.tiff",units="in", width=6, height=18,res=300)
+par(mfrow=c(6,2))
 for (t in 1:am_patt){
   
   # Make mask for pattern
@@ -120,7 +122,7 @@ for (t in 1:am_patt){
   # print(length(mask_pat))
   
   # Plot trends
-  png(paste("Trends/trend_patt_",paste(pattern,collapse="_"),".png",sep=""))
+  # png(paste("Trends/trend_patt_",paste(pattern,collapse="_"),".png",sep=""))
   if(nrow(logcpm_mask)>500){
     rest <- nrow(logcpm_mask) %% 500
     times <- (nrow(logcpm_mask)-rest)/500
@@ -131,7 +133,8 @@ for (t in 1:am_patt){
         g <- ggplot(data=temp,aes(Age,LogCpm,group=1)) +
           theme_bw() +
           geom_line() +
-          ylim(min(logcpm_rowm),max(logcpm_rowm))
+          ylim(-5,15)
+          # ylim(min(logcpm_rowm),max(logcpm_rowm))
         for (i in 1:nrow(logcpm_mask_sub)) {
           #print(temp)
           temp <- data.frame(Age = x, LogCpm = logcpm_mask_sub[i,])
@@ -151,7 +154,7 @@ for (t in 1:am_patt){
         }
         textdf <- data.frame(Age = 2.5, LogCpm = min(logcpm_mask)+(max(logcpm_mask)-min(logcpm_mask))*0.10)
         temp <- data.frame(Age = x, LogCpm = colMeans(logcpm_mask))
-        g <- g + geom_label(data=textdf,aes(Age,LogCpm),label=paste(paste(toupper(substr(gsub("elevated","higher",pattern),1,1)),collapse=""),": ",nrow(logcpm_mask),sep=""),size = 6,label.size = 0) + 
+        g <- g + geom_label(data=textdf,aes(Age,LogCpm),label=paste(paste(toupper(substr(gsub("elevated","higher",pattern),1,1)),collapse=""),": ",nrow(logcpm_mask),sep=""),size = 8,label.size = 0) + 
           geom_line(data = temp, aes(Age,LogCpm),col="blue")
         print(g)
       }
