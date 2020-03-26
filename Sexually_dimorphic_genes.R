@@ -43,10 +43,21 @@ list_20dph <- read.table("GeneLists/ListGenes_20dph.txt",header=F,stringsAsFacto
 list_65dph <- read.table("GeneLists/ListGenes_65dph.txt",header=F,stringsAsFactors = F)$V1
 list_adult <- read.table("GeneLists/ListGenes_adult.txt",header=F,stringsAsFactors = F)$V1
 
-ensembl=useMart("ensembl")
-ensembl = useDataset("tguttata_gene_ensembl",mart=ensembl)
-genes <- getBM(attributes = c('hgnc_symbol', 'ensembl_gene_id','chromosome_name'),mart = ensembl)
-
+# Load in ensembl annotation
+if (!file.exists("Genes.Rda")){
+  ensembl=useMart("ensembl",host="http://jan2019.archive.ensembl.org")
+  ensembl = useDataset("tguttata_gene_ensembl",mart=ensembl)
+  genes <- getBM(attributes = c('ensembl_gene_id','hgnc_symbol','chromosome_name','start_position','end_position','transcription_start_site'),mart = ensembl)
+  print(dim(genes))
+  genes <- genes[!duplicated(genes$ensembl_gene_id),]
+  print(dim(genes))
+  save(genes,file="Genes.Rda")
+} else {
+  load(file="Genes.Rda")
+  genes <- genes[!duplicated(genes$ensembl_gene_id),]
+  print(dim(genes))
+}
+genes <- genes[,1:3]
 
 ## Calculate percentage of Z-linked genes
 ############## 
@@ -277,7 +288,7 @@ getZorA <- function(genelist){
   return(chr)
 }
 
-# Annotation
+# Load in ensembl annotation
 if (!file.exists("Genes.Rda")){
   ensembl=useMart("ensembl",host="http://jan2019.archive.ensembl.org")
   ensembl = useDataset("tguttata_gene_ensembl",mart=ensembl)
