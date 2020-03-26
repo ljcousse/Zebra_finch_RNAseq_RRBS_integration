@@ -660,8 +660,8 @@ annot_human <- annot[annot$Species==9606,]
 ## Annotation
 ############
 
-genes_TF <- fulldata_output$ensembl.gene.id[(fulldata_output$gene.symbol%in%annot_human$Gene_Symbol) | (fulldata_output$uniprot.annot%in%annot_human$Gene_Symbol)]
-genes_notTF <- fulldata_output$ensembl.gene.id[!((fulldata_output$gene.symbol%in%annot_human$Gene_Symbol) | (fulldata_output$uniprot.annot%in%annot_human$Gene_Symbol))]
+genes_TF <- fulldata_output$ensembl.gene.id[(fulldata_output$gene.symbol%in%annot_human$Name) | (fulldata_output$uniprot.annot%in%annot_human$Name)]
+genes_notTF <- fulldata_output$ensembl.gene.id[!((fulldata_output$gene.symbol%in%annot_human$Name) | (fulldata_output$uniprot.annot%in%annot_human$Name))]
  
 ct_TF <- rbind(c(sum(genes_TF%in%genes_DM),sum(genes_TF%in%genes_notDM)),
             c(sum(genes_notTF%in%genes_DM),sum(genes_notTF%in%genes_notDM)))
