@@ -176,22 +176,22 @@ for (t in 1:am_patt){
     print(g)
 
   }
-  dev.off()
-}
 
+}
+dev.off()
 library(grid)
 library(png)
 library(ggplot2)
 library(gridExtra)
 
-unlink("Trends_overall.png")
-plots <- lapply(ll <- list.files("Trends/",patt='*[.]png'),function(x){
-  img <- as.raster(readPNG(paste("Trends/",x,sep="")))
-  rasterGrob(img, interpolate = FALSE)
-})
-
-ggsave("Trends_overall.png",width=20, height=15, units="cm",
-       marrangeGrob(grobs = plots, nrow=3, ncol=4,top=NULL))
+# unlink("Trends_overall.png")
+# plots <- lapply(ll <- list.files("Trends/",patt='*[.]png'),function(x){
+#   img <- as.raster(readPNG(paste("Trends/",x,sep="")))
+#   rasterGrob(img, interpolate = FALSE)
+# })
+# 
+# ggsave("Trends_overall.png",width=20, height=15, units="cm",
+#        marrangeGrob(grobs = plots, nrow=3, ncol=4,top=NULL))
 
 
 
