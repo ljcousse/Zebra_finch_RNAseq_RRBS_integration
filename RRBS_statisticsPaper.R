@@ -655,7 +655,8 @@ head(annot)
 
 annot$ID <- unlist(strsplit(annot$ID,"\\.[0-9]"))
 
-annot_human <- annot[annot$Species==9606,]
+annot_human <- annot[annot$Species=="Homo sapiens",]
+head(annot_human)
 
 ## Annotation
 ############
