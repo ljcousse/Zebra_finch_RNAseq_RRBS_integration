@@ -73,7 +73,7 @@ genes_allsex <- genes[(genes$ensembl_gene_id%in%list_1dph) |
                      (genes$ensembl_gene_id%in%list_20dph) |
                      (genes$ensembl_gene_id%in%list_65dph) |
                      (genes$ensembl_gene_id%in%list_adult),]
-genes_allsex <- genes_allsex[!duplicated(genes_all$ensembl_gene_id),]
+genes_allsex <- genes_allsex[!duplicated(genes_allsex$ensembl_gene_id),]
 dim(genes_allsex)
 barplot(table(genes_allsex$chromosome_name),las=2)
 sum(grepl("Z",genes_allsex$chromosome_name))/length(genes_allsex$chromosome_name)
