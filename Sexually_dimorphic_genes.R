@@ -263,6 +263,11 @@ adj.pvals[adj.pvals>1] <- 1
 adj.pvals
 
 # Amount DE sex genes covered in RRBS #
+rrbs_1dph_RNAseq <- read.table('RRBS_1dph_RNAseq.txt',header=T,sep="\t",stringsAsFactors = F)
+rrbs_20dph_RNAseq <- read.table('RRBS_20dph_RNAseq.txt',header=T,sep="\t",stringsAsFactors = F)
+rrbs_65dph_RNAseq <- read.table('RRBS_65dph_RNAseq.txt',header=T,sep="\t",stringsAsFactors = F)
+rrbs_adult_RNAseq <- read.table('RRBS_adult_RNAseq.txt',header=T,sep="\t",stringsAsFactors = F)
+
 RRBS_sex_covered <- c(unlist(rrbs_1dph_RNAseq[,grepl("gene",colnames(rrbs_1dph_RNAseq)) & !grepl("gene_symbol",colnames(rrbs_1dph_RNAseq))]),
                       unlist(rrbs_20dph_RNAseq[,grepl("gene",colnames(rrbs_20dph_RNAseq)) & !grepl("gene_symbol",colnames(rrbs_20dph_RNAseq))]),
                       unlist(rrbs_65dph_RNAseq[,grepl("gene",colnames(rrbs_65dph_RNAseq)) & !grepl("gene_symbol",colnames(rrbs_65dph_RNAseq))]),
