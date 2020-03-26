@@ -102,9 +102,7 @@ for (t in 1:am_patt){
                                  eval(parse(text = paste("direction$",pattern[2],sep="")))[i,2],
                                  eval(parse(text = paste("direction$",pattern[3],sep="")))[i,3]))==3)
   }
-  print(head(mask_pat))
-  print(sum(mask_pat))
-  print(length(mask_pat))
+  
   
   # Select annotation
   annot_mask <- rna_annot[mask_pat]
@@ -116,6 +114,10 @@ for (t in 1:am_patt){
   # Select logcpm values for pattern
   logcpm_mask <- logcpm_rowm[mask_pat,1:4]
   x <- as.factor(unique(f1))
+  
+  print(paste(paste(toupper(substr(gsub("elevated","higher",pattern),1,1)),collapse=""),": ",nrow(logcpm_mask),sep=""))
+  # print(sum(mask_pat))
+  # print(length(mask_pat))
   
   # Plot trends
   png(paste("Trends/trend_patt_",paste(pattern,collapse="_"),".png",sep=""))
