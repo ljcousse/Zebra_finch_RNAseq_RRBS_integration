@@ -220,6 +220,8 @@ pvals <- c(pvals,chisq.test(cbind(c(sum(grepl("Z",genes_adult_all$chromosome_nam
 
 adj.pvals <- pvals*6
 adj.pvals[adj.pvals>1] <- 1
+print("Adj Pvals")
+names(adj.pvals) <- c("1vs20","1vs65","1vsadult","20vs65","20vsadult","65vsadult")
 adj.pvals
 
 # % Z-linked chi sq test #
@@ -258,6 +260,8 @@ pvals <- c(pvals,chisq.test(cbind(mat_A[2,],mat_A[3,]))$p.value)
 pvals <- c(pvals,chisq.test(cbind(mat_A[2,],mat_A[4,]))$p.value)
 pvals <- c(pvals,chisq.test(cbind(mat_A[3,],mat_A[4,]))$p.value)
 
+print("Adj Pvals")
+names(adj.pvals) <- c("1vs20","1vs65","1vsadult","20vs65","20vsadult","65vsadult")
 adj.pvals <- pvals*6
 adj.pvals[adj.pvals>1] <- 1
 adj.pvals
