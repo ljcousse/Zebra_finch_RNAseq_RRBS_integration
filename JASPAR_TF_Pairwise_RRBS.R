@@ -30,7 +30,7 @@ fimo_all <- read.table(paste(working_dir,"/fimo_RRBS_out/fimo.txt",sep=""),heade
 
 fimo_all$ID <- unlist(strsplit(fimo_all$ID,"\\.[0-9]"))
 
-rrbs_age_RNAseq <- read.table('RRBS_age_RNAseq.txt',header=T,sep="\t",stringsAsFactors = F)
+rrbs_age_RNAseq <- read.table(paste('RRBS_',args,'_RNAseq.txt',sep=""),header=T,sep="\t",stringsAsFactors = F)
 mask_sign <- rrbs_age_RNAseq$adj.P.Val<0.05 & rrbs_age_RNAseq$func=="promoter"
 chrom_pos_in <- paste(rrbs_age_RNAseq$chr[mask_sign],rrbs_age_RNAseq$locations[mask_sign],sep="_")
 
