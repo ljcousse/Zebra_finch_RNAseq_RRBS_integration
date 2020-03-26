@@ -251,12 +251,12 @@ mat_A <- rbind(mat_A,c(sum(fulldata_output_adult_all$logFC.adult[fulldata_output
 sum(mat_A[1:3,1])/sum(mat_A[1:3,])
 mat_A[4,1]/sum(mat_A[4,])
 pvals <- NULL
-pvals <- c(pvals,chisq.test(cbind(mat[1,],mat[2,]))$p.value)
-pvals <- c(pvals,chisq.test(cbind(mat[1,],mat[3,]))$p.value)
-pvals <- c(pvals,chisq.test(cbind(mat[1,],mat[4,]))$p.value)
-pvals <- c(pvals,chisq.test(cbind(mat[2,],mat[3,]))$p.value)
-pvals <- c(pvals,chisq.test(cbind(mat[2,],mat[4,]))$p.value)
-pvals <- c(pvals,chisq.test(cbind(mat[3,],mat[4,]))$p.value)
+pvals <- c(pvals,chisq.test(cbind(mat_A[1,],mat_A[2,]))$p.value)
+pvals <- c(pvals,chisq.test(cbind(mat_A[1,],mat_A[3,]))$p.value)
+pvals <- c(pvals,chisq.test(cbind(mat_A[1,],mat_A[4,]))$p.value)
+pvals <- c(pvals,chisq.test(cbind(mat_A[2,],mat_A[3,]))$p.value)
+pvals <- c(pvals,chisq.test(cbind(mat_A[2,],mat_A[4,]))$p.value)
+pvals <- c(pvals,chisq.test(cbind(mat_A[3,],mat_A[4,]))$p.value)
 
 adj.pvals <- pvals*6
 adj.pvals[adj.pvals>1] <- 1
