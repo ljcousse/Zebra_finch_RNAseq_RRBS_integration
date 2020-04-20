@@ -15,7 +15,9 @@ library(biomaRt)
 library(edgeR)
 library(BiSeq)
 library(xlsx)
+library(extrafont)
 
+loadfonts()
 working_dir <- getwd()
 
 # Function for calculation of percentage of genes per bin
