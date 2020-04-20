@@ -17,7 +17,7 @@ library(BiSeq)
 library(xlsx)
 library(extrafont)
 
-loadfonts()
+loadfonts(device="win")
 working_dir <- getwd()
 
 # Function for calculation of percentage of genes per bin
