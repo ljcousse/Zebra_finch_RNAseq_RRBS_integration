@@ -213,7 +213,7 @@ for (t in 1:nrow(logcpm_Z_F_1dph)){
 # Make percentage plots per age
 per_Z <- CalcPercentage(ratio_Z_1dph,1000,0.1)
 per_A <- CalcPercentage(ratio_A_1dph,1000,0.1)
-tiff(paste("MoverFratios_panel_1.tiff",sep=""),units="in", width=4, height=4,res=300)
+tiff(paste("MoverFratios_panel_1.tiff",sep=""),units="in", width=4, height=4,res=300,family = "Arial")
 plot(per_A$x,per_A$y,type="l",main="1dph",ylab="Percentage of genes",xlab="M:F ratio",xlim=c(0,3),ylim=c(0.1,5.5))
 lines(per_Z$x,per_Z$y,col="red")
 legend("topright",c(paste("A:",round(MF_A[1],digits=2)),paste("Z:",round(MF_Z[1],digits=2))))
