@@ -84,9 +84,9 @@ labels <- c("1dph,F","1dph,M","20dph,F","20dph,M","65dph,F","65dph,M","adult,F",
 labels <- labels[c(1,3,5,7,2,4,6,8)]
 
 tiff("Methylation_plot.tiff",units="in", width=4, height=4,res=300,family = "sans")
+par(mar=c(4,4,2,2))
 boxplot(y~f1+f2,data_CpG,at=c(1,3,5,7,2,4,6,8),las=2,
-        names=labels,col=c(rep("gray",4),rep("white",4)),main="CpG methylation",ylab= "",xlab="")
-title(ylab = "Methylation (%)", line = 4.5)
+        names=labels,col=c(rep("gray",4),rep("white",4)),main="CpG methylation",ylab= "Methylation (%)",xlab="",cex=0.6)
 legend("topleft",c("female","male"),pch=21,col="black",pt.bg=c("gray","white"))
 dev.off()
 
