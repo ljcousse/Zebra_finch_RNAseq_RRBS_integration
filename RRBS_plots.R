@@ -85,7 +85,8 @@ labels <- labels[c(1,3,5,7,2,4,6,8)]
 
 tiff("Methylation_plot.tiff",units="in", width=4, height=4,res=300,family = "sans")
 boxplot(y~f1+f2,data_CpG,at=c(1,3,5,7,2,4,6,8),las=2,
-        names=labels,col=c(rep("gray",4),rep("white",4)),main="CpG methylation",ylab= "Methylation (%)")
+        names=labels,col=c(rep("gray",4),rep("white",4)),main="CpG methylation",ylab= "",xlab="")
+title(ylab = "Methylation (%)", line = 4.5)
 legend("topleft",c("female","male"),pch=21,col="black",pt.bg=c("gray","white"))
 dev.off()
 
@@ -148,7 +149,7 @@ labels <- labels[c(1,3,5,7,2,4,6,8)]
 
 tiff("Methylation_nonCpG_plot.tiff",units="in", width=4, height=4,res=300,family = "sans")
 boxplot(y~f1+f2,data_CpH,at=c(1,3,5,7,2,4,6,8),las=2,
-        names=labels,col=c(rep("gray",4),rep("white",4)),main="nonCpG methylation",ylab= "Methylation (%)")
+        names=labels,col=c(rep("gray",4),rep("white",4)),main="nonCpG methylation",ylab= "Methylation (%)",xlab="")
 legend("topleft",c("female","male"),pch=21,col="black",pt.bg=c("gray","white"))
 dev.off()
 
@@ -161,6 +162,6 @@ data_barplot <- cbind(c(mean(data_CpG$y[data_CpG$f1==1 & data_CpG$f2==1]),mean(d
                       c(mean(data_CpG$y[data_CpG$f1==4 & data_CpG$f2==1]),mean(data_hydroxy$y[data_hydroxy$f1==4 & data_hydroxy$f2==1]),mean(data_CpH$y[data_CpH$f1==4 & data_CpH$f2==1])),
                       c(mean(data_CpG$y[data_CpG$f1==4 & data_CpG$f2==2]),mean(data_hydroxy$y[data_hydroxy$f1==4 & data_hydroxy$f2==2]),mean(data_CpH$y[data_CpH$f1==4 & data_CpH$f2==2])))
 tiff("Comparison_RRBS.tiff",units="in", width=4, height=4,res=300,family = "sans")
-barplot(data_barplot,beside=T,main="Comparison",ylab= "Methylation (%)")
+barplot(data_barplot,beside=T,main="Comparison",ylab= "Methylation (%)",xlab="")
 legend("topleft",c("CpG","hydroxy","nonCpG"),pt.bg=c("darkgrey","grey","white"),pch=21,col="black")
 dev.off()
