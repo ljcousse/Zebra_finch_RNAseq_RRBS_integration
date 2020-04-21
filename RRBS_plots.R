@@ -17,6 +17,8 @@ quartzFonts(sans=c("Arial","Arial Black","Arial Narrow","Arial Rounded MT Bold")
 ## Parameter settings 
 #####################
 
+home_dir <- getwd()
+data_dir <- "/data/sandras/BiSeq"
 options(warn=2L)
 mincov<-5 
 minmethreads<-6
@@ -36,11 +38,9 @@ rownames(rrbs) <- 1:nrow(rrbs)
 rrbs_CpH <- rrbs
 rrbs_CpH.rel <- rawToRel(rrbs_CpH)
 
-data_dir <- "/data/sandras/BiSeq/"
-home_dir <- "/home/louisc/Zebra_Finch_new/"
-
 
 ## CpG
+##############
 
 # annotation
 setwd(data_dir)
@@ -90,7 +90,8 @@ legend("topleft",c("female","male"),pch=21,col="black",pt.bg=c("gray","white"))
 dev.off()
 
 
-## hydroxy
+## Hydroxy
+##############
 
 f1_hydroxy <- f1_CpG
 f2_hydroxy <- f2_CpG
@@ -113,12 +114,13 @@ labels <- labels[c(1,3,5,7,2,4,6,8)]
 
 tiff("Methylation_hydroxy_plot.tiff",units="in", width=4, height=4,res=300,family = "sans")
 boxplot(y~f1+f2,data_hydroxy,at=c(1,3,5,7,2,4,6,8),las=2,
-        names=labels,col=c(rep("gray",4),rep("white",4)),main="Hydroxymethylation",ylab= "Methylation (%)")
+        names=labels,col=c(rep("gray",4),rep("white",4)),main="Hydroxymethylation",ylab= "Methylation (%)",xlab="")
 legend("topleft",c("female","male"),pch=21,col="black",pt.bg=c("gray","white"))
 dev.off()
 
 
 ## CpH
+##############
 
 # annotation
 annot <- rbind(annot[-which(rownames(annot)=="O16"),],annot[which(rownames(annot)=="O16"),])
