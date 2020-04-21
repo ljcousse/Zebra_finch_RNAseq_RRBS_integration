@@ -11,6 +11,11 @@
 ################
 
 library(BiSeq)
+library(grid)
+library(png)
+library(ggplot2)
+library(gridExtra)
+library(readbitmap)
 quartzFonts(sans=c("Arial","Arial Black","Arial Narrow","Arial Rounded MT Bold"))
 
 
@@ -86,7 +91,8 @@ labels <- labels[c(1,3,5,7,2,4,6,8)]
 tiff("Methylation_plot.tiff",units="in", width=4, height=4,res=300,family = "sans")
 par(mar=c(4,4,2,2))
 boxplot(y~f1+f2,data_CpG,at=c(1,3,5,7,2,4,6,8),las=2,
-        names=labels,col=c(rep("gray",4),rep("white",4)),main="CpG methylation",ylab= "Methylation (%)",xlab="",cex.lab=0.8,cex.axis=0.7,cex.main=0.8)
+        names=labels,col=c(rep("gray",4),rep("white",4)),main="CpG methylation",ylab= "Methylation (%)",
+        xlab="",cex.lab=0.8,cex.axis=0.7,cex.main=0.8)
 legend("topleft",c("female","male"),pch=21,col="black",pt.bg=c("gray","white"),cex=0.7)
 dev.off()
 
@@ -116,7 +122,8 @@ labels <- labels[c(1,3,5,7,2,4,6,8)]
 tiff("Methylation_hydroxy_plot.tiff",units="in", width=4, height=4,res=300,family = "sans")
 par(mar=c(4,4,2,2))
 boxplot(y~f1+f2,data_hydroxy,at=c(1,3,5,7,2,4,6,8),las=2,
-        names=labels,col=c(rep("gray",4),rep("white",4)),main="Hydroxymethylation",ylab= "Methylation (%)",xlab="",cex.lab=0.8,cex.axis=0.7,cex.main=0.8)
+        names=labels,col=c(rep("gray",4),rep("white",4)),main="Hydroxymethylation",ylab= "Methylation (%)",
+        xlab="",cex.lab=0.8,cex.axis=0.7,cex.main=0.8)
 legend("topleft",c("female","male"),pch=21,col="black",pt.bg=c("gray","white"),cex=0.7)
 dev.off()
 
@@ -151,7 +158,8 @@ labels <- labels[c(1,3,5,7,2,4,6,8)]
 tiff("Methylation_nonCpG_plot.tiff",units="in", width=4, height=4,res=300,family = "sans")
 par(mar=c(4,4,2,2))
 boxplot(y~f1+f2,data_CpH,at=c(1,3,5,7,2,4,6,8),las=2,
-        names=labels,col=c(rep("gray",4),rep("white",4)),main="nonCpG methylation",ylab= "Methylation (%)",xlab="",cex.lab=0.8,cex.axis=0.7,cex.main=0.8)
+        names=labels,col=c(rep("gray",4),rep("white",4)),main="nonCpG methylation",
+        ylab= "Methylation (%)",xlab="",cex.lab=0.8,cex.axis=0.7,cex.main=0.8)
 legend("topleft",c("female","male"),pch=21,col="black",pt.bg=c("gray","white"),cex=0.7)
 dev.off()
 
@@ -169,3 +177,14 @@ barplot(data_barplot,beside=T,main="Comparison",names=labels,las=2,cex=0.7,
         ylab= "Methylation (%)",xlab="",cex.lab=0.8,cex.axis=0.7,cex.main=0.8)
 legend("topleft",c("CpG","hydroxy","nonCpG"),pt.bg=c("darkgrey","grey","white"),pch=21,col="black",cex=0.7)
 dev.off()
+
+unlink("RRBS.tiff")
+ll <- list("Comparison_RRBS.tiff","Methylation_plot.tiff",
+             "Methylation_nonCpG_plot.tiff","Methylation_hydroxy_plot.tiff")
+plots <- lapply(ll,function(x){
+  img <- as.raster(read.bitmap(paste(x,sep="")))
+  rasterGrob(img, interpolate = FALSE)
+})
+
+ggsave("RRBS.tiff",width=8, height=8, units="in",
+       marrangeGrob(grobs = plots[c(1,4,2,3)], nrow=2, ncol=2,top=NULL))
