@@ -15,6 +15,11 @@ library(biomaRt)
 library(edgeR)
 library(BiSeq)
 library(xlsx)
+library(grid)
+library(png)
+library(ggplot2)
+library(gridExtra)
+library(readbitmap)
 
 quartzFonts(sans=c("Arial","Arial Black","Arial Narrow","Arial Rounded MT Bold"))
 
@@ -249,6 +254,15 @@ lines(per_Z$x,per_Z$y,col="red")
 legend("topright",c(paste("A:",round(MF_A[4],digits=2)),paste("Z:",round(MF_Z[4],digits=2))),cex=0.8)
 dev.off()
 
+unlink("MoverFratios.tiff")
+plots <- lapply(ll <- list.files(patt='MoverFratios*[.]tiff'),function(x){
+  img <- as.raster(read.bitmap(paste(x,sep="")))
+  rasterGrob(img, interpolate = FALSE)
+})
+
+ggsave("MoverFratios.tiff",width=8, height=8, units="in",
+       marrangeGrob(grobs = plots[c(1,4,2,3)], nrow=2, ncol=2,top=NULL))
+
 
 ## Make Gene lists for further analysis
 ###################################
@@ -366,6 +380,15 @@ for (i in 1:length(coi)){
   legend("topright",c("Female","Male"),col=c("blue","red"),pch=16,cex=0.8)      
   dev.off()
 }
+
+unlink("DosageCompensation.tiff")
+plots <- lapply(ll <- list.files(patt='DosageCompensation*[.]tiff'),function(x){
+  img <- as.raster(read.bitmap(paste(x,sep="")))
+  rasterGrob(img, interpolate = FALSE)
+})
+
+ggsave("DosageCompensation.tiff",width=8, height=8, units="in",
+       marrangeGrob(grobs = plots[c(1,3,2)], nrow=2, ncol=2,top=NULL))
 
 # Statistical test
 
