@@ -162,6 +162,7 @@ data_barplot <- cbind(c(mean(data_CpG$y[data_CpG$f1==1 & data_CpG$f2==1]),mean(d
                       c(mean(data_CpG$y[data_CpG$f1==4 & data_CpG$f2==1]),mean(data_hydroxy$y[data_hydroxy$f1==4 & data_hydroxy$f2==1]),mean(data_CpH$y[data_CpH$f1==4 & data_CpH$f2==1])),
                       c(mean(data_CpG$y[data_CpG$f1==4 & data_CpG$f2==2]),mean(data_hydroxy$y[data_hydroxy$f1==4 & data_hydroxy$f2==2]),mean(data_CpH$y[data_CpH$f1==4 & data_CpH$f2==2])))
 tiff("Comparison_RRBS.tiff",units="in", width=4, height=4,res=300,family = "sans")
-barplot(data_barplot,beside=T,main="Comparison",ylab= "Methylation (%)",xlab="",cex.lab=0.8,cex.axis=0.7,cex.main=0.8)
+barplot(data_barplot,beside=T,main="Comparison",names=labels,
+        ylab= "Methylation (%)",xlab="",cex.lab=0.8,cex.axis=0.7,cex.main=0.8)
 legend("topleft",c("CpG","hydroxy","nonCpG"),pt.bg=c("darkgrey","grey","white"),pch=21,col="black",cex=0.7)
 dev.off()
