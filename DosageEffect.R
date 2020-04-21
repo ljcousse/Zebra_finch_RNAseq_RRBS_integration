@@ -255,7 +255,7 @@ legend("topright",c(paste("A:",round(MF_A[4],digits=2)),paste("Z:",round(MF_Z[4]
 dev.off()
 
 unlink("MoverFratios.tiff")
-plots <- lapply(ll <- list.files(patt='MoverFratios*[.]tiff'),function(x){
+plots <- lapply(ll <- list.files(patt='MoverFratios.*[.]tiff'),function(x){
   img <- as.raster(read.bitmap(paste(x,sep="")))
   rasterGrob(img, interpolate = FALSE)
 })
@@ -382,7 +382,7 @@ for (i in 1:length(coi)){
 }
 
 unlink("DosageCompensation.tiff")
-plots <- lapply(ll <- list.files(patt='DosageCompensation*[.]tiff'),function(x){
+plots <- lapply(ll <- list.files(patt='DosageCompensation.*[.]tiff'),function(x){
   img <- as.raster(read.bitmap(paste(x,sep="")))
   rasterGrob(img, interpolate = FALSE)
 })
