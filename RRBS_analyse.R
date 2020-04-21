@@ -236,7 +236,7 @@ print(levels(f2))
 print(paste(rep(as.character(levels(f1)),2),rep(as.character(levels(f2)),4),sep=","))
 jpeg("Methylation_plot.jpg")
 boxplot(y~f1+f2,data_boxplot,at=c(1,3,5,7,2,4,6,8),las=2,
-        names=labels[])
+        names=labels[],ylab="Methylation")
 dev.off()
 
 
