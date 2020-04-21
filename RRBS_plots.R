@@ -14,6 +14,14 @@ library(BiSeq)
 quartzFonts(sans=c("Arial","Arial Black","Arial Narrow","Arial Rounded MT Bold"))
 
 
+## Parameter settings 
+#####################
+
+options(warn=2L)
+mincov<-5 
+minmethreads<-6
+ct<-0.01 
+
 ## Load Data
 ################
 
