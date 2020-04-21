@@ -261,7 +261,7 @@ plots <- lapply(ll <- list.files(patt='MoverFratios.*[.]tiff'),function(x){
 })
 
 ggsave("MoverFratios.tiff",width=8, height=8, units="in",
-       marrangeGrob(grobs = plots[c(1,4,2,3)], nrow=2, ncol=2,top=NULL))
+       marrangeGrob(grobs = plots[c(1,3,2,4)], nrow=2, ncol=2,top=NULL))
 
 
 ## Make Gene lists for further analysis
