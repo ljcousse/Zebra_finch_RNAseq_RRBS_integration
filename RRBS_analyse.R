@@ -201,10 +201,21 @@ for (i in 2:max_n){
   
 }
 
+# Gene list: genes sufficiently covered in RRBS
 genelist_allgenes_RRBS <- unique(unlist(gene))[-1]
 head(genelist_allgenes_RRBS)
 length(genelist_allgenes_RRBS)
 write.table(genelist_allgenes_RRBS,"GeneLists/ListGenes_allRRBS.txt",col.names = F,row.names = F,quote = F, sep="\n")
+
+# Gene list: genes sufficiently covered in RRBS and DE
+DE_genes <- read.table("GeneLists/ListGenes_all.txt",header=F,sep="\n",stringsAsFactors=F)$V1
+head(DE_genes)
+length(genelist_allgenes_RRBS)
+genelist_allgenes_RRBS_DE <- genelist_allgenes_RRBS[genelist_allgenes_RRBS%in%DE_genes]
+length(genelist_allgenes_RRBS_DE)
+write.table(genelist_allgenes_RRBS_DE,"GeneLists/ListGenes_allRRBS_DE.txt",col.names = F,row.names = F,quote = F, sep="\n")
+
+
 
 ## Boxplot Methylation percentage
 ################################
