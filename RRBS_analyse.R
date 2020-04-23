@@ -347,7 +347,7 @@ jpeg("Heatmap_methylation.jpg")
 heatmap.2(m_matrix, col = hmcol,Rowv=dend_tcomplete, Colv=dend_complete, trace="non", margin=c(5,1),labRow = "")
 dev.off()
 
-jpeg("Clustering_RRBS.jpg")
+tiff("Clustering_RRBS.tiff",units="in", width=16, height=16,res=300,family = "sans")
 par(xpd=TRUE)
 par(mar=c(2.5,2.5,2.5,11))
 Bclust<-plot(hclus_complete)
