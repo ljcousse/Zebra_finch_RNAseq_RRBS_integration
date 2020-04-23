@@ -12,6 +12,9 @@
 
 library(edgeR)
 library(ggplot2)
+library(grid)
+library(gridExtra)
+library(readbitmap)
 quartzFonts(sans=c("Arial","Arial Black","Arial Narrow","Arial Rounded MT Bold"))
 
 ## Load Data & annotation
@@ -120,7 +123,7 @@ for (t in 1:am_patt){
   # print(length(mask_pat))
   
   # Plot trends
-  tiff(paste("Trends/trend_patt_",paste(pattern,collapse="_"),".png",sep=""),res=300,family="sans")
+  tiff(paste("Trends/trend_patt_",paste(pattern,collapse="_"),".tiff",sep=""),res=300,family="sans")
   if(nrow(logcpm_mask)>500){
     rest <- nrow(logcpm_mask) %% 500
     times <- (nrow(logcpm_mask)-rest)/500
@@ -185,18 +188,13 @@ for (t in 1:am_patt){
   dev.off()
 }
 
-library(grid)
-library(png)
-library(ggplot2)
-library(gridExtra)
-
-unlink("Trends_overall.png")
+unlink("Trends_overall.tiff")
 plots <- lapply(ll <- list.files("Trends/",patt='*[.]tiff'),function(x){
-  img <- as.raster(readPNG(paste("Trends/",x,sep="")))
+  img <- as.raster(read.bitmap(paste("Trends/",x,sep="")))
   rasterGrob(img, interpolate = FALSE)
 })
 
-ggsave("Trends_overall.png",width=10, height=30, units="cm",
+ggsave("Trends_overall.tiff",width=10, height=30, units="cm",
        marrangeGrob(grobs = plots[c(1:6,12,11,10,9,8,7)], nrow=6, ncol=2,top=NULL))
 
 
