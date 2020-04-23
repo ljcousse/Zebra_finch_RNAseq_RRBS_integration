@@ -79,7 +79,7 @@ dend_complete <- as.dendrogram(hclust_complete)
 
 
 
-tiff("Clustering.tiff",units="in", width=16, height=16,res=300,family = "sans")
+tiff("Clustering.tiff",units="in", width=10, height=10,res=300,family = "sans")
 par(xpd=TRUE)
 par(mar=c(2.5,2.5,2.5,11))
 Bclust<-plot(hclust_complete,cex=2.5,lwd=3,main="",yaxt="n")
