@@ -421,7 +421,7 @@ dev.off()
 
 # Open jpg
 out.file <- "RCircos_Plastoscine_DEgenes.tiff";
-tiff(file=out.file,units="in", width=16, height=16,res=300,family = "sans");
+tiff(file=out.file,units="in", width=8, height=8,res=300,family = "sans");
 
 # Adjust text size for jpg
 rcircos.params$text.size <- 10
