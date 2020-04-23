@@ -95,7 +95,7 @@ am_patt <- max(as.numeric(unlist(strsplit(ls()[grep("pattern",ls())],"pattern"))
 annot_clust <- list()
 # jpeg("Trends.jpg")
 # par(mfrow=c(3,4))
-for (t in 1:am_patt){
+for (t in c(1:am_patt)[c(-3,-4)]){
   
   # Make mask for pattern
   mask_pat <- NULL
@@ -123,7 +123,7 @@ for (t in 1:am_patt){
   # print(length(mask_pat))
   
   # Plot trends
-  tiff(paste("Trends/trend_patt_",paste(pattern,collapse="_"),".tiff",sep=""),res=300,family="sans")
+  tiff(paste("Trends/trend_patt_",paste(pattern,collapse="_"),".tiff",sep=""),width=5, height=5, units="in",res=300,family="sans")
   if(nrow(logcpm_mask)>500){
     rest <- nrow(logcpm_mask) %% 500
     times <- (nrow(logcpm_mask)-rest)/500
@@ -194,7 +194,7 @@ plots <- lapply(ll <- list.files("Trends/",patt='*[.]tiff'),function(x){
   rasterGrob(img, interpolate = FALSE)
 })
 
-ggsave("Trends_overall.tiff",width=10, height=30, units="cm",
+ggsave("Trends_overall.tiff",width=10, height=30, units="in",
        marrangeGrob(grobs = plots[c(1:6,12,11,10,9,8,7)], nrow=6, ncol=2,top=NULL))
 
 
