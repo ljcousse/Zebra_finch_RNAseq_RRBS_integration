@@ -12,7 +12,7 @@
 
 library(edgeR)
 library(ggplot2)
-
+quartzFonts(sans=c("Arial","Arial Black","Arial Narrow","Arial Rounded MT Bold"))
 
 ## Load Data & annotation
 ###############
@@ -92,8 +92,6 @@ am_patt <- max(as.numeric(unlist(strsplit(ls()[grep("pattern",ls())],"pattern"))
 annot_clust <- list()
 # jpeg("Trends.jpg")
 # par(mfrow=c(3,4))
-tiff("Trends/Trends.tiff",units="in", width=6, height=18,res=300)
-par(mfrow=c(6,2))
 for (t in 1:am_patt){
   
   # Make mask for pattern
@@ -122,7 +120,7 @@ for (t in 1:am_patt){
   # print(length(mask_pat))
   
   # Plot trends
-  # png(paste("Trends/trend_patt_",paste(pattern,collapse="_"),".png",sep=""))
+  tiff(paste("Trends/trend_patt_",paste(pattern,collapse="_"),".png",sep=""),res=300,family="sans")
   if(nrow(logcpm_mask)>500){
     rest <- nrow(logcpm_mask) %% 500
     times <- (nrow(logcpm_mask)-rest)/500
@@ -132,9 +130,10 @@ for (t in 1:am_patt){
         temp <- data.frame(Age = x, LogCpm = colMeans(logcpm_mask_sub))
         g <- ggplot(data=temp,aes(Age,LogCpm,group=1)) +
           theme_bw() +
+          theme(axis.text=element_text(size=15),
+                axis.title = element_text(size=20)) +
           geom_line() +
-          ylim(-5,15)
-          # ylim(min(logcpm_rowm),max(logcpm_rowm))
+          ylim(min(logcpm_rowm),max(logcpm_rowm))
         for (i in 1:nrow(logcpm_mask_sub)) {
           #print(temp)
           temp <- data.frame(Age = x, LogCpm = logcpm_mask_sub[i,])
@@ -146,16 +145,19 @@ for (t in 1:am_patt){
         temp <- data.frame(Age = x, LogCpm = colMeans(logcpm_mask_sub))
         g <- ggplot(data=temp,aes(Age,LogCpm,group=1)) +
           theme_bw() +
-          geom_line()
+          theme(axis.text=element_text(size=15),
+                axis.title = element_text(size=20)) +
+          geom_line() 
         for (i in 1:nrow(logcpm_mask_sub)) {
           #print(temp)
           temp <- data.frame(Age = x, LogCpm = logcpm_mask_sub[i,])
-          g <- g + geom_line(data = temp, aes(Age,LogCpm),col="grey")
+          g <- g + geom_line(data = temp, aes(Age,LogCpm),col="grey") 
         }
         textdf <- data.frame(Age = 2.5, LogCpm = min(logcpm_mask)+(max(logcpm_mask)-min(logcpm_mask))*0.10)
         temp <- data.frame(Age = x, LogCpm = colMeans(logcpm_mask))
-        g <- g + geom_label(data=textdf,aes(Age,LogCpm),label=paste(paste(toupper(substr(gsub("elevated","higher",pattern),1,1)),collapse=""),": ",nrow(logcpm_mask),sep=""),size = 8,label.size = 0) + 
-          geom_line(data = temp, aes(Age,LogCpm),col="blue")
+        g <- g + geom_label(data=textdf,aes(Age,LogCpm),
+                            label=paste(paste(toupper(substr(gsub("elevated","higher",pattern),1,1)),collapse=""),": ",nrow(logcpm_mask),sep=""),size = 10,label.size = 0) + 
+          geom_line(data = temp, aes(Age,LogCpm),col="blue",size=4)
         print(g)
       }
     }
@@ -163,7 +165,9 @@ for (t in 1:am_patt){
     temp <- data.frame(Age = x, LogCpm = colMeans(logcpm_mask))
     g <- ggplot(data=temp,aes(Age,LogCpm,group=1)) +
       theme_bw() +
-      geom_line()
+      theme(axis.text=element_text(size=15),
+            axis.title = element_text(size=20)) +
+      geom_line() 
     for (i in 1:nrow(logcpm_mask)) {
       #print(temp)
       temp <- data.frame(Age = x, LogCpm = logcpm_mask[i,])
@@ -171,27 +175,29 @@ for (t in 1:am_patt){
     }
     temp <- data.frame(Age = x, LogCpm = colMeans(logcpm_mask))
     textdf <- data.frame(Age = 2.5, LogCpm = min(logcpm_mask)+(max(logcpm_mask)-min(logcpm_mask))*0.10)
-    g <- g + geom_label(data=textdf,aes(Age,LogCpm),label=paste(paste(toupper(substr(gsub("elevated","higher",pattern),1,1)),collapse=""),": ",nrow(logcpm_mask),sep=""),size = 6,label.size = 0) + 
-      geom_line(data = temp, aes(Age,LogCpm),col="blue")
+    g <- g + geom_label(data=textdf,aes(Age,LogCpm),
+                        label=paste(paste(toupper(substr(gsub("elevated","higher",pattern),1,1)),collapse=""),": ",nrow(logcpm_mask),sep=""),
+                        size = 10,label.size = 0) + 
+      geom_line(data = temp, aes(Age,LogCpm),col="blue",size=4)
     print(g)
 
   }
-
+  dev.off()
 }
-dev.off()
+
 library(grid)
 library(png)
 library(ggplot2)
 library(gridExtra)
 
-# unlink("Trends_overall.png")
-# plots <- lapply(ll <- list.files("Trends/",patt='*[.]png'),function(x){
-#   img <- as.raster(readPNG(paste("Trends/",x,sep="")))
-#   rasterGrob(img, interpolate = FALSE)
-# })
-# 
-# ggsave("Trends_overall.png",width=20, height=15, units="cm",
-#        marrangeGrob(grobs = plots, nrow=3, ncol=4,top=NULL))
+unlink("Trends_overall.png")
+plots <- lapply(ll <- list.files("Trends/",patt='*[.]tiff'),function(x){
+  img <- as.raster(readPNG(paste("Trends/",x,sep="")))
+  rasterGrob(img, interpolate = FALSE)
+})
+
+ggsave("Trends_overall.png",width=10, height=30, units="cm",
+       marrangeGrob(grobs = plots[c(1:6,12,11,10,9,8,7)], nrow=6, ncol=2,top=NULL))
 
 
 

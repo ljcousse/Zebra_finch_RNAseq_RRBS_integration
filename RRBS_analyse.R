@@ -30,6 +30,7 @@ library(biomaRt)
 library(UniProt.ws)
 library(RColorBrewer)
 library(gplots)
+quartzFonts(sans=c("Arial","Arial Black","Arial Narrow","Arial Rounded MT Bold"))
 
 sink(file='RRBS_analyse.log', type = c("output", "message"))
 

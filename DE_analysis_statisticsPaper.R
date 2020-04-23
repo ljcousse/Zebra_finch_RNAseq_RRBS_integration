@@ -23,6 +23,7 @@ library("edgeR")
 library("tidyverse")
 library("stageR")
 library("biomaRt")
+quartzFonts(sans=c("Arial","Arial Black","Arial Narrow","Arial Rounded MT Bold"))
 
 
 ## Load data

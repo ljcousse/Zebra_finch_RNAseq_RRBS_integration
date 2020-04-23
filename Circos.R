@@ -7,6 +7,7 @@
 library(RCircos)
 library(xlsx)
 library(biomaRt)
+quartzFonts(sans=c("Arial","Arial Black","Arial Narrow","Arial Rounded MT Bold"))
 
 # Load in chromosome info
 df <- read.table("genome.txt",stringsAsFactors = F,header=F)
