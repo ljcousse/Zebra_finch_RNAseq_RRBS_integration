@@ -95,7 +95,7 @@ am_patt <- max(as.numeric(unlist(strsplit(ls()[grep("pattern",ls())],"pattern"))
 annot_clust <- list()
 # jpeg("Trends.jpg")
 # par(mfrow=c(3,4))
-for (t in c(1:am_patt)[c(-3,-4)]){
+for (t in 1:am_patt){
   
   # Make mask for pattern
   mask_pat <- NULL
