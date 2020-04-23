@@ -77,10 +77,12 @@ distance <- as.dist(correl)
 hclust_complete <- hclust(distance, method = "complete")
 dend_complete <- as.dendrogram(hclust_complete)
 
-jpeg("Clustering.jpg")
+
+
+tiff("Clustering.tiff",units="in", width=16, height=16,res=300,family = "sans")
 par(xpd=TRUE)
 par(mar=c(2.5,2.5,2.5,11))
-Bclust<-plot(hclust_complete)
+Bclust<-plot(hclust_complete,cex=2.5,lwd=3,main="",yaxt="n")
 # legend(20,0,legend=c(paste(colnames(RRBS_repl),"is",cn)),ncol = 1)
 dev.off()
 

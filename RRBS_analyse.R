@@ -350,7 +350,7 @@ dev.off()
 tiff("Clustering_RRBS.tiff",units="in", width=16, height=16,res=300,family = "sans")
 par(xpd=TRUE)
 par(mar=c(2.5,2.5,2.5,11))
-Bclust<-plot(hclus_complete)
+Bclust<-plot(hclus_complete,cex=2.5,lwd=3,main="",yaxt="n")
 dev.off()
 
 
