@@ -134,7 +134,7 @@ breaks <- seq(-1.05,1.05,0.1)
 
 tiff(file="RRBS_hydroxy.tiff",units="in", width=4, height=4,res=300,family = "sans")
 par(mar=c(4,4,2,2))
-hist_diff <- hist(diff,breaks=breaks,xlab="Hydroxymethylation",cex.lab=0.8,cex.axis=0.7,cex.main=0.8)
+hist_diff <- hist(diff,breaks=breaks,xlab="Hydroxymethylation",cex.lab=0.6,cex.axis=0.5,cex.main=0.6)
 dev.off()
 print(hist_diff$breaks)
 print(hist_diff$counts)
