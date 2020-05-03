@@ -16,7 +16,7 @@ options(warn=2L)
 mincov<-5 
 minmethreads<-6
 ct<-0.01 #constant value for calculation M-values from methylation degrees
-
+quartzFonts(sans=c("Arial","Arial Black","Arial Narrow","Arial Rounded MT Bold"))
 
 ## load packages
 ################
@@ -131,8 +131,9 @@ diff <- methLevel(rrbs_B.rel)-methLevel(rrbs_O.rel)
 
 breaks <- seq(-1.05,1.05,0.1)
 
-tiff(file="RRBS_hydroxy.tiff",width = 1000, height = 1000, units = "px")
-par(mar=c(5.1,5.1,4.1,2.1))
+
+tiff(file="RRBS_hydroxy.tiff",units="in", width=4, height=4,res=300,family = "sans")
+par(mar=c(4,4,2,2))
 hist_diff <- hist(diff,breaks=breaks,xlab="Hydroxymethylation",cex.lab=2,cex.axis=2,cex.main=2)
 dev.off()
 print(hist_diff$breaks)
