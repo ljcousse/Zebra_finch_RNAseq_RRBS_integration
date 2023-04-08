@@ -133,8 +133,8 @@ for (t in 1:am_patt){
         temp <- data.frame(Age = x, LogCpm = colMeans(logcpm_mask_sub))
         g <- ggplot(data=temp,aes(Age,LogCpm,group=1)) +
           theme_bw() +
-          theme(axis.text=element_text(size=15),
-                axis.title = element_text(size=20)) +
+          theme(axis.text=element_text(size=20),
+                axis.title = element_text(size=25))  +
           geom_line() +
           ylim(min(logcpm_rowm),max(logcpm_rowm))
         for (i in 1:nrow(logcpm_mask_sub)) {
@@ -148,8 +148,8 @@ for (t in 1:am_patt){
         temp <- data.frame(Age = x, LogCpm = colMeans(logcpm_mask_sub))
         g <- ggplot(data=temp,aes(Age,LogCpm,group=1)) +
           theme_bw() +
-          theme(axis.text=element_text(size=15),
-                axis.title = element_text(size=20)) +
+          theme(axis.text=element_text(size=20),
+                axis.title = element_text(size=25)) +
           geom_line() 
         for (i in 1:nrow(logcpm_mask_sub)) {
           #print(temp)
@@ -168,8 +168,8 @@ for (t in 1:am_patt){
     temp <- data.frame(Age = x, LogCpm = colMeans(logcpm_mask))
     g <- ggplot(data=temp,aes(Age,LogCpm,group=1)) +
       theme_bw() +
-      theme(axis.text=element_text(size=15),
-            axis.title = element_text(size=20)) +
+      theme(axis.text=element_text(size=20),
+            axis.title = element_text(size=25))  +
       geom_line() 
     for (i in 1:nrow(logcpm_mask)) {
       #print(temp)

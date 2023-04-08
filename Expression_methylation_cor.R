@@ -13,7 +13,7 @@
 library(edgeR)
 library(BiSeq)
 library(biomaRt)
-
+library(lme4)
 
 ## Import data 
 ##############

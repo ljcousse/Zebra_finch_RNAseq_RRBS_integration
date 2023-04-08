@@ -78,7 +78,9 @@ annotN<-DataFrame(annot)
 # read RRBS data given colData object
 allrrbs_CHH<-readBismark(poolfiles,colData=annotN)
 
+setwd(home_dir)
 allrrbs_nonCpG <- rbind(allrrbs_CHG,allrrbs_CHH)
+rownames(allrrbs_nonCpG) <- 1:nrow(allrrbs_nonCpG) 
 setwd(home_dir)
 save(allrrbs_nonCpG,file="allrrbs_nonCpG.Rda")
 

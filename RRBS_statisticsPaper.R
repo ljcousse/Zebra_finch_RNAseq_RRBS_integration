@@ -240,10 +240,10 @@ load(file="allrrbs.Rda") # allrrbs.Rda can be retrieved using RRBS_analyis.R scr
 
 mincov <- 5
 
-rrbs<-filterBySharedRegions(object=allrrbs,perc.samples=1,minCov=mincov)
-rrbs.rel <- rawToRel(rrbs)
+rrbs_CpG <-filterBySharedRegions(object=allrrbs,perc.samples=1,minCov=mincov)
+rrbs.rel_CpG <- rawToRel(rrbs_CpG)
 
-locs<-rowRanges(rrbs)
+locs_CpG<-rowRanges(rrbs_CpG)
 
 if (file.exists("Genes_RRBS.Rda")){
   load("Genes_RRBS.Rda")
@@ -273,8 +273,8 @@ prom_gr <- GRanges(data.frame(chr=c(genes$chr[sense],genes$chr[!sense]),
                               end=new_end,
                               gene=c(genes$gene[sense],genes$gene[!sense]),
                               gene_symbol=c(genes$gene_symbol[sense],genes$gene_symbol[!sense])))
-overlap_p <- subsetByOverlaps(locs,prom_gr)
-promoter <- rownames(as.data.frame(locs))%in%rownames(as.data.frame(overlap_p))
+overlap_p <- subsetByOverlaps(locs_CpG,prom_gr)
+promoter_CpG <- rownames(as.data.frame(locs_CpG))%in%rownames(as.data.frame(overlap_p))
 
 new_start <- cbind(c(genes$start[sense]+500,genes$start[!sense]),
                    c(genes$end[sense],genes$start[!sense]))
@@ -287,22 +287,22 @@ genic_gr <- GRanges(data.frame(chr=c(genes$chr[sense],genes$chr[!sense]),
                                end=new_end,
                                gene=c(genes$gene[sense],genes$gene[!sense]),
                                gene_symbol=c(genes$gene_symbol[sense],genes$gene_symbol[!sense])))
-overlap_g <- subsetByOverlaps(locs,genic_gr)
-genic <- rownames(as.data.frame(locs))%in%rownames(as.data.frame(overlap_g))
+overlap_g <- subsetByOverlaps(locs_CpG,genic_gr)
+genic_CpG <- rownames(as.data.frame(locs_CpG))%in%rownames(as.data.frame(overlap_g))
 
 
-genic[genic & promoter] <- FALSE
+genic_CpG[genic_CpG & promoter_CpG] <- FALSE
 
-overlaps_genic <- findOverlaps(locs,genic_gr)
-overlaps_prom <- findOverlaps(locs,prom_gr)
+overlaps_genic <- findOverlaps(locs_CpG,genic_gr)
+overlaps_prom <- findOverlaps(locs_CpG,prom_gr)
 
 all_overlap <- c(as.character(genic_gr[subjectHits(overlaps_genic)]$gene),as.character(prom_gr[subjectHits(overlaps_prom)]$gene))
 all_overlap <- cbind(all_overlap,c(as.character(genic_gr[subjectHits(overlaps_genic)]$gene_symbol),as.character(prom_gr[subjectHits(overlaps_prom)]$gene_symbol)))
-all_overlap <- cbind(all_overlap,c(locs[queryHits(overlaps_genic)]@ranges@NAMES,locs[queryHits(overlaps_prom)]@ranges@NAMES))
+all_overlap <- cbind(all_overlap,c(locs_CpG[queryHits(overlaps_genic)]@ranges@NAMES,locs_CpG[queryHits(overlaps_prom)]@ranges@NAMES))
 colnames(all_overlap) <- c("gene","gene_symbol","rowname")
 
 
-rn <- as.matrix(locs@ranges@NAMES,ncol=1)
+rn <- as.matrix(locs_CpG@ranges@NAMES,ncol=1)
 colnames(rn) <- "rowname"
 
 merger <- merge(rn,all_overlap,all=T)
@@ -311,13 +311,13 @@ merger <- merger[sort(as.numeric(as.character(merger$rowname)),index.return=T)$i
 merger$gene <- as.character(merger$gene)
 merger$gene_symbol <- as.character(merger$gene_symbol)
 
-gene <- as.character(merger$gene[!duplicated(merger$rowname)])
-gene_symbol <- as.character(merger$gene_symbol[!duplicated(merger$rowname)])
+gene_CpG <- as.character(merger$gene[!duplicated(merger$rowname)])
+gene_symbol_CpG <- as.character(merger$gene_symbol[!duplicated(merger$rowname)])
 
 max_n <- max(table(merger$rowname))
 print(max_n)
-gene <- cbind(gene,matrix(rep(NA,length(gene)*(max_n-1)),ncol=max_n-1))
-gene_symbol <- cbind(gene_symbol,matrix(rep(NA,length(gene_symbol)*(max_n-1)),ncol=max_n-1))
+gene_CpG <- cbind(gene_CpG,matrix(rep(NA,length(gene_CpG)*(max_n-1)),ncol=max_n-1))
+gene_symbol_CpG <- cbind(gene_symbol_CpG,matrix(rep(NA,length(gene_symbol_CpG)*(max_n-1)),ncol=max_n-1))
 for (i in 2:max_n){
   n_times <- merger[merger$rowname%in%names(table(merger$rowname)[table(merger$rowname)==i]),]
   if(nrow(n_times)==0){
@@ -325,29 +325,29 @@ for (i in 2:max_n){
     next
   }
   if (i==2 | nrow(n_times)==i){
-    gene[locs@ranges@NAMES%in%unique(n_times$rowname),2:i] <- n_times$gene[c(1:((nrow(n_times)/i)*i))[-c(c(1:(nrow(n_times)/i))*i-(i-1))]]
-    gene_symbol[locs@ranges@NAMES%in%unique(n_times$rowname),2:i] <- n_times$gene_symbol[c(1:((nrow(n_times)/i)*i))[-c(c(1:(nrow(n_times)/i))*i-(i-1))]]
+    gene_CpG[locs_CpG@ranges@NAMES%in%unique(n_times$rowname),2:i] <- n_times$gene[c(1:((nrow(n_times)/i)*i))[-c(c(1:(nrow(n_times)/i))*i-(i-1))]]
+    gene_symbol_CpG[locs_CpG@ranges@NAMES%in%unique(n_times$rowname),2:i] <- n_times$gene_symbol[c(1:((nrow(n_times)/i)*i))[-c(c(1:(nrow(n_times)/i))*i-(i-1))]]
   } else {
-    gene[locs@ranges@NAMES%in%unique(n_times$rowname),2:i] <- t(matrix(n_times$gene[c(1:((nrow(n_times)/i)*i))[-c(c(1:(nrow(n_times)/i))*i-(i-1))]],nrow=i-1))
-    gene_symbol[locs@ranges@NAMES%in%unique(n_times$rowname),2:i] <- t(matrix(n_times$gene_symbol[c(1:((nrow(n_times)/i)*i))[-c(c(1:(nrow(n_times)/i))*i-(i-1))]],nrow=i-1))
+    gene_CpG[locs_CpG@ranges@NAMES%in%unique(n_times$rowname),2:i] <- t(matrix(n_times$gene[c(1:((nrow(n_times)/i)*i))[-c(c(1:(nrow(n_times)/i))*i-(i-1))]],nrow=i-1))
+    gene_symbol_CpG[locs_CpG@ranges@NAMES%in%unique(n_times$rowname),2:i] <- t(matrix(n_times$gene_symbol[c(1:((nrow(n_times)/i)*i))[-c(c(1:(nrow(n_times)/i))*i-(i-1))]],nrow=i-1))
   }
   
 }
 
 minmethreads <- 6
 
-inclocsM2 <- rowSums(methReads(rrbs))>=minmethreads
+inclocsM2_CpG <- rowSums(methReads(rrbs_CpG))>=minmethreads
 
-locs <- locs[inclocsM2]
-rrbsredB <- rrbs[inclocsM2,]
+locs_CpG <- locs_CpG[inclocsM2_CpG]
+rrbsredB_CpG <- rrbs_CpG[inclocsM2_CpG,]
 
-genic <- genic[inclocsM2]
-promoter <- promoter[inclocsM2]
+genic_CpG <- genic_CpG[inclocsM2_CpG]
+promoter_CpG <- promoter_CpG[inclocsM2_CpG]
 
-gene <- gene[inclocsM2,]
-gene_symbol <- gene_symbol[inclocsM2,]
+gene_CpG <- gene_CpG[inclocsM2_CpG,]
+gene_symbol_CpG <- gene_symbol_CpG[inclocsM2_CpG,]
 
-rrbsredB_meth <- methLevel(rawToRel(rrbsredB))
+rrbsredB_CpG_meth <- methLevel(rawToRel(rrbsredB_CpG))
 
 # Correlation
 uniq_annot_RNAseq <- rowSums(is.na(rrbs_age_RNAseq[,grepl("gene_alt",colnames(rrbs_age_RNAseq))]))==10 
@@ -361,33 +361,52 @@ colnumbers <- which(grepl("gene",colnames(rrbs_age_RNAseq)) & !grepl("gene_symbo
 rnaseq_logcpm <- NULL
 rrbs_meth <- NULL
 genes_uniq <- unique(rrbs_age_RNAseq_uniq$gene)
+print(length(genes_uniq))
 for(i in 1:length(genes_uniq)){
   if (i %% 100 == 0){print(i)}
   rnaseq_logcpm <- c(rnaseq_logcpm,logcpm[rna_annot==genes_uniq[i]])
-  rrbs_meth <- c(rrbs_meth,mean(rrbsredB_meth[gene[,1]==genes_uniq[i] & !is.na(gene[,1]),]))
+  rrbs_meth <- c(rrbs_meth,mean(rrbsredB_CpG_meth[(gene_CpG[,1]==genes_uniq[i]) & !is.na(gene_CpG[,1]),]))
 }
 cor.test(rrbs_meth,rnaseq_logcpm)
 
 rnaseq_logcpm_prom <- NULL
 rrbs_meth_prom <- NULL
 genes_uniq_prom <- unique(rrbs_age_RNAseq_prom$gene)
+print(length(genes_uniq_prom))
 for(i in 1:length(genes_uniq_prom)){
   if (i %% 100 == 0){print(i)}
   rnaseq_logcpm_prom  <- c(rnaseq_logcpm_prom,logcpm[rna_annot==genes_uniq_prom[i]])
-  rrbs_meth_prom  <- c(rrbs_meth_prom,mean(rrbsredB_meth[gene[,1]==genes_uniq_prom[i] & !is.na(gene[,1]),]))
+  rrbs_meth_prom  <- c(rrbs_meth_prom,mean(rrbsredB_CpG_meth[(gene_CpG[,1]==genes_uniq_prom[i]) & !is.na(gene_CpG[,1]) & promoter_CpG,]))
 }
 cor.test(rrbs_meth_prom,rnaseq_logcpm_prom)
+
 
 rnaseq_logcpm_genic <- NULL
 rrbs_meth_genic <- NULL
 genes_uniq_genic <- unique(rrbs_age_RNAseq_genic$gene)
+print(length(genes_uniq_genic))
 for(i in 1:length(genes_uniq_genic)){
   if (i %% 100 == 0){print(i)}
   rnaseq_logcpm_genic  <- c(rnaseq_logcpm_genic,logcpm[rna_annot==genes_uniq_genic[i]])
-  rrbs_meth_genic  <- c(rrbs_meth_genic,mean(rrbsredB_meth[gene[,1]==genes_uniq_genic[i] & !is.na(gene[,1]),]))
+  rrbs_meth_genic  <- c(rrbs_meth_genic,mean(rrbsredB_CpG_meth[(gene_CpG[,1]==genes_uniq_genic[i]) & !is.na(gene_CpG[,1]) & genic_CpG,]))
 }
 cor.test(rrbs_meth_genic,rnaseq_logcpm_genic)
 
+dat_prom_CpG_summ <- data.frame(Expression=rnaseq_logcpm_prom,
+                                Methylation=rrbs_meth_prom,
+                                stringsAsFactors = F)
+lm_prom_CpG_summ <-  lm(Expression~Methylation,dat_prom_CpG_summ)
+dat_genic_CpG_summ <- data.frame(Expression=rnaseq_logcpm_genic,
+                                Methylation=rrbs_meth_genic,
+                                stringsAsFactors = F)
+lm_genic_CpG_summ <-  lm(Expression~Methylation,dat_genic_CpG_summ)
+tiff("summ_scatter.tiff",height=4,width=8,units="in",res=150)
+par(mfrow=c(1,2))
+plot(dat_prom_CpG_summ$Methylation,dat_prom_CpG_summ$Expression,main="Promoter",pch=20)
+abline(a=summary(lm_prom_CpG_summ)$coefficients[1,1],b=summary(lm_prom_CpG_summ)$coefficients[2,1],col="red")
+plot(dat_genic_CpG_summ$Methylation,dat_genic_CpG_summ$Expression,main="Genic",pch=20)
+abline(a=summary(lm_genic_CpG_summ)$coefficients[1,1],b=summary(lm_genic_CpG_summ)$coefficients[2,1],col="red")
+dev.off()
 
 ## nonCpG
 
@@ -395,10 +414,11 @@ cor.test(rrbs_meth_genic,rnaseq_logcpm_genic)
 
 # Load in RRBS annotation
 load("rrbs_nonCpG.Rda")
-rownames(rrbs) <- 1:nrow(rrbs) 
-rrbs.rel <- rawToRel(rrbs)
+rrbs_nonCpG <- rrbs
+rownames(rrbs_nonCpG) <- 1:nrow(rrbs_nonCpG) 
+rrbs.rel_nonCpG  <- rawToRel(rrbs_nonCpG)
 
-locs<-rowRanges(rrbs)
+locs_nonCpG <-rowRanges(rrbs_nonCpG)
 
 if (file.exists("Genes_RRBS.Rda")){
   load("Genes_RRBS.Rda")
@@ -427,8 +447,8 @@ prom_gr <- GRanges(data.frame(chr=c(genes$chr[sense],genes$chr[!sense]),
                               end=new_end,
                               gene=c(genes$gene[sense],genes$gene[!sense]),
                               gene_symbol=c(genes$gene_symbol[sense],genes$gene_symbol[!sense])))
-overlap_p <- subsetByOverlaps(locs,prom_gr)
-promoter <- rownames(as.data.frame(locs))%in%rownames(as.data.frame(overlap_p))
+overlap_p <- subsetByOverlaps(locs_nonCpG,prom_gr)
+promoter_nonCpG <- rownames(as.data.frame(locs_nonCpG))%in%rownames(as.data.frame(overlap_p))
 
 new_start <- cbind(c(genes$start[sense]+500,genes$start[!sense]),
                    c(genes$end[sense],genes$start[!sense]))
@@ -441,22 +461,22 @@ genic_gr <- GRanges(data.frame(chr=c(genes$chr[sense],genes$chr[!sense]),
                                end=new_end,
                                gene=c(genes$gene[sense],genes$gene[!sense]),
                                gene_symbol=c(genes$gene_symbol[sense],genes$gene_symbol[!sense])))
-overlap_g <- subsetByOverlaps(locs,genic_gr)
-genic <- rownames(as.data.frame(locs))%in%rownames(as.data.frame(overlap_g))
+overlap_g <- subsetByOverlaps(locs_nonCpG,genic_gr)
+genic_nonCpG <- rownames(as.data.frame(locs_nonCpG))%in%rownames(as.data.frame(overlap_g))
 
 
-genic[genic & promoter] <- FALSE
+genic_nonCpG[genic_nonCpG & promoter_nonCpG] <- FALSE
 
-overlaps_genic <- findOverlaps(locs,genic_gr)
-overlaps_prom <- findOverlaps(locs,prom_gr)
+overlaps_genic <- findOverlaps(locs_nonCpG,genic_gr)
+overlaps_prom <- findOverlaps(locs_nonCpG,prom_gr)
 
 all_overlap <- c(as.character(genic_gr[subjectHits(overlaps_genic)]$gene),as.character(prom_gr[subjectHits(overlaps_prom)]$gene))
 all_overlap <- cbind(all_overlap,c(as.character(genic_gr[subjectHits(overlaps_genic)]$gene_symbol),as.character(prom_gr[subjectHits(overlaps_prom)]$gene_symbol)))
-all_overlap <- cbind(all_overlap,c(locs[queryHits(overlaps_genic)]@ranges@NAMES,locs[queryHits(overlaps_prom)]@ranges@NAMES))
+all_overlap <- cbind(all_overlap,c(locs_nonCpG[queryHits(overlaps_genic)]@ranges@NAMES,locs_nonCpG[queryHits(overlaps_prom)]@ranges@NAMES))
 colnames(all_overlap) <- c("gene","gene_symbol","rowname")
 
 
-rn <- as.matrix(locs@ranges@NAMES,ncol=1)
+rn <- as.matrix(locs_nonCpG@ranges@NAMES,ncol=1)
 colnames(rn) <- "rowname"
 
 merger <- merge(rn,all_overlap,all=T)
@@ -465,13 +485,13 @@ merger <- merger[sort(as.numeric(as.character(merger$rowname)),index.return=T)$i
 merger$gene <- as.character(merger$gene)
 merger$gene_symbol <- as.character(merger$gene_symbol)
 
-gene <- as.character(merger$gene[!duplicated(merger$rowname)])
-gene_symbol <- as.character(merger$gene_symbol[!duplicated(merger$rowname)])
+gene_nonCpG <- as.character(merger$gene[!duplicated(merger$rowname)])
+gene_symbol_nonCpG <- as.character(merger$gene_symbol[!duplicated(merger$rowname)])
 
 max_n <- max(table(merger$rowname))
 print(max_n)
-gene <- cbind(gene,matrix(rep(NA,length(gene)*(max_n-1)),ncol=max_n-1))
-gene_symbol <- cbind(gene_symbol,matrix(rep(NA,length(gene_symbol)*(max_n-1)),ncol=max_n-1))
+gene_nonCpG <- cbind(gene_nonCpG,matrix(rep(NA,length(gene_nonCpG)*(max_n-1)),ncol=max_n-1))
+gene_symbol_nonCpG <- cbind(gene_symbol_nonCpG,matrix(rep(NA,length(gene_symbol_nonCpG)*(max_n-1)),ncol=max_n-1))
 for (i in 2:max_n){
   n_times <- merger[merger$rowname%in%names(table(merger$rowname)[table(merger$rowname)==i]),]
   if(nrow(n_times)==0){
@@ -479,29 +499,29 @@ for (i in 2:max_n){
     next
   }
   if (i==2 | nrow(n_times)==i){
-    gene[locs@ranges@NAMES%in%unique(n_times$rowname),2:i] <- n_times$gene[c(1:((nrow(n_times)/i)*i))[-c(c(1:(nrow(n_times)/i))*i-(i-1))]]
-    gene_symbol[locs@ranges@NAMES%in%unique(n_times$rowname),2:i] <- n_times$gene_symbol[c(1:((nrow(n_times)/i)*i))[-c(c(1:(nrow(n_times)/i))*i-(i-1))]]
+    gene_nonCpG[locs_nonCpG@ranges@NAMES%in%unique(n_times$rowname),2:i] <- n_times$gene[c(1:((nrow(n_times)/i)*i))[-c(c(1:(nrow(n_times)/i))*i-(i-1))]]
+    gene_symbol_nonCpG[locs_nonCpG@ranges@NAMES%in%unique(n_times$rowname),2:i] <- n_times$gene_symbol[c(1:((nrow(n_times)/i)*i))[-c(c(1:(nrow(n_times)/i))*i-(i-1))]]
   } else {
-    gene[locs@ranges@NAMES%in%unique(n_times$rowname),2:i] <- t(matrix(n_times$gene[c(1:((nrow(n_times)/i)*i))[-c(c(1:(nrow(n_times)/i))*i-(i-1))]],nrow=i-1))
-    gene_symbol[locs@ranges@NAMES%in%unique(n_times$rowname),2:i] <- t(matrix(n_times$gene_symbol[c(1:((nrow(n_times)/i)*i))[-c(c(1:(nrow(n_times)/i))*i-(i-1))]],nrow=i-1))
+    gene_nonCpG[locs_nonCpG@ranges@NAMES%in%unique(n_times$rowname),2:i] <- t(matrix(n_times$gene[c(1:((nrow(n_times)/i)*i))[-c(c(1:(nrow(n_times)/i))*i-(i-1))]],nrow=i-1))
+    gene_symbol_nonCpG[locs_nonCpG@ranges@NAMES%in%unique(n_times$rowname),2:i] <- t(matrix(n_times$gene_symbol[c(1:((nrow(n_times)/i)*i))[-c(c(1:(nrow(n_times)/i))*i-(i-1))]],nrow=i-1))
   }
   
 }
 
 minmethreads <- 6
 
-inclocsM2 <- rowSums(methReads(rrbs))>=minmethreads
+inclocsM2_nonCpG <- rowSums(methReads(rrbs_nonCpG))>=minmethreads
 
-locs <- locs[inclocsM2]
-rrbsredB <- rrbs[inclocsM2,]
+locs_nonCpG <- locs_nonCpG[inclocsM2_nonCpG]
+rrbsredB_nonCpG <- rrbs_nonCpG[inclocsM2_nonCpG,]
 
-genic <- genic[inclocsM2]
-promoter <- promoter[inclocsM2]
+genic_nonCpG <- genic_nonCpG[inclocsM2_nonCpG]
+promoter_nonCpG <- promoter_nonCpG[inclocsM2_nonCpG]
 
-gene <- gene[inclocsM2,]
-gene_symbol <- gene_symbol[inclocsM2,]
+gene_nonCpG <- gene_nonCpG[inclocsM2_nonCpG,]
+gene_symbol_nonCpG <- gene_symbol_nonCpG[inclocsM2_nonCpG,]
 
-rrbsredB_meth <- methLevel(rawToRel(rrbsredB))
+rrbsredB_nonCpG_meth <- methLevel(rawToRel(rrbsredB_nonCpG))
 
 # Correlation
 uniq_nonCpG_annot_RNAseq <- rowSums(is.na(rrbs_nonCpG_age_RNAseq[,grepl("gene_alt",colnames(rrbs_age_RNAseq))]))==10 
@@ -517,7 +537,7 @@ genes_uniq_nonCpG <- unique(rrbs_nonCpG_age_RNAseq_uniq$gene)
 for(i in 1:length(genes_uniq_nonCpG)){
   if (i %% 100 == 0){print(i)}
   rnaseq_logcpm_nonCpG  <- c(rnaseq_logcpm_nonCpG,logcpm[rna_annot==genes_uniq_nonCpG[i]])
-  rrbs_meth_nonCpG  <- c(rrbs_meth_nonCpG,mean(rrbsredB_meth[gene[,1]==genes_uniq_nonCpG[i] & !is.na(gene[,1]),]))
+  rrbs_meth_nonCpG  <- c(rrbs_meth_nonCpG,mean(rrbsredB_nonCpG_meth[(gene_nonCpG[,1]==genes_uniq_nonCpG[i]) & !is.na(gene_nonCpG[,1]),]))
 }
 cor.test(rrbs_meth_nonCpG,rnaseq_logcpm_nonCpG)
 
@@ -528,7 +548,7 @@ genes_uniq_nonCpG_prom <- unique(rrbs_nonCpG_age_RNAseq_prom$gene)
 for(i in 1:length(genes_uniq_nonCpG_prom)){
   if (i %% 100 == 0){print(i)}
   rnaseq_logcpm_nonCpG_prom  <- c(rnaseq_logcpm_nonCpG_prom,logcpm[rna_annot==genes_uniq_nonCpG_prom[i]])
-  rrbs_meth_nonCpG_prom  <- c(rrbs_meth_nonCpG_prom,mean(rrbsredB_meth[gene[,1]==genes_uniq_nonCpG_prom[i] & !is.na(gene[,1]),]))
+  rrbs_meth_nonCpG_prom  <- c(rrbs_meth_nonCpG_prom,mean(rrbsredB_nonCpG_meth[(gene_nonCpG[,1]==genes_uniq_nonCpG_prom[i]) & !is.na(gene_nonCpG[,1]) & promoter_nonCpG,]))
 }
 cor.test(rrbs_meth_nonCpG_prom,rnaseq_logcpm_nonCpG_prom)
 
@@ -539,10 +559,291 @@ genes_uniq_nonCpG_genic <- unique(rrbs_nonCpG_age_RNAseq_genic$gene)
 for(i in 1:length(genes_uniq_nonCpG_genic)){
   if (i %% 100 == 0){print(i)}
   rnaseq_logcpm_nonCpG_genic  <- c(rnaseq_logcpm_nonCpG_genic,logcpm[rna_annot==genes_uniq_nonCpG_genic[i]])
-  rrbs_meth_nonCpG_genic  <- c(rrbs_meth_nonCpG_genic,mean(rrbsredB_meth[gene[,1]==genes_uniq_nonCpG_genic[i] & !is.na(gene[,1]),]))
+  rrbs_meth_nonCpG_genic  <- c(rrbs_meth_nonCpG_genic,mean(rrbsredB_nonCpG_meth[(gene_nonCpG[,1]==genes_uniq_nonCpG_genic[i]) & !is.na(gene_nonCpG[,1]) & genic_nonCpG,]))
 }
 cor.test(rrbs_meth_nonCpG_genic,rnaseq_logcpm_nonCpG_genic)
 
+
+
+##################
+## Mixed Models ##
+##################
+
+
+## CpG
+
+rrbsredB.rel_CpG <- rawToRel(rrbsredB_CpG)
+rrbsredB.M_CpG <- rrbsredB.rel_CpG
+ct <- 0.01
+for (i in 1:ncol(rrbsredB.rel_CpG)){
+  ML<-methLevel(rrbsredB.rel_CpG)[,i]
+  methLevel(rrbsredB.M_CpG)[,i]<-log2((ML+ct)/(1-ML+ct))
+}
+
+logcpm_sample <- cpm(y,log=T)
+
+order_col_CpG <- sort(as.numeric(gsub("O","",gsub("B","",colnames(rrbsredB.M_CpG)))),index.return=T)$ix
+head(rrbsredB.M_CpG[,order_col_CpG])
+
+# Model 1 Prom
+dat_lme_1_prom_CpG <- NULL
+genes_uniq_prom <- unique(rrbs_age_RNAseq_prom$gene)
+print(length(genes_uniq_prom))
+for(i in 1:length(genes_uniq_prom)){
+  if (i %% 100 == 0){print(i)}
+  if (sum((gene_CpG[,1]==genes_uniq_prom[i]) & !is.na(gene_CpG[,1]) & promoter_CpG)>1){
+    dat_lme_1_prom_CpG <- rbind(dat_lme_1_prom_CpG,
+                                cbind(logcpm_sample[rna_annot==genes_uniq_prom[i]],
+                                      colMeans(methLevel(rrbsredB.M_CpG)[(gene_CpG[,1]==genes_uniq_prom[i]) & !is.na(gene_CpG[,1]) & promoter_CpG,order_col_CpG]),
+                                      rep(genes_uniq_prom[i],length(colnames(rrbsredB.M_CpG))),
+                                      colnames(rrbsredB.M_CpG)[order_col_CpG]))
+  } else {
+    dat_lme_1_prom_CpG <- rbind(dat_lme_1_prom_CpG,
+                                cbind(logcpm_sample[rna_annot==genes_uniq_prom[i]],  
+                                      methLevel(rrbsredB.M_CpG)[(gene_CpG[,1]==genes_uniq_prom[i]) & !is.na(gene_CpG[,1]) & promoter_CpG,order_col_CpG],
+                                      rep(genes_uniq_prom[i],length(colnames(rrbsredB.M_CpG))),
+                                      colnames(rrbsredB.M_CpG)[order_col_CpG]))
+  }
+}
+dat_lme_1_prom_CpG <- data.frame(dat_lme_1_prom_CpG,stringsAsFactors = F)
+colnames(dat_lme_1_prom_CpG) <- c("Expression","Methylation","Gene","Sample")
+dat_lme_1_prom_CpG$Expression <- as.numeric(dat_lme_1_prom_CpG$Expression)  
+dat_lme_1_prom_CpG$Methylation <- as.numeric(dat_lme_1_prom_CpG$Methylation) 
+dat_lme_1_prom_CpG$Sample <- as.factor(dat_lme_1_prom_CpG$Sample) 
+dat_lme_1_prom_CpG$Gene <- as.factor(dat_lme_1_prom_CpG$Gene) 
+dim(dat_lme_1_prom_CpG)
+head(dat_lme_1_prom_CpG)
+str(dat_lme_1_prom_CpG)
+write.table(dat_lme_1_prom_CpG,file="dat_lme_1_prom_CpG.txt",col.names = T,row.names = F,quote=F,sep="\t")
+
+mixed_lmer_1_prom_CpG <- lmerTest::lmer(Expression ~ Methylation + (1|Sample) + (1+ Methylation|Gene), data = dat_lme_1_prom_CpG)
+summary(mixed_lmer_1_prom_CpG)
+
+# dat_lme_1_prom_CpG_scaled <- dat_lme_1_prom_CpG
+# dat_lme_1_prom_CpG_scaled[,1:2] <- scale(dat_lme_1_prom_CpG_scaled[, 1:2], center = T, scale = T)
+# 
+# mixed_lmer_1_prom_CpG_scaled <- lmerTest::lmer(Expression ~ Methylation + (1|Sample) + (1+ Methylation|Gene), data = dat_lme_1_prom_CpG_scaled)
+# summary(mixed_lmer_1_prom_CpG_scaled)
+
+
+# Model 1 Genic
+dat_lme_1_genic_CpG <- NULL
+genes_uniq_genic <- unique(rrbs_age_RNAseq_genic$gene)
+print(length(genes_uniq_genic))
+for(i in 1:length(genes_uniq_genic)){
+  if (i %% 100 == 0){print(i)}
+  if (sum((gene_CpG[,1]==genes_uniq_genic[i]) & !is.na(gene_CpG[,1]) & genic_CpG)>1){
+    dat_lme_1_genic_CpG <- rbind(dat_lme_1_genic_CpG,
+                                 cbind(logcpm_sample[rna_annot==genes_uniq_genic[i]],
+                                      colMeans(methLevel(rrbsredB.M_CpG)[(gene_CpG[,1]==genes_uniq_genic[i]) & !is.na(gene_CpG[,1]) & genic_CpG,order_col_CpG]),
+                                      rep(genes_uniq_genic[i],length(colnames(rrbsredB.M_CpG))),
+                                      colnames(rrbsredB.M_CpG)[order_col_CpG]))
+  } else {
+    dat_lme_1_genic_CpG <- rbind(dat_lme_1_genic_CpG,
+                                 cbind(logcpm_sample[rna_annot==genes_uniq_genic[i]],
+                                       methLevel(rrbsredB.M_CpG)[(gene_CpG[,1]==genes_uniq_genic[i]) & !is.na(gene_CpG[,1]) & genic_CpG,order_col_CpG],
+                                       rep(genes_uniq_genic[i],length(colnames(rrbsredB.M_CpG))),
+                                       colnames(rrbsredB.M_CpG)[order_col_CpG]))
+  }
+}
+dat_lme_1_genic_CpG <- data.frame(dat_lme_1_genic_CpG,stringsAsFactors = F)
+colnames(dat_lme_1_genic_CpG) <- c("Expression","Methylation","Gene","Sample")
+dat_lme_1_genic_CpG$Expression <- as.numeric(dat_lme_1_genic_CpG$Expression)  
+dat_lme_1_genic_CpG$Methylation <- as.numeric(dat_lme_1_genic_CpG$Methylation) 
+dat_lme_1_genic_CpG$Sample <- as.factor(dat_lme_1_genic_CpG$Sample) 
+dat_lme_1_genic_CpG$Gene <- as.factor(dat_lme_1_genic_CpG$Gene) 
+dim(dat_lme_1_genic_CpG)
+head(dat_lme_1_genic_CpG)
+str(dat_lme_1_genic_CpG)
+write.table(dat_lme_1_genic_CpG,file="dat_lme_1_genic_CpG.txt",col.names = T,row.names = F,quote=F,sep="\t")
+
+mixed_lmer_1_genic_CpG <- lmerTest::lmer(Expression ~ Methylation + (1|Sample) + (1+ Methylation|Gene), data = dat_lme_1_genic_CpG)
+summary(mixed_lmer_1_genic_CpG)
+
+# dat_lme_1_genic_CpG_scaled <- dat_lme_1_genic_CpG
+# dat_lme_1_genic_CpG_scaled[,1:2] <- scale(dat_lme_1_genic_CpG_scaled[, 1:2], center = T, scale = T)
+# 
+# mixed_lmer_1_genic_CpG_scaled <- lmerTest::lmer(Expression ~ Methylation + (1|Sample) + (1+ Methylation|Gene), data = dat_lme_1_genic_CpG_scaled)
+# summary(mixed_lmer_1_genic_CpG_scaled)
+
+
+# Plots 
+
+library(readbitmap)
+library(grid)
+library(gridExtra)
+library(ggplot2)
+tiff("mixed_lmer_prom_qc_A.tiff",height=4,width=4,units="in",res=75)
+qqnorm(resid(mixed_lmer_1_prom_CpG_scaled))
+qqline(resid(mixed_lmer_1_prom_CpG_scaled))
+dev.off()
+tiff("mixed_lmer_prom_qc_B.tiff",height=4,width=4,units="in",res=75)
+plot(mixed_lmer_1_prom_CpG_scaled)
+dev.off()
+ll <- list("mixed_lmer_prom_qc_A.tiff","mixed_lmer_prom_qc_B.tiff")
+plots <- lapply(ll,function(x){
+  img <- as.raster(read.bitmap(paste(x,sep="")))
+  rasterGrob(img, interpolate = FALSE)
+})
+ggsave("mixed_lmer_prom_qc.tiff",width=8, height=4, units="in",
+       marrangeGrob(grobs = plots, nrow=1, ncol=2,top=NULL))
+
+lm_prom_CpG <- lm(Expression~Methylation,dat_lme_1_prom_CpG)
+lm_genic_CpG <- lm(Expression~Methylation,dat_lme_1_genic_CpG)
+tiff("mixed_lmer_scatter.tiff",height=4,width=8,units="in",res=150)
+par(mfrow=c(1,2))
+plot(dat_lme_1_prom_CpG$Methylation,dat_lme_1_prom_CpG$Expression,main="Promoter",pch=20)
+abline(a=summary(lm_prom_CpG)$coefficients[1,1],b=summary(lm_prom_CpG)$coefficients[2,1],col="red")
+plot(dat_lme_1_genic_CpG$Methylation,dat_lme_1_genic_CpG$Expression,main="Genic",pch=20)
+abline(a=summary(lm_genic_CpG)$coefficients[1,1],b=summary(lm_genic_CpG)$coefficients[2,1],col="red")
+dev.off()
+
+dat_lme_1_prom_CpG_mean <- NULL
+for (i in 1:length(unique(dat_lme_1_prom_CpG$Gene))){
+  dat_lme_1_prom_CpG_mean <- rbind(dat_lme_1_prom_CpG_mean,
+                                   c(mean(dat_lme_1_prom_CpG$Methylation[dat_lme_1_prom_CpG$Gene==unique(dat_lme_1_prom_CpG$Gene)[i]]),
+                                     mean(dat_lme_1_prom_CpG$Expression[dat_lme_1_prom_CpG$Gene==unique(dat_lme_1_prom_CpG$Gene)[i]])))
+}
+cor.test(dat_lme_1_prom_CpG_mean[,1],dat_lme_1_prom_CpG_mean[,2],method="pearson")
+dat_lme_1_genic_CpG_mean <- NULL
+for (i in 1:length(unique(dat_lme_1_genic_CpG$Gene))){
+  dat_lme_1_genic_CpG_mean <- rbind(dat_lme_1_genic_CpG_mean,
+                                    c(mean(dat_lme_1_genic_CpG$Methylation[dat_lme_1_genic_CpG$Gene==unique(dat_lme_1_genic_CpG$Gene)[i]]),
+                                      mean(dat_lme_1_genic_CpG$Expression[dat_lme_1_genic_CpG$Gene==unique(dat_lme_1_genic_CpG$Gene)[i]])))
+}
+cor.test(dat_lme_1_genic_CpG_mean[,1],dat_lme_1_genic_CpG_mean[,2],method="pearson")
+
+
+## nonCpG
+
+
+rrbsredB.rel_nonCpG <- rawToRel(rrbsredB_nonCpG)
+rrbsredB.M_nonCpG <- rrbsredB.rel_nonCpG
+ct <- 0.01
+for (i in 1:ncol(rrbsredB.rel_nonCpG)){
+  ML<-methLevel(rrbsredB.rel_nonCpG)[,i]
+  methLevel(rrbsredB.M_nonCpG)[,i]<-log2((ML+ct)/(1-ML+ct))
+}
+
+logcpm_sample <- cpm(y,log=T)
+
+order_col_nonCpG <- sort(as.numeric(gsub("O","",gsub("B","",colnames(rrbsredB.M_nonCpG)))),index.return=T)$ix
+head(rrbsredB.M_nonCpG[,order_col_nonCpG])
+
+# Model 1 Prom
+dat_lme_1_prom_nonCpG <- NULL
+genes_uniq_prom <- unique(rrbs_nonCpG_age_RNAseq_prom$gene)
+print(length(genes_uniq_prom))
+for(i in 1:length(genes_uniq_prom)){
+  if (i %% 100 == 0){print(i)}
+  if (sum((gene_nonCpG[,1]==genes_uniq_prom[i]) & !is.na(gene_nonCpG[,1]) & promoter_nonCpG)>1){
+    dat_lme_1_prom_nonCpG <- rbind(dat_lme_1_prom_nonCpG,
+                                cbind(logcpm_sample[rna_annot==genes_uniq_prom[i]],
+                                      colMeans(methLevel(rrbsredB.M_nonCpG)[(gene_nonCpG[,1]==genes_uniq_prom[i]) & !is.na(gene_nonCpG[,1]) & promoter_nonCpG,order_col_nonCpG]),
+                                      rep(genes_uniq_prom[i],length(colnames(rrbsredB.M_nonCpG))),
+                                      colnames(rrbsredB.M_nonCpG)[order_col_nonCpG]))
+  } else {
+    dat_lme_1_prom_nonCpG <- rbind(dat_lme_1_prom_nonCpG,
+                                cbind(logcpm_sample[rna_annot==genes_uniq_prom[i]],  
+                                      methLevel(rrbsredB.M_nonCpG)[(gene_nonCpG[,1]==genes_uniq_prom[i]) & !is.na(gene_nonCpG[,1]) & promoter_nonCpG,order_col_nonCpG],
+                                      rep(genes_uniq_prom[i],length(colnames(rrbsredB.M_nonCpG))),
+                                      colnames(rrbsredB.M_nonCpG)[order_col_nonCpG]))
+  }
+}
+dat_lme_1_prom_nonCpG <- data.frame(dat_lme_1_prom_nonCpG,stringsAsFactors = F)
+colnames(dat_lme_1_prom_nonCpG) <- c("Expression","Methylation","Gene","Sample")
+dat_lme_1_prom_nonCpG$Expression <- as.numeric(dat_lme_1_prom_nonCpG$Expression)  
+dat_lme_1_prom_nonCpG$Methylation <- as.numeric(dat_lme_1_prom_nonCpG$Methylation) 
+dat_lme_1_prom_nonCpG$Sample <- as.factor(dat_lme_1_prom_nonCpG$Sample) 
+dat_lme_1_prom_nonCpG$Gene <- as.factor(dat_lme_1_prom_nonCpG$Gene) 
+dim(dat_lme_1_prom_nonCpG)
+head(dat_lme_1_prom_nonCpG)
+str(dat_lme_1_prom_nonCpG)
+write.table(dat_lme_1_prom_nonCpG,file="dat_lme_1_prom_nonCpG.txt",col.names = T,row.names = F,quote=F,sep="\t")
+
+mixed_lmer_1_prom_nonCpG <- lmerTest::lmer(Expression ~ Methylation + (1|Sample) + (1+ Methylation|Gene), data = dat_lme_1_prom_nonCpG)
+summary(mixed_lmer_1_prom_nonCpG)
+
+
+# Model 1 Genic
+dat_lme_1_genic_nonCpG <- NULL
+genes_uniq_genic <- unique(rrbs_nonCpG_age_RNAseq_genic$gene)
+print(length(genes_uniq_genic))
+for(i in 1:length(genes_uniq_genic)){
+  if (i %% 100 == 0){print(i)}
+  if (sum((gene_nonCpG[,1]==genes_uniq_genic[i]) & !is.na(gene_nonCpG[,1]) & genic_nonCpG)>1){
+    dat_lme_1_genic_nonCpG <- rbind(dat_lme_1_genic_nonCpG,
+                                 cbind(logcpm_sample[rna_annot==genes_uniq_genic[i]],
+                                       colMeans(methLevel(rrbsredB.M_nonCpG)[(gene_nonCpG[,1]==genes_uniq_genic[i]) & !is.na(gene_nonCpG[,1]) & genic_nonCpG,order_col_nonCpG]),
+                                       rep(genes_uniq_genic[i],length(colnames(rrbsredB.M_nonCpG))),
+                                       colnames(rrbsredB.M_nonCpG)[order_col_nonCpG]))
+  } else {
+    dat_lme_1_genic_nonCpG <- rbind(dat_lme_1_genic_nonCpG,
+                                 cbind(logcpm_sample[rna_annot==genes_uniq_genic[i]],
+                                       methLevel(rrbsredB.M_nonCpG)[(gene_nonCpG[,1]==genes_uniq_genic[i]) & !is.na(gene_nonCpG[,1]) & genic_nonCpG,order_col_nonCpG],
+                                       rep(genes_uniq_genic[i],length(colnames(rrbsredB.M_nonCpG))),
+                                       colnames(rrbsredB.M_nonCpG)[order_col_nonCpG]))
+  }
+}
+dat_lme_1_genic_nonCpG <- data.frame(dat_lme_1_genic_nonCpG,stringsAsFactors = F)
+colnames(dat_lme_1_genic_nonCpG) <- c("Expression","Methylation","Gene","Sample")
+dat_lme_1_genic_nonCpG$Expression <- as.numeric(dat_lme_1_genic_nonCpG$Expression)  
+dat_lme_1_genic_nonCpG$Methylation <- as.numeric(dat_lme_1_genic_nonCpG$Methylation) 
+dat_lme_1_genic_nonCpG$Sample <- as.factor(dat_lme_1_genic_nonCpG$Sample) 
+dat_lme_1_genic_nonCpG$Gene <- as.factor(dat_lme_1_genic_nonCpG$Gene) 
+dim(dat_lme_1_genic_nonCpG)
+head(dat_lme_1_genic_nonCpG)
+str(dat_lme_1_genic_nonCpG)
+write.table(dat_lme_1_genic_nonCpG,file="dat_lme_1_genic_nonCpG.txt",col.names = T,row.names = F,quote=F,sep="\t")
+
+mixed_lmer_1_genic_nonCpG <- lmerTest::lmer(Expression ~ Methylation + (1|Sample) + (1+ Methylation|Gene), data = dat_lme_1_genic_nonCpG)
+summary(mixed_lmer_1_genic_nonCpG)
+
+
+
+
+
+
+
+# Model 2 Prom
+dat_lme_2_prom_CpG <- NULL
+genes_uniq <- unique(rrbs_age_RNAseq_prom$gene)
+print(length(genes_uniq))
+for(i in 1:length(genes_uniq)){
+  if (i %% 100 == 0){print(i)}
+  if (sum(gene_CpG[,1]==genes_uniq[i] & !is.na(gene_CpG[,1]))>1){
+    for (j in 1:sum(gene_CpG[,1]==genes_uniq[i] & !is.na(gene_CpG[,1]))){
+      wh <- which(gene_CpG[,1]==genes_uniq[i] & !is.na(gene_CpG[,1]))[j]
+      dat_lme_2_prom_CpG <- rbind(dat_lme_2_prom_CpG,
+                                  cbind(logcpm_sample[rna_annot==genes_uniq[i]],
+                                        methLevel(rrbsredB.M_CpG)[wh,order_col_CpG],
+                                        rep(genes_uniq[i],length(colnames(rrbsredB.M_CpG))),
+                                        colnames(rrbsredB.M_CpG)[order_col_CpG],
+                                        rep(rownames(rrbsredB.M_CpG)[wh],length(colnames(rrbsredB.M_CpG)))))
+      
+    }
+  } else {
+    dat_lme_2_prom_CpG <- rbind(dat_lme_2_prom_CpG,
+                                cbind(logcpm_sample[rna_annot==genes_uniq[i]],
+                                      methLevel(rrbsredB.M_CpG)[gene_CpG[,1]==genes_uniq[i] & !is.na(gene_CpG[,1]),order_col_CpG],
+                                      rep(genes_uniq[i],length(colnames(rrbsredB.M_CpG))),
+                                      colnames(rrbsredB.M_CpG)[order_col_CpG],
+                                      rep(rownames(rrbsredB.M_CpG)[gene_CpG[,1]==genes_uniq[i] & !is.na(gene_CpG[,1])],length(colnames(rrbsredB.M_CpG)))))
+  }
+}
+dat_lme_2_prom_CpG <- data.frame(dat_lme_2_prom_CpG,stringsAsFactors = F)
+colnames(dat_lme_2_prom_CpG) <- c("Expression","Methylation","Gene","Sample","CpG")
+dat_lme_2_prom_CpG$Expression <- as.numeric(dat_lme_2_prom_CpG$Expression)  
+dat_lme_2_prom_CpG$Methylation <- as.numeric(dat_lme_2_prom_CpG$Methylation) 
+dat_lme_2_prom_CpG$Sample <- as.factor(dat_lme_2_prom_CpG$Sample) 
+dat_lme_2_prom_CpG$Gene <- as.factor(dat_lme_2_prom_CpG$Gene) 
+dat_lme_2_prom_CpG$CpG <- as.factor(dat_lme_2_prom_CpG$CpG) 
+dim(dat_lme_2_prom_CpG)
+head(dat_lme_2_prom_CpG)
+str(dat_lme_2_prom_CpG)
+
+mixed_lmer_2_prom_CpG <- lmerTest::lmer(Expression ~ Methylation + (1|Sample) + (1+Methylation|Gene/CpG), data = dat_lme_2_prom_CpG)
+summary(mixed_lmer_2_prom_CpG)
 
 
 ######################################################
@@ -720,4 +1021,51 @@ rrbs_age_prom_sign <- rrbs_age_prom_sign[!grepl("MT",rrbs_age_prom_sign$chr),]
 makeBedGraph(rrbs_age_prom_sign,c(1,2,2,12),"RRBS_age_1dph","Meth_perc",col=c("green","red"),isSign = (rrbs_age_prom_sign$adj.P.Val<0.05), range=c(0,0.3))
 makeBedGraph(rrbs_age_prom_sign,c(1,2,2,14),"RRBS_age_older","Meth_perc",col=c("blue","brown"),isSign = (rrbs_age_prom_sign$adj.P.Val<0.05), range=c(0,0.3))
 
+# Comet plot
+rrbs_age_prom_ARX <- rrbs_age_prom_sign[rrbs_age_prom_sign$gene_symbol=="ARX",]
+rrbs_age_prom_ARX <- rrbs_age_prom_ARX[sort(rrbs_age_prom_ARX$locations,index.return=T)$ix,]
+dim(rrbs_age_prom_sign_ARX)
+head(rrbs_age_prom_ARX[,1:15])
 
+rrbs_age_prom_sign_ARX <- rrbs_age_prom_ARX[rrbs_age_prom_ARX$adj.P.Val<0.05,]
+dim(rrbs_age_prom_sign_ARX)
+head(rrbs_age_prom_ARX[,1:15])
+
+# mat_infofile <- cbind(rownames(rrbs_age_prom_ARX),rrbs_age_prom_ARX$chr,
+#                       rrbs_age_prom_ARX$locations,rrbs_age_prom_ARX$adj.P.Val)
+# colnames(mat_infofile) <- c("TargetID","CHR","MAPINFO","Pval")
+# write.table(mat_infofile,"ARX_infofile.txt",col.names = T,row.names = F,quote = F,sep="\t")
+# 
+# library("coMET")
+# library("rtracklayer")
+# extdata <- system.file("extdata", package="coMET",mustWork=TRUE)
+# configfile <- "ARX_configfile.txt"
+# myinfofile <- "ARX_infofile.txt"
+# myexpressfile <- file.path(extdata, "cyp1b1_infofile_exprGene_region.txt")
+# mycorrelation <- file.path(extdata, "cyp1b1_res37_rawMatrix.txt")
+# chrom <- "chr1"
+# start <- 12462436
+# end <- 12466436
+# gen <- "hg19"
+# strand <- "*"
+# BROWSER.SESSION="UCSC"
+# mySession <- browserSession(BROWSER.SESSION)
+# genome(mySession) <- gen
+# genetrack <-genes_ENSEMBL(gen,chrom,start,end,showId=TRUE)
+# # snptrack <- snpBiomart_ENSEMBL(gen,chrom, start, end,
+# #                                dataset="hsapiens_snp_som",showId=FALSE,
+# #                                title="SNPs Ensembl")
+# cpgIstrack <- cpgIslands_UCSC(gen,chrom,start,end)
+# prombedFilePath <- file.path(extdata, "/RoadMap/regions_prom_E063.bed")
+# promRMtrackE063<- DNaseI_RoadMap(gen,chrom,start, end, prombedFilePath,
+#                                  featureDisplay='promotor', type_stacking="squish")
+# bedFilePath <- file.path(extdata, "RoadMap/E063_15_coreMarks_mnemonics.bed")
+# chromHMM_RoadMapAllE063 <- chromHMM_RoadMap(gen,chrom,start, end,
+#                                             bedFilePath, featureDisplay = "all",
+#                                             colorcase='roadmap15' )
+# listgviz <- list(genetrack,cpgIstrack,promRMtrackE063,chromHMM_RoadMapAllE063)
+# comet(config.file=configfile, mydata.file=myinfofile, mydata.type="file",
+#       cormatrix.file=mycorrelation, cormatrix.type="listfile",
+#       mydata.large.file=myexpressfile, mydata.large.type="listfile",
+#       tracks.gviz=listgviz, verbose=TRUE, print.image=FALSE)
+# 

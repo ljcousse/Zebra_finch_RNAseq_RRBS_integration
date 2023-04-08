@@ -89,11 +89,14 @@ labels <- c("1dph,F","1dph,M","20dph,F","20dph,M","65dph,F","65dph,M","adult,F",
 labels <- labels[c(1,3,5,7,2,4,6,8)]
 
 tiff("Methylation_plot.tiff",units="in", width=4, height=4,res=300,family = "sans")
-par(mar=c(4,4,2,2))
+par(mar=c(4,5,2,2))
 boxplot(y~f1+f2,data_CpG,at=c(1,3,5,7,2,4,6,8),las=2,
-        names=labels,col=c(rep("gray",4),rep("white",4)),main="CpG methylation",ylab= "Methylation (%)",
-        xlab="",cex.lab=0.8,cex.axis=0.7,cex.main=0.8)
-legend("topleft",c("female","male"),pch=21,col="black",pt.bg=c("gray","white"),cex=0.7)
+        names=labels,col=c(rep("gray",4),rep("white",4)),main="CpG methylation",
+        ylab= "",xlab="",cex.lab=1,cex.axis=0.9,cex.main=1)
+legend("topleft",c("female","male"),pch=21,col="black",pt.bg=c("gray","white"),cex=0.9)
+mtext("Methylation (%)",side=2,line=3.5,cex=0.9)
+par(xpd=TRUE)
+text(par("usr")[1],par("usr")[4]*1.1,"A",cex=4)
 dev.off()
 
 
@@ -120,11 +123,12 @@ labels <- c("1dph,F","1dph,M","20dph,F","20dph,M","65dph,F","65dph,M","adult,F",
 labels <- labels[c(1,3,5,7,2,4,6,8)]
 
 tiff("Methylation_hydroxy_plot.tiff",units="in", width=4, height=4,res=300,family = "sans")
-par(mar=c(4,4,2,2))
+par(mar=c(4,5,2,2))
 boxplot(y~f1+f2,data_hydroxy,at=c(1,3,5,7,2,4,6,8),las=2,
-        names=labels,col=c(rep("gray",4),rep("white",4)),main="Hydroxymethylation",ylab= "Methylation (%)",
-        xlab="",cex.lab=0.8,cex.axis=0.7,cex.main=0.8)
-legend("topleft",c("female","male"),pch=21,col="black",pt.bg=c("gray","white"),cex=0.7)
+        names=labels,col=c(rep("gray",4),rep("white",4)),main="Hydroxymethylation",
+        ylab= "",xlab="",cex.lab=1,cex.axis=0.9,cex.main=1)
+legend("topleft",c("female","male"),pch=21,col="black",pt.bg=c("gray","white"),cex=0.9)
+mtext("Methylation (%)",side=2,line=3.5,cex=0.9)
 dev.off()
 
 
@@ -156,11 +160,12 @@ labels <- c("1dph,F","1dph,M","20dph,F","20dph,M","65dph,F","65dph,M","adult,F",
 labels <- labels[c(1,3,5,7,2,4,6,8)]
 
 tiff("Methylation_nonCpG_plot.tiff",units="in", width=4, height=4,res=300,family = "sans")
-par(mar=c(4,4,2,2))
+par(mar=c(4,5,2,2))
 boxplot(y~f1+f2,data_CpH,at=c(1,3,5,7,2,4,6,8),las=2,
         names=labels,col=c(rep("gray",4),rep("white",4)),main="nonCpG methylation",
-        ylab= "Methylation (%)",xlab="",cex.lab=0.8,cex.axis=0.7,cex.main=0.8)
-legend("topleft",c("female","male"),pch=21,col="black",pt.bg=c("gray","white"),cex=0.7)
+        ylab= "",xlab="",cex.lab=1,cex.axis=0.9,cex.main=1)
+legend("topleft",c("female","male"),pch=21,col="black",pt.bg=c("gray","white"),cex=0.9)
+mtext("Methylation (%)",side=2,line=3.5,cex=0.9)
 dev.off()
 
 data_barplot <- cbind(c(mean(data_CpG$y[data_CpG$f1==1 & data_CpG$f2==1]),mean(data_hydroxy$y[data_hydroxy$f1==1 & data_hydroxy$f2==1]),mean(data_CpH$y[data_CpH$f1==1 & data_CpH$f2==1])),
@@ -172,10 +177,11 @@ data_barplot <- cbind(c(mean(data_CpG$y[data_CpG$f1==1 & data_CpG$f2==1]),mean(d
                       c(mean(data_CpG$y[data_CpG$f1==4 & data_CpG$f2==1]),mean(data_hydroxy$y[data_hydroxy$f1==4 & data_hydroxy$f2==1]),mean(data_CpH$y[data_CpH$f1==4 & data_CpH$f2==1])),
                       c(mean(data_CpG$y[data_CpG$f1==4 & data_CpG$f2==2]),mean(data_hydroxy$y[data_hydroxy$f1==4 & data_hydroxy$f2==2]),mean(data_CpH$y[data_CpH$f1==4 & data_CpH$f2==2])))
 tiff("Comparison_RRBS.tiff",units="in", width=4, height=4,res=300,family = "sans")
-par(mar=c(4,4,2,2))
-barplot(data_barplot,beside=T,main="Comparison",names=labels,las=2,cex=0.7,
-        ylab= "Methylation (%)",xlab="",cex.lab=0.8,cex.axis=0.7,cex.main=0.8)
+par(mar=c(4,5,2,2))
+barplot(data_barplot,beside=T,main="Comparison",names=labels,las=2,cex=0.9,
+        ylab= "",xlab="",cex.lab=1,cex.axis=0.9,cex.main=1)
 legend("topleft",c("CpG","hydroxy","nonCpG"),pt.bg=c("darkgrey","grey","white"),pch=21,col="black",cex=0.7)
+mtext("Methylation (%)",side=2,line=3.5,cex=0.9)
 dev.off()
 
 unlink("RRBS.tiff")
@@ -188,3 +194,15 @@ plots <- lapply(ll,function(x){
 
 ggsave("RRBS.tiff",width=8, height=8, units="in",
        marrangeGrob(grobs = plots[c(1,4,2,3)], nrow=2, ncol=2,top=NULL))
+
+
+unlink("RRBS_total.tiff")
+ll <- list("RRBS.tiff","Clustering_RRBS.tiff")
+plots <- lapply(ll,function(x){
+  img <- as.raster(read.bitmap(paste(x,sep="")))
+  rasterGrob(img, interpolate = FALSE)
+})
+
+ggsave("RRBS_total.tiff",width=16, height=8, units="in",
+       marrangeGrob(grobs = plots, nrow=1, ncol=2,top=NULL))
+
