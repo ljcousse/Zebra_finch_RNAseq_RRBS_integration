@@ -37,8 +37,8 @@ We profiled the telencephalon of male and female zebra finches (*Taeniopygia gut
 ## Installation
 
 ```bash
-git clone https://github.com/ljcousse/PlastoscineProject.git
-cd PlastoscineProject
+git clone https://github.com/ljcousse/Zebra_finch_RNAseq_RRBS_integration.git
+cd Zebra_finch_RNAseq_RRBS_integration
 
 conda env create -f conda_environment.yml
 conda activate zebra_finch
