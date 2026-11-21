@@ -1,0 +1,16 @@
+# Local paths for the zebra finch telencephalon analysis.
+# Copy this file to environment.yml and fill in your own paths (environment.yml is not tracked by git).
+
+# RRBS (read by RRBS_analyse.R, RRBS_analyse_hydroxy.R, RRBS_analyse_nonCpG.R, RRBS_plots.R)
+dir_rrbs_cpg: /path/to/rrbs/CpG            # Bismark CpG coverage files, RRBS (*.B*) and oxRRBS (*.O*) per sample
+dir_rrbs_chg: /path/to/rrbs/CHG            # Bismark CHG coverage files
+dir_rrbs_chh: /path/to/rrbs/CHH            # Bismark CHH coverage files
+
+# RNA-seq pre-processing (read by fastq2counts.bash)
+dir_fastq: /path/to/fastq                  # FASTQ files, one folder per sequencing run/lane
+dir_mapping: /path/to/mapping              # STAR output, BAM files and htseq-count tables
+dir_star_index: /path/to/star_index        # STAR genome index of taeGut3.2.4 (Ensembl release 87)
+file_gtf: /path/to/Taeniopygia_guttata.taeGut3.2.4.87.gtf   # Ensembl release 87 GTF
+
+# Sequencing statistics (read by Info_paper.R on the RRBS server)
+dir_rrbs_runs: /path/to/rrbs_runs          # RRBS run folders with the Trim Galore trimming reports

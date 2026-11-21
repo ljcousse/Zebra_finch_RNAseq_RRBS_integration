@@ -1,4 +1,4 @@
-# !/bin/sh 
+#!/bin/bash
 
 ###############################
 ##                           ##
@@ -11,8 +11,11 @@
 ## Directories ##
 #################
 
-dir_fastq=/data/rundata/run174/fastq
-dir_home=/data/louisc/Project_Plastoscine/
+# Directories are read from environment.yml (copy environment_example.yml and fill in the local paths)
+dir_fastq=$(awk '$1=="dir_fastq:" {print $2}' environment.yml)
+dir_home=$(awk '$1=="dir_mapping:" {print $2}' environment.yml)
+dir_star_index=$(awk '$1=="dir_star_index:" {print $2}' environment.yml)
+file_gtf=$(awk '$1=="file_gtf:" {print $2}' environment.yml)
 
 ##########
 ## STAR ##
@@ -28,7 +31,7 @@ do
 	do
 		# echo $dir_home/$dir/$files
 		cd $dir_home/$dir
-		STAR --runThreadN 6 --genomeDir $dir_home/TAIR --readFilesIn $dir_fastq/$dir/$files --outFileNamePrefix $files --outReadsUnmapped Fastx
+		STAR --runThreadN 6 --genomeDir $dir_star_index --readFilesIn $dir_fastq/$dir/$files --outFileNamePrefix $files --outReadsUnmapped Fastx
 	done
 	cd $dir_fastq/$dir
 	pigz *
@@ -67,7 +70,7 @@ for prefix in $(ls -LR | cut -d_ -f 1 | grep JD | sort -u)
 do 
 	echo $prefix
 	samtools sort $prefix\_merged $prefix\_sorted
-	htseq-count -s no -f bam $prefix\_sorted.bam Taeniopygia_guttata.taeGut3.2.4.87.gtf > $prefix\_htseqobj.txt
+	htseq-count -s no -f bam $prefix\_sorted.bam $file_gtf > $prefix\_htseqobj.txt
 done
 
 pr -mTs $'\t' <(cut -d$'\t' -f2 JD-1_htseqobj.txt) <(cut -d$'\t' -f2 JD-2_htseqobj.txt) <(cut -d$'\t' -f2 JD-3_htseqobj.txt) <(cut -d$'\t' -f2 JD-4_htseqobj.txt) <(cut -d$'\t' -f2 JD-5_htseqobj.txt) <(cut -d$'\t' -f2 JD-6_htseqobj.txt) <(cut -d$'\t' -f2 JD-7_htseqobj.txt) <(cut -d$'\t' -f2 JD-8_htseqobj.txt) <(cut -d$'\t' -f2 JD-9_htseqobj.txt) <(cut -d$'\t' -f2 JD-10_htseqobj.txt) <(cut -d$'\t' -f2 JD-11_htseqobj.txt) <(cut -d$'\t' -f2 JD-12_htseqobj.txt) <(cut -d$'\t' -f2 JD-13_htseqobj.txt) <(cut -d$'\t' -f2 JD-14_htseqobj.txt) <(cut -d$'\t' -f2 JD-15_htseqobj.txt) <(cut -d$'\t' -f2 JD-16_htseqobj.txt) <(cut -d$'\t' -f2 JD-17_htseqobj.txt) <(cut -d$'\t' -f2 JD-18_htseqobj.txt) <(cut -d$'\t' -f2 JD-19_htseqobj.txt) <(cut -d$'\t' -f2 JD-20_htseqobj.txt) <(cut -d$'\t' -f2 JD-21_htseqobj.txt) <(cut -d$'\t' -f2 JD-22_htseqobj.txt) <(cut -d$'\t' -f2 JD-23_htseqobj.txt) <(cut -d$'\t' -f2 JD-24_htseqobj.txt) > Plastoscine.txt

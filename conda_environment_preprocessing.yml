@@ -1,0 +1,20 @@
+# Conda environment for the RNA-seq pre-processing (fastq2counts.bash).
+#
+# Versions as in the manuscript where available: STAR 2.5.2b, samtools 0.1.18
+# (fastq2counts.bash uses the old "samtools sort <in> <prefix>" syntax) and htseq-count 0.6.1
+# (0.6.0 is not on bioconda). htseq-count 0.6.1 needs Python 2.7, which is why this is a
+# separate environment.
+#
+# conda env create -f conda_environment_preprocessing.yml
+# conda activate zebra_finch_preprocessing
+
+name: zebra_finch_preprocessing
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - python=2.7
+  - star=2.5.2b
+  - samtools=0.1.18
+  - htseq=0.6.1
+  - pigz

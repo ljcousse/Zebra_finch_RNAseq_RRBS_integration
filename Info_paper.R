@@ -9,6 +9,15 @@ if (identical(server,character(0))){
   stop("This script is not supposed to run on this server")
 }
 
+# Directories are read from environment.yml (copy environment_example.yml and fill in the local paths)
+library(yaml)
+if (!file.exists("environment.yml")){
+  stop("environment.yml not found, copy environment_example.yml and fill in the local paths")
+}
+env <- read_yaml("environment.yml")
+home_dir <- getwd()
+dir_rrbs_runs <- env$dir_rrbs_runs
+
 # options(warn = 2)
 
 if (server=="porthos"){
@@ -39,12 +48,12 @@ if (server=="porthos"){
   write.table(output,file="RNA_info.txt",row.names = F,quote = F,sep="\t")
   
 } else if (server=="midas"){
-  setwd("/data/sandras")
+  setwd(dir_rrbs_runs)
   print(dir())
   folders <- dir()[grep("run",dir())]
   trim_report_final <- matrix(rep(0,24*3),ncol=3)
   for (t in 1:length(folders)){
-    setwd(paste("/data/sandras/",folders[t],"/Data/Intensities/BaseCalls/",sep=""))
+    setwd(paste(dir_rrbs_runs,"/",folders[t],"/Data/Intensities/BaseCalls/",sep=""))
     prefixes <- unique(unlist(strsplit(dir(), "_"))[grep("[B][0-9]+",unlist(strsplit(dir(), "_")))])
     # print(prefixes)
     for (s in 1:length(prefixes)){
@@ -59,7 +68,7 @@ if (server=="porthos"){
       # print(trim_report)
     }
   }
-  setwd("/home/louisc/Zebra_Finch")
+  setwd(home_dir)
   print(trim_report_final)
   output <- cbind(paste("JD",1:24,sep="-"),trim_report_final)
   print(output)

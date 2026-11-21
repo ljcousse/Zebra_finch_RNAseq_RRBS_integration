@@ -1,10 +1,10 @@
-####################
-####################
-##                ##
-## DosageEffect.R ##
-##                ##
-####################
-####################
+##################
+##################
+##              ##
+## RRBS_plots.R ##
+##              ##
+##################
+##################
 
 
 ## Load libraries
@@ -23,7 +23,13 @@ quartzFonts(sans=c("Arial","Arial Black","Arial Narrow","Arial Rounded MT Bold")
 #####################
 
 home_dir <- getwd()
-data_dir <- "/data/sandras/BiSeq"
+# Directories are read from environment.yml (copy environment_example.yml and fill in the local paths)
+library(yaml)
+if (!file.exists("environment.yml")){
+  stop("environment.yml not found, copy environment_example.yml and fill in the local paths")
+}
+env <- read_yaml("environment.yml")
+data_dir <- env$dir_rrbs_cpg
 options(warn=2L)
 mincov<-5 
 minmethreads<-6

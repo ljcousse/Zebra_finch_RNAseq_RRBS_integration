@@ -1,0 +1,48 @@
+# Conda environment for the analysis (FullAnalysis.bash and all R scripts).
+#
+# The versions in the manuscript (R 3.6.1, edgeR 3.8.6, limma 3.22.7, UniProt.ws 2.14.0,
+# FIMO/MEME 4.11.3, deepTools 3.4.3) come from different Bioconductor releases and are not
+# available together on conda. This environment uses one consistent release instead:
+# R 3.6 with Bioconductor 3.10, MEME 4.11.2 (writes fimo.txt, as the parsing scripts expect;
+# MEME >= 5 writes fimo.tsv) and deepTools 3.4.3. Results may differ slightly from the published ones.
+#
+# conda env create -f conda_environment.yml
+# conda activate zebra_finch
+
+name: zebra_finch
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - r-base=3.6
+  # Bioconductor 3.10
+  - bioconductor-edger=3.28.0
+  - bioconductor-limma=3.42.0
+  - bioconductor-stager=1.8.0
+  - bioconductor-biseq=1.26.0
+  - bioconductor-genomicranges=1.38.0
+  - bioconductor-genomicfeatures=1.38.0
+  - bioconductor-rtracklayer=1.46.0
+  - bioconductor-biomart=2.42.0
+  - bioconductor-uniprot.ws=2.26.0
+  # CRAN
+  - r-yaml=2.2.1
+  - r-stringr=1.4.0
+  - r-tidyverse=1.3.0
+  - r-rcolorbrewer=1.1_2
+  - r-gplots=3.1.1
+  - r-ggplot2=3.3.3
+  - r-gridextra=2.3
+  - r-png=0.1_7
+  - r-readbitmap=0.1.5
+  - r-rcircos=1.2.1
+  - r-xlsx=0.6.5
+  - r-lme4=1.1_27
+  - r-lmertest=3.1_3
+  # Command-line tools used in FullAnalysis.bash
+  - meme=4.11.2
+  - deeptools=3.4.3
+  - samtools=0.1.18
+  - pigz
+  - wget
+  - unzip

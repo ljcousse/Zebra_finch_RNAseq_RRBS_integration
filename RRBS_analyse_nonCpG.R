@@ -11,8 +11,14 @@
 #####################
 
 home_dir <- getwd()
-data_dir_CHG <- "/data/louisc/Zebra_Finch/oxRRBS/CHG/"
-data_dir_CHH <- "/data/louisc/Zebra_Finch/oxRRBS/CHH/"
+# Directories are read from environment.yml (copy environment_example.yml and fill in the local paths)
+library(yaml)
+if (!file.exists("environment.yml")){
+  stop("environment.yml not found, copy environment_example.yml and fill in the local paths")
+}
+env <- read_yaml("environment.yml")
+data_dir_CHG <- env$dir_rrbs_chg
+data_dir_CHH <- env$dir_rrbs_chh
 options(warn=2L)
 mincov<-5 
 minmethreads<-6

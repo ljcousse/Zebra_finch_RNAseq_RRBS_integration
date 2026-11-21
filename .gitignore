@@ -1,0 +1,63 @@
+# Ignore
+
+# Personal configuration files
+environment.yml
+
+# Project specific files/directories
+Genomic_data/*
+JASPAR_pfms_meme/*
+JASPAR_counts/*
+JASPAR_output/*
+GeneLists/*
+boxplots/*
+Trends/*
+fimo_RNAseq_out/*
+fimo_RRBS_out/*
+*.Rda
+*.tiff
+
+# Always
+tmp/*
+*.jar
+*.bedGraph
+*.pptm
+Test*
+*.pdf
+*.jpg
+*.jpeg
+*.gif
+*.bw
+*.gz
+*.png
+*.h5
+*.h5ad
+*.npz
+*.npy
+*.mtx
+*.xlsx
+*.tsv
+*.Rda
+*.csv
+*.html
+*.zip
+*.fastq
+*.fq
+*.bam
+*.bai
+*.sam
+
+*.rds
+*.txt
+*.txt.gz
+*.log
+*.docx
+*.gtf
+*.fa
+
+*.arrow
+
+# Input data that are part of the repository (must stay below the *.txt rule)
+!Plastoscine.txt
+!Plastoscine_annot.txt
+!JASPAR_annot.txt
+!genome.txt

@@ -1,5 +1,9 @@
 ###################################
-# ExtractSeq_TFsearching_RNAseq.R #
+###################################
+##                               ##
+## ExtractSeq_TFsearching_RRBS.R ##
+##                               ##
+###################################
 ###################################
 
 
@@ -10,6 +14,8 @@ library("biomaRt")
 library("parallel")
 options(warn=2)
 
+working_dir <- getwd()
+data_dir <- "Genomic_data/"
 
 # Loading Contrast of Interest
 #################################
@@ -19,7 +25,7 @@ coi <- c("age")
 # Loading Chromosomes and defining functions
 ##############################################
 
-setwd("/share/louisc/Porthos_backup/louisc/Project_Plastoscine/")
+setwd(data_dir)
 
 chromosome <- c(1, "1A", "1B", 2, 3, 4, "4A", 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 'LGE22', 'Z', 'LG2', 'LG5', 'MT')
 
@@ -34,74 +40,6 @@ for (i in 1:length(chromosome)){
   }
 }
 print(length(chr))
-
-getPromSeq <- function(pos,chrom){
-  # print("new")
-  chrom_standard <- c(1, "1A", "1B", 2, 3, 4, "4A", 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 'LGE22', 'Z', 'LG2', 'LG5', 'MT')
-  if (!(sum(chromosome%in%chrom_standard)==36 & length(chromosome)==36)){
-    stop("Vector chromosome should be defined as c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 'LGE22', 'Z', 'LG2', 'LG5', 'MT') for this function")
-  }
-  # print(pos)
-  # print(chrom)
-  # print(which(chromosome==chrom))
-  chr_sp <- chr[[which(chromosome==chrom)]]
-  # print(length(chr_sp))
-  contig_len <- nchar(chr[[which(chromosome==chrom)]][1])
-  start <- pos - 2000
-  if (start < 0){
-    start <- 1
-  }
-  end <- pos + 500
-  
-  # print(start)
-  # print(end)
-  base_st <- start %% contig_len
-  base_end <- end %% contig_len
-  
-  
-  if (base_st == 0){
-    contig_st <- ((start-base_st)/contig_len)
-    base_st <- contig_len
-  } else {
-    contig_st <- ((start-base_st)/contig_len)+1
-  }
-  if (base_end == 0){
-    contig_end <- ((end-base_end)/contig_len)
-    base_end <- contig_len
-  } else {
-    contig_end <- ((end-base_end)/contig_len)+1
-  }
-  if (contig_end > length(chr_sp)){
-    contig_end <- length(chr_sp)
-    base_end <- nchar(chr_sp[contig_end])
-  }
-  # print(base_st)
-  # print(base_end)
-  # print(contig_st)
-  # print(contig_end)
-  # print(chr_sp[(contig_st-1):(contig_end+1)])
-  if(contig_st == contig_end){
-    seq <- paste(unlist(strsplit(chr_sp[contig_st],""))[base_st:base_end],collapse="")
-  } else {
-    seq_st <- unlist(strsplit(chr_sp[contig_st],""))[base_st:contig_len]
-    seq_end <- unlist(strsplit(chr_sp[contig_end],""))[1:base_end]
-    if (contig_st == (contig_end - 1)){
-      seq <- paste(paste(seq_st,collapse=""),paste(seq_end,collapse=""),sep="")
-    } else {
-      seq <- paste(paste(seq_st,collapse=""),paste(chr_sp[(contig_st+1):(contig_end-1)],collapse=""),paste(seq_end,collapse=""),sep="")
-    }
-  }
-  # print(seq)
-  if (grepl("NANANANANANANANANANA",seq)){
-    print(chrom)
-    print(start)
-    print(end)
-    print(contig_st)
-    print(contig_end)
-    print(length(chr_sp))
-  }
-  return(seq)
-}
 
 getSeq <- function(pos,chrom){
   
@@ -156,7 +94,7 @@ getSeq <- function(pos,chrom){
 ##################
 
 
-setwd("/home/louisc/Zebra_Finch_new")
+setwd(working_dir)
 
 for (j in 1:length(coi)){
   rrbs <- read.table(file=paste("RRBS_",coi[j],"_RNAseq.txt",sep=""),header=T,stringsAsFactors = F,sep="\t")
@@ -165,20 +103,9 @@ for (j in 1:length(coi)){
   rrbs <- rrbs[!grepl("random",rrbs$chr),]
   rrbs <- rrbs[!grepl("Un",rrbs$chr),]
   
-  if (j == 1){
-    rrbs_ns <- rrbs[rrbs$func=="promoter" & rrbs$adj.P.Val>0.05,]
-    rrbs <- rrbs[rrbs$func=="promoter" & rrbs$adj.P.Val<0.05,]
-  } else {
-    rrbs <- rrbs[rrbs$func=="promoter" & rrbs$adj.P.Val<0.05,]
-    rrbs_ns <- rrbs_ns[!(paste(rrbs_ns$chr,rrbs_ns$locations,sep="_")%in%paste(rrbs$chr,rrbs$locations,sep="_")),]
-  }
+  rrbs <- rrbs[rrbs$func=="promoter",]
   
   print(dim(rrbs))
-  print(dim(rrbs_ns))
-  
-  if (nrow(rrbs)==0){
-    next
-  }
   
   # Seq extraction
   seq <- NULL
@@ -197,42 +124,14 @@ for (j in 1:length(coi)){
     if (!grepl("NANANANANANANANANANA",seq[i])){
       # print(i)
       if (i == 1){
-        write.table(paste(">",paste(rrbs$chr[i],rrbs$locations[i],sep="_")),file=paste("seq_",coi[j],"_rrbs_TFsearching.fa",sep=""),col.names = F,row.names = F, quote = F)
-        write.table(seq[i],file=paste("seq_",coi[j],"_rrbs_TFsearching.fa",sep=""),col.names = F,row.names = F, quote = F, append = T)
+        write.table(paste(">",paste(rrbs$chr[i],rrbs$locations[i],sep="_")),file="seq_RRBS_TFsearching.fa",col.names = F,row.names = F, quote = F)
+        write.table(seq[i],file="seq_RRBS_TFsearching.fa",col.names = F,row.names = F, quote = F, append = T)
       } else {
-        write.table(paste(">",paste(rrbs$chr[i],rrbs$locations[i],sep="_")),file=paste("seq_",coi[j],"_rrbs_TFsearching.fa",sep=""),col.names = F,row.names = F, quote = F, append = T)
-        write.table(seq[i],file=paste("seq_",coi[j],"_rrbs_TFsearching.fa",sep=""),col.names = F,row.names = F,quote = F, append = T)
+        write.table(paste(">",paste(rrbs$chr[i],rrbs$locations[i],sep="_")),file="seq_RRBS_TFsearching.fa",col.names = F,row.names = F, quote = F, append = T)
+        write.table(seq[i],file="seq_RRBS_TFsearching.fa",col.names = F,row.names = F,quote = F, append = T)
       }
     } else {
       stop("Non-sensical sequences!")
     }
-  }
-}
-
-# Seq extraction for significant positions
-seq_ns <- NULL
-for (i in 1:length(rrbs_ns$locations)){
-  if (nchar(getSeq(rrbs_ns$locations[i],as.character(rrbs_ns$chr[i])))!=101){
-    print(rrbs_ns$locations[i])
-    print(rrbs_ns$chr[i])
-    print(nchar(getSeq(rrbs_ns$locations[i],as.character(rrbs_ns$chr[i]))))
-  }
-  seq_ns <- c(seq_ns,getSeq(rrbs_ns$locations[i],as.character(rrbs_ns$chr[i])))
-}
-seq_ns <- toupper(seq_ns)
-print(head(seq_ns))
-
-for (i in 1:length(seq_ns)){
-  if (!grepl("NANANANANANANANANANA",seq_ns[i])){
-    # print(i)
-    if (i == 1){
-      write.table(paste(">",paste(rrbs_ns$chr[i],rrbs_ns$locations[i],sep="_")),file="seq_rrbs_ns_TFsearching.fa",col.names = F,row.names = F, quote = F)
-      write.table(seq_ns[i],file="seq_rrbs_ns_TFsearching.fa",col.names = F,row.names = F, quote = F, append = T)
-    } else {
-      write.table(paste(">",paste(rrbs_ns$chr[i],rrbs_ns$locations[i],sep="_")),file="seq_rrbs_ns_TFsearching.fa",col.names = F,row.names = F, quote = F, append = T)
-      write.table(seq_ns[i],file="seq_rrbs_ns_TFsearching.fa",col.names = F,row.names = F,quote = F, append = T)
-    }
-  } else {
-    stop("Non-sensical sequences!")
   }
 }
